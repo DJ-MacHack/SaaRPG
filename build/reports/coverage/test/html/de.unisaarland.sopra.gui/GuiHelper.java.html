@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GuiHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.gui</a> &gt; <span class="el_source">GuiHelper.java</span></div><h1>GuiHelper.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.gui;
+
+import de.unisaarland.sopra.model.Field;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+/**
+ * Created by Team 14 on 25.09.2016.
+ */
+public class GuiHelper {
+
+<span class="nc" id="L13">    public static final Color FONT_COLOR = new Color(0, 225, 52);</span>
+<span class="nc" id="L14">    public static final Color BACKGROUND_COLOR = new Color(25, 0, 55);</span>
+
+<span class="nc" id="L16">    private static final Color FIELD_GRASS_COLOR = new Color(161, 231, 35);</span>
+<span class="nc" id="L17">    private static final Color FIELD_TREE_COLOR = new Color(60, 135, 0);</span>
+<span class="nc" id="L18">    private static final Color FIELD_SWAMP_COLOR = new Color(82, 130, 79);</span>
+<span class="nc" id="L19">    private static final Color FIELD_WATER_COLOR = new Color(0, 0, 255);</span>
+<span class="nc" id="L20">    private static final Color FIELD_ICE_COLOR = new Color(0, 255, 255);</span>
+<span class="nc" id="L21">    private static final Color FIELD_LAVA_COLOR = new Color(255, 90, 21);</span>
+<span class="nc" id="L22">    private static final Color FIELD_CURSE_COLOR = new Color(108, 44, 151);</span>
+<span class="nc" id="L23">    private static final Color FIELD_HILL_COLOR = new Color(124, 181, 115);</span>
+<span class="nc" id="L24">    private static final Color FIELD_BUSH_COLOR = new Color(84, 186, 0);</span>
+<span class="nc" id="L25">    private static final Color FIELD_ROCK_COLOR = new Color(16, 16, 16);</span>
+<span class="nc" id="L26">    private static final Color FIELD_HEAL_COLOR = new Color(216, 255, 0);</span>
+<span class="nc" id="L27">    private static final Color FIELD_HEAL_DISABLED_COLOR = new Color(185, 185, 0);</span>
+
+<span class="nc" id="L29">    private GuiHelper() {</span>
+
+<span class="nc" id="L31">    }</span>
+
+    public static void drawSpeechBubble(Graphics g, int x, int y, String msg, boolean mirrored, BufferedImage speechBubble) {
+<span class="nc" id="L34">        int length = g.getFontMetrics().stringWidth(msg);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        int m = mirrored ? 1 : -1;</span>
+<span class="nc" id="L36">        int xx = x + 14 * m;</span>
+<span class="nc" id="L37">        g.drawImage(speechBubble, x, y, xx, y + 31, 17, 0, 31, 31, null);</span>
+<span class="nc" id="L38">        xx = x - length * m;</span>
+<span class="nc" id="L39">        g.drawImage(speechBubble, x, y, xx, y + 31, 11, 0, 16, 31, null);</span>
+<span class="nc" id="L40">        int xx2 = xx - 11 * m;</span>
+<span class="nc" id="L41">        xx = xx2 + 11 * m;</span>
+<span class="nc" id="L42">        g.drawImage(speechBubble, xx2, y, xx, y + 31, 0, 0, 10, 31, null);</span>
+
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        xx = x - (mirrored ? length : 0);</span>
+<span class="nc" id="L45">        g.drawString(msg, xx, y + 16);</span>
+<span class="nc" id="L46">    }</span>
+
+    public static void drawBox(Graphics g, int x, int y, int width, int height, BufferedImage box) {
+<span class="nc" id="L49">        int x2 = x + width;</span>
+<span class="nc" id="L50">        int y2 = y + height;</span>
+
+<span class="nc" id="L52">        g.drawImage(box, x - 1, y - 1, x + 10, y + 10, 0, 0, 10, 10, null);</span>
+<span class="nc" id="L53">        g.drawImage(box, x2 - 11, y - 1, x2, y + 10, 53, 0, 64, 10, null);</span>
+<span class="nc" id="L54">        g.drawImage(box, x - 1, y2 - 11, x + 10, y2, 0, 53, 10, 64, null);</span>
+<span class="nc" id="L55">        g.drawImage(box, x2 - 11, y2 - 11, x2, y2, 53, 53, 64, 64, null);</span>
+
+<span class="nc" id="L57">        g.drawImage(box, x + 10, y - 1, x2 - 11, y + 11, 11, 0, 12, 10, null);</span>
+<span class="nc" id="L58">        g.drawImage(box, x - 1, y + 10, x + 11, y2 - 11, 0, 11, 10, 12, null);</span>
+<span class="nc" id="L59">        g.drawImage(box, x2 - 11, y+10, x2, y2 - 11, 53, 11, 64, 12, null);</span>
+<span class="nc" id="L60">        g.drawImage(box, x + 10, y2-11, x2 - 11, y2, 11, 53, 12, 64, null);</span>
+
+<span class="nc" id="L62">        g.drawImage(box, x + 10, y+10, x2 - 11, y2-11, 11, 11, 12, 12, null);</span>
+<span class="nc" id="L63">    }</span>
+
+    public static BufferedImage getColoredImage(BufferedImage image, Color color) {
+<span class="nc" id="L66">        BufferedImage img = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);</span>
+<span class="nc" id="L67">        Graphics2D g = img.createGraphics();</span>
+<span class="nc" id="L68">        g.drawImage(image, null, 0, 0);</span>
+<span class="nc" id="L69">        Color c = new Color(color.getRed(), color.getGreen(), color.getBlue(), 175);</span>
+<span class="nc" id="L70">        g.setComposite(AlphaComposite.SrcAtop);</span>
+<span class="nc" id="L71">        g.setColor(c);</span>
+<span class="nc" id="L72">        g.fillRect(0, 0, image.getWidth(), image.getHeight());</span>
+<span class="nc" id="L73">        g.dispose();</span>
+<span class="nc" id="L74">        return img;</span>
+    }
+
+    public static Color getColorForField(Field field) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (field == null)</span>
+<span class="nc" id="L79">            return Color.BLACK;</span>
+
+<span class="nc bnc" id="L81" title="All 13 branches missed.">        switch (field) {</span>
+            case BUSH:
+<span class="nc" id="L83">                return FIELD_BUSH_COLOR;</span>
+            case SWAMP:
+<span class="nc" id="L85">                return FIELD_SWAMP_COLOR;</span>
+            case GRASS:
+<span class="nc" id="L87">                return FIELD_GRASS_COLOR;</span>
+            case WATER:
+<span class="nc" id="L89">                return FIELD_WATER_COLOR;</span>
+            case ICE:
+<span class="nc" id="L91">                return FIELD_ICE_COLOR;</span>
+            case LAVA:
+<span class="nc" id="L93">                return FIELD_LAVA_COLOR;</span>
+            case CURSE:
+<span class="nc" id="L95">                return FIELD_CURSE_COLOR;</span>
+            case HILL:
+<span class="nc" id="L97">                return FIELD_HILL_COLOR;</span>
+            case TREE:
+<span class="nc" id="L99">                return FIELD_TREE_COLOR;</span>
+            case ROCK:
+<span class="nc" id="L101">                return FIELD_ROCK_COLOR;</span>
+            case HEAL:
+<span class="nc" id="L103">                return FIELD_HEAL_COLOR;</span>
+            case HEAL_DISABLED:
+<span class="nc" id="L105">                return FIELD_HEAL_DISABLED_COLOR;</span>
+            default:
+<span class="nc" id="L107">                return Color.BLACK;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

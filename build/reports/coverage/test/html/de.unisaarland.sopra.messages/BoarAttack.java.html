@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoarAttack.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages</a> &gt; <span class="el_source">BoarAttack.java</span></div><h1>BoarAttack.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.model.*;
+import de.unisaarland.sopra.utility.DirectionHelper;
+import de.unisaarland.sopra.utility.GameVector;
+import de.unisaarland.sopra.utility.LogString;
+
+/**
+ * Created by Team 14 on 12.09.2016.
+ * implemented by Karla
+ */
+public class BoarAttack implements Event{
+
+    private final static int damage = 5;
+    private final int boarId;
+    private final int victimId;
+
+<span class="nc" id="L21">    public BoarAttack(int boardId, int victimId){</span>
+<span class="nc" id="L22">        this.boarId = boardId;</span>
+<span class="nc" id="L23">        this.victimId = victimId;</span>
+<span class="nc" id="L24">    }</span>
+
+    public void executeEvent(Game game, Client client){
+<span class="nc" id="L27">        Creature victim = game.getCreatureById(victimId);</span>
+<span class="nc" id="L28">        int d = (int)(5 * FieldEffects.getDefensiveMultiplier(game.getFieldAt(victim.getPosition()), victim.getCreatureType()));</span>
+<span class="nc" id="L29">        victim.receiveDamage(d);</span>
+<span class="nc" id="L30">    }</span>
+
+    public boolean validateEvent(Game game, Client client){
+<span class="nc" id="L33">        Creature boar = game.getCreatureById(boarId);</span>
+
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (boar == null) {</span>
+<span class="nc" id="L36">            return false;</span>
+        }
+
+        //Am I a boar?
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if(boar.getCreatureType() != CreatureType.BOAR) {</span>
+<span class="nc" id="L41">            return false;</span>
+        }
+
+        // am I dead?
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if(boar.isDead()){</span>
+<span class="nc" id="L46">            return false;</span>
+        }
+
+<span class="nc" id="L49">        Creature victim = game.getCreatureById(victimId);</span>
+
+<span class="nc bnc" id="L51" title="All 4 branches missed.">        return (victim != null &amp;&amp; boar.getPosition().distanceTo(victim.getPosition()) &lt;= 1);</span>
+    }
+
+    @Override
+    public void sendCommand(ClientConnection cc) {
+<span class="nc" id="L56">        throw new UnsupportedOperationException(&quot;You are not allowed to call a BoarAttackEvent!&quot;);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L61">        return String.format(&quot;Boar(%d) attacked %s!&quot;, boarId, LogString.createVictimName(cli.getGame(),victimId));</span>
+    }
+
+    public int getDamage() {
+<span class="nc" id="L65">        return this.damage;</span>
+    }
+
+    public int getBoardId() {
+<span class="nc" id="L69">        return this.boarId;</span>
+    }
+
+    public int getVictimId() {
+<span class="nc" id="L73">        return this.victimId;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

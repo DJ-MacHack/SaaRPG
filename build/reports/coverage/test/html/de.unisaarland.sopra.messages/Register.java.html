@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Register.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages</a> &gt; <span class="el_source">Register.java</span></div><h1>Register.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+
+import de.unisaarland.sopra.model.*;
+
+import de.unisaarland.sopra.MonsterType;
+import de.unisaarland.sopra.utility.GameVector;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+import de.unisaarland.sopra.utility.LogString;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Register {@link Command}/{@link Event}
+ * Created on 12.09.16.
+ *
+ * @author Henrik Paul Koehn
+ */
+public class Register implements Command, Event {
+
+    private static final int KOBOLD_HP = 100;
+    private static final int ELF_HP = 100;
+    private static final int ROOK_HP = 100;
+    private static final int YETI_HP = 200;
+    private static final int IFRIT_HP = 87;
+    private static final int WRAITH_HP = 100;
+    private static final int NAGA_HP = 100;
+
+    // Health of creatures
+    private static final Map&lt;CreatureType, Integer&gt; HP;
+
+    static {
+<span class="fc" id="L38">        HP = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L39">        HP.put(CreatureType.KOBOLD, KOBOLD_HP);</span>
+<span class="fc" id="L40">        HP.put(CreatureType.ELF, ELF_HP);</span>
+<span class="fc" id="L41">        HP.put(CreatureType.ROOK, ROOK_HP);</span>
+<span class="fc" id="L42">        HP.put(CreatureType.YETI, YETI_HP);</span>
+<span class="fc" id="L43">        HP.put(CreatureType.IFRIT, IFRIT_HP);</span>
+<span class="fc" id="L44">        HP.put(CreatureType.WRAITH, WRAITH_HP);</span>
+<span class="fc" id="L45">        HP.put(CreatureType.NAGA, NAGA_HP);</span>
+<span class="fc" id="L46">    }</span>
+
+    //Fields
+    private int commId;                 // The commlib id of the new player
+    private String name;                // Name of the player
+    private CreatureType creatureType;  // Creature type of the player
+    private String teamName;            // name of the team of the player
+    private int startNumber;            // start number of the player
+    private int xCoord;                // x Coordinate of the start position of the player
+    private int yCoord;                // y Coordinate of the start position of the player
+    private CommIds commIds;            // Class with all Commlib ids
+
+    private Game game;                  // Save game for results
+
+    /**
+     * @param commIds      {@link CommIds} Ids
+     * @param playerId     Player Id of the to be registered player
+     * @param name         Name of the {@link Player}
+     * @param creatureType {@link CreatureType} of the player
+     * @param teamName     Name of the {@link Team} of the {@link Player}
+     * @param startNumber  Startnumber of the {@link Player}
+     * @param x            x Coordinate of the start position of the {@link Player}
+     * @param y            y Coordinate of the start position of the {@link Player}
+     */
+    public Register(CommIds commIds, int playerId, String name, CreatureType creatureType, String teamName,
+<span class="fc" id="L71">                    int startNumber, int x, int y) {</span>
+<span class="fc" id="L72">        this.commIds = commIds;</span>
+<span class="fc" id="L73">        this.commId = playerId;</span>
+<span class="fc" id="L74">        this.name = name;</span>
+<span class="fc" id="L75">        this.teamName = teamName;</span>
+<span class="fc" id="L76">        this.creatureType = creatureType;</span>
+<span class="fc" id="L77">        this.startNumber = startNumber;</span>
+<span class="fc" id="L78">        this.xCoord = x;</span>
+<span class="fc" id="L79">        this.yCoord = y;</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Executes as {@link Command} on a given {@link Game}
+     *
+     * @param game {@link Game} to manipulate
+     */
+    @Override
+    public void executeCommand(Game game) {
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if(game.getRoundState() != RoundState.REGISTER){</span>
+<span class="nc" id="L90">            return;</span>
+        }
+
+<span class="fc" id="L93">        Team pTeam = game.getTeam(this.teamName);</span>
+<span class="fc" id="L94">        GameVector startVec = pTeam.nextStartPosition();</span>
+<span class="fc" id="L95">        addPc(game, startVec);</span>
+<span class="fc" id="L96">        commIds.addCommMonsterId(commId, startNumber);</span>
+<span class="fc" id="L97">        this.xCoord = startVec.getX();</span>
+<span class="fc" id="L98">        this.yCoord = startVec.getY();</span>
+
+        // Save files
+<span class="fc" id="L101">        this.game = game;</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Tests if this {@link Event}/{@link Command} is valid as command for a given {@link Game}
+     *
+     * @param game {@link Game} to test
+     * @return Returns true if valid else false
+     */
+    @Override
+    public boolean validateCommand(Game game) {
+<span class="fc" id="L112">        int id = commIds.getMonsterId(commId);</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (id &gt;= 0) {</span>
+            // schon registriert
+<span class="nc" id="L115">            return false;</span>
+        } else {
+            // noch nicht registriert
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (game.getRoundState() == RoundState.REGISTER) {</span>
+<span class="fc" id="L119">                Player player = game.getPlayerByName(name);</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">                return player != null</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                        &amp;&amp; player.getTeamName().equals(teamName)</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">                        &amp;&amp; player.getMonsterType() == this.creatureType</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">                        &amp;&amp; testRegistered(game);</span>
+            } else {
+<span class="fc" id="L125">                return true;</span>
+            }
+        }
+    }
+
+    /**
+     * Handles aftermath of execution and sends corresponding {@link Event}
+     *
+     * @param sc {@link ServerConnection} which shall send the {@link Event}
+     */
+    @Override
+    public void sendResults(ServerConnection sc) {
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if(game.getRoundState() != RoundState.REGISTER){</span>
+<span class="nc" id="L138">            return;</span>
+        }
+
+        // Send map file
+<span class="nc" id="L142">        sc.sendMap(this.commId, this.game.getMapFile());</span>
+        // Send fight file
+<span class="nc" id="L144">        sc.sendFight(this.commId, this.game.getFightFile());</span>
+
+        // Send registered events to all registered player (inclusive new player)
+<span class="nc" id="L147">        List&lt;Integer&gt; ids = this.commIds.getCommLibIds();</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        for (int id : ids) {</span>
+<span class="nc" id="L149">            sc.sendRegistered(id, this.startNumber, this.name, MonsterType.valueOf(this.creatureType.name()),</span>
+                    this.teamName, this.startNumber, this.xCoord, this.yCoord);
+<span class="nc" id="L151">        }</span>
+
+        // Send register events of all old players to the new player
+<span class="nc" id="L154">        List&lt;Player&gt; players = this.game.getPlayers();</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        for (Player player : players) {</span>
+            // Is player already registered and not the new player
+<span class="nc bnc" id="L157" title="All 4 branches missed.">            if (player.getRegistered() &amp;&amp; !this.name.equals(player.getName())) {</span>
+
+                // Get x and y coord of target player
+<span class="nc" id="L160">                GameVector vec = game.getCreatureById(player.getId()).getPosition();</span>
+<span class="nc" id="L161">                sc.sendRegistered(this.commId, player.getId(), player.getName(),</span>
+<span class="nc" id="L162">                        MonsterType.valueOf(player.getMonsterType().name()),</span>
+<span class="nc" id="L163">                        player.getTeamName(), player.getId(), vec.getX(), vec.getY());</span>
+            }
+<span class="nc" id="L165">        }</span>
+<span class="nc" id="L166">    }</span>
+
+    /**
+     * Sends this as {@link Command} via the given {@link ClientConnection}
+     *
+     * @param cc {@link ClientConnection} which shall send the {@link Command}
+     */
+    @Override
+    public void sendCommand(ClientConnection cc) {
+<span class="nc" id="L175">        cc.sendRegister(this.name, MonsterType.valueOf(this.creatureType.name()), this.teamName);</span>
+<span class="nc" id="L176">    }</span>
+
+    @Override
+    public int getMonsterId() {
+<span class="nc" id="L180">        return startNumber;</span>
+    }
+
+    /**
+     * Execute as {@link Event} for a given {@link Client}
+     *
+     * @param client {@link Client} to manipulate
+     */
+    @Override
+    public void executeEvent(Game game, Client client) {
+<span class="nc" id="L190">        GameVector startPos = new GameVector(this.xCoord, this.yCoord);</span>
+<span class="nc" id="L191">        addPc(game, startPos);</span>
+
+<span class="nc bnc" id="L193" title="All 4 branches missed.">        if (this.name.equals(client.getName()) &amp;&amp; this.teamName.equals(client.getTeamName())) {</span>
+<span class="nc" id="L194">            client.setOwnCreature(this.startNumber);</span>
+        }
+<span class="nc" id="L196">    }</span>
+
+    /**
+     * Tests if this {@link Event}/{@link Command} is valid as {@link Event} for a given {@link Client}
+     *
+     * @param client {@link Client} to test
+     * @return returns true if valid else false
+     */
+    @Override
+    public boolean validateEvent(Game game, Client client) {
+<span class="nc" id="L206">        Player player = game.getPlayerByName(this.name);</span>
+<span class="nc bnc" id="L207" title="All 4 branches missed.">        return (player != null &amp;&amp; !player.getRegistered());</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L212">        return String.format(&quot;%s registered!&quot;, LogString.createVictimName(this.name,this.startNumber,this.teamName));</span>
+    }
+
+    /**
+     * Adds a {@link Player} to a given {@link Game}.
+     * The information of the {@link Player} are taken from the fields of this class
+     *
+     * @param game {@link Game} the {@link Player} is to be added
+     */
+    private void addPc(Game game, GameVector position) {
+        // TODO assumption id is already assinged
+        // add pc to game
+<span class="fc" id="L224">        Pc pc = new Pc(this.startNumber, position, HP.get(this.creatureType), this.creatureType);</span>
+<span class="fc" id="L225">        game.addMonster(pc);</span>
+        // Do register stuff of player
+<span class="fc" id="L227">        Player player = game.getPlayerByName(this.name);</span>
+<span class="fc" id="L228">        player.register(this.startNumber);</span>
+<span class="fc" id="L229">    }</span>
+
+    /**
+     * Checks if the {@link Player} may be added to the {@link Game}
+     *
+     * @param game {@link Game} the {@link Player} is to be added
+     */
+    private boolean testRegistered(Game game) {
+<span class="fc" id="L237">        Player player = game.getPlayerByName(this.name);</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        return player != null</span>
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">                &amp;&amp; !player.getRegistered();</span>
+    }
+
+    // Getter for systemtests
+
+    public int getId() {
+<span class="nc" id="L245">        return startNumber;</span>
+    }
+
+    public String getName() {
+<span class="nc" id="L249">        return name;</span>
+    }
+
+    public String getTeamName() {
+<span class="nc" id="L253">        return teamName;</span>
+    }
+
+    public CreatureType getCreatureType() {
+<span class="nc" id="L257">        return creatureType;</span>
+    }
+
+    public int getxCoord() {
+<span class="nc" id="L261">        return xCoord;</span>
+    }
+
+    public int getyCoord() {
+<span class="nc" id="L265">        return yCoord;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

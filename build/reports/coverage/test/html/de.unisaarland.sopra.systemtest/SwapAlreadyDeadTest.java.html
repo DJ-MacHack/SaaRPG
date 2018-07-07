@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SwapAlreadyDeadTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">SwapAlreadyDeadTest.java</span></div><h1>SwapAlreadyDeadTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team14 on 23/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class SwapAlreadyDeadTest extends OurSystemTest {
+    public SwapAlreadyDeadTest() {
+<span class="nc" id="L14">        super(&quot;SwapAlreadyDeadTest&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // register phase
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; hakkar = register(0, &quot;Hakkar&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 0);</span>
+
+<span class="nc" id="L22">        ClientConnection&lt;Event&gt; noc = register(1, &quot;Nocturne&quot;, CreatureType.WRAITH, &quot;Void&quot;, 1, 0);</span>
+<span class="nc" id="L23">        assertRegisterEvent(hakkar.nextEvent(), 1, &quot;Nocturne&quot;, CreatureType.WRAITH, &quot;Void&quot;, 1, 0);</span>
+<span class="nc" id="L24">        assertRegisterEvent(noc.nextEvent(), 0, &quot;Hakkar&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 0);</span>
+
+<span class="nc" id="L26">        ClientConnection&lt;Event&gt; garen = register(2, &quot;Garen&quot;, CreatureType.YETI, &quot;Demacia&quot;, 2, 0);</span>
+<span class="nc" id="L27">        assertRegisterEvent(assertAndMerge(hakkar, noc), 2, &quot;Garen&quot;, CreatureType.YETI, &quot;Demacia&quot;, 2, 0);</span>
+<span class="nc" id="L28">        assertRegisterEvent(garen.nextEvent(), 0, &quot;Hakkar&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 0);</span>
+<span class="nc" id="L29">        assertRegisterEvent(garen.nextEvent(), 1, &quot;Nocturne&quot;, CreatureType.WRAITH, &quot;Void&quot;, 1, 0);</span>
+
+        // round 1 begins
+<span class="nc" id="L32">        assertRoundBegin(assertAndMerge(noc, garen, hakkar), 1);</span>
+
+        // hakkar's turn
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        for (int attacks = 0; attacks &lt; 4; attacks++) {</span>
+<span class="nc" id="L36">            assertActNow(assertAndMerge(hakkar, noc, garen), 0);</span>
+<span class="nc" id="L37">            hakkar.sendStab(Direction.EAST);</span>
+<span class="nc" id="L38">            assertStabbed(assertAndMerge(hakkar, noc, garen), 0, Direction.EAST);</span>
+        }
+<span class="nc" id="L40">        assertActNow(assertAndMerge(hakkar, noc, garen), 0);</span>
+<span class="nc" id="L41">        hakkar.sendDoneActing();</span>
+<span class="nc" id="L42">        assertDoneActing(assertAndMerge(hakkar, noc, garen), 0);</span>
+
+        // noc's turn
+<span class="nc" id="L45">        assertActNow(assertAndMerge(hakkar, noc, garen), 1);</span>
+<span class="nc" id="L46">        noc.sendDoneActing();</span>
+<span class="nc" id="L47">        assertDoneActing(assertAndMerge(hakkar, noc, garen), 1);</span>
+
+        // garen's turn
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L51">            assertActNow(assertAndMerge(hakkar, noc, garen), 2);</span>
+<span class="nc" id="L52">            garen.sendCrush(Direction.WEST);</span>
+<span class="nc" id="L53">            assertCrush(assertAndMerge(hakkar, noc, garen), 2, Direction.WEST);</span>
+        }
+<span class="nc" id="L55">        assertActNow(assertAndMerge(hakkar, noc, garen), 2);</span>
+<span class="nc" id="L56">        garen.sendDoneActing();</span>
+<span class="nc" id="L57">        assertDoneActing(assertAndMerge(hakkar, noc, garen), 2);</span>
+
+        // round 1 ends: noc's hp: 40
+<span class="nc" id="L60">        assertRoundEnd(assertAndMerge(hakkar, noc, garen), 1, 0);</span>
+
+        // round 2 begins
+<span class="nc" id="L63">        assertRoundBegin(assertAndMerge(hakkar, noc, garen), 2);</span>
+
+        // noc's turn
+<span class="nc" id="L66">        assertActNow(assertAndMerge(hakkar, noc, garen), 1);</span>
+<span class="nc" id="L67">        noc.sendDoneActing();</span>
+<span class="nc" id="L68">        assertDoneActing(assertAndMerge(hakkar, noc, garen), 1);</span>
+
+        // garen's turn
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L72">            assertActNow(assertAndMerge(hakkar, noc, garen), 2);</span>
+<span class="nc" id="L73">            garen.sendCrush(Direction.WEST);</span>
+<span class="nc" id="L74">            assertCrush(assertAndMerge(hakkar, noc, garen), 2, Direction.WEST);</span>
+        }
+<span class="nc" id="L76">        assertActNow(assertAndMerge(hakkar, noc, garen), 2);</span>
+<span class="nc" id="L77">        garen.sendDoneActing();</span>
+<span class="nc" id="L78">        assertDoneActing(assertAndMerge(hakkar, noc, garen), 2);</span>
+
+        // noc's hp: 8
+        // hakkar's turn
+<span class="nc" id="L82">        assertActNow(assertAndMerge(hakkar, noc, garen), 0);</span>
+<span class="nc" id="L83">        hakkar.sendSwap(1, 0);</span>
+<span class="nc" id="L84">        assertSwapped(assertAndMerge(hakkar, noc, garen), 0, 1, 0);</span>
+<span class="nc" id="L85">        assertActNow(assertAndMerge(hakkar, noc, garen), 0);</span>
+<span class="nc" id="L86">        hakkar.sendSwap(0, 0);</span>
+<span class="nc" id="L87">        assertSwapped(assertAndMerge(hakkar, noc, garen), 0, 0, 0);</span>
+        // noc died
+<span class="nc" id="L89">        assertDied(assertAndMerge(hakkar, noc, garen), 1);</span>
+<span class="nc" id="L90">        assertActNow(assertAndMerge(hakkar, noc, garen), 0);</span>
+<span class="nc" id="L91">        hakkar.sendDoneActing();</span>
+<span class="nc" id="L92">        assertDoneActing(assertAndMerge(hakkar, noc, garen), 0);</span>
+
+        // round 2 ends
+<span class="nc" id="L95">        assertRoundEnd(assertAndMerge(hakkar, noc, garen), 2, 0);</span>
+
+        // round 3 begins
+<span class="nc" id="L98">        assertRoundBegin(assertAndMerge(hakkar, noc, garen), 3);</span>
+
+        // hakkar's turn
+<span class="nc" id="L101">        assertActNow(assertAndMerge(hakkar, noc, garen), 0);</span>
+<span class="nc" id="L102">        noc.sendWarCry(&quot;Am I dead? ;(&quot;);</span>
+<span class="nc" id="L103">        noc.sendSwap(0, 0);</span>
+<span class="nc" id="L104">        hakkar.sendSwap(1, 0);</span>
+<span class="nc" id="L105">        assertKicked(assertAndMerge(hakkar, noc, garen), 0);</span>
+
+        // garen's turn
+<span class="nc" id="L108">        assertActNow(assertAndMerge(hakkar, noc, garen), 2);</span>
+<span class="nc" id="L109">        garen.sendDoneActing();</span>
+<span class="nc" id="L110">        assertDoneActing(assertAndMerge(hakkar, noc, garen), 2);</span>
+
+        // round 3 ends
+<span class="nc" id="L113">        assertRoundEnd(assertAndMerge(hakkar, noc, garen), 3, 0);</span>
+
+<span class="nc" id="L115">        assertWinner(assertAndMerge(hakkar, noc, garen), &quot;Demacia&quot;);</span>
+<span class="nc" id="L116">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L120">        return &quot;001&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L125">        return &quot;Void, Demacia\n&quot;</span>
+             + &quot;Void, Hakkar, Wraith\n&quot;
+             + &quot;Void, Nocturne, Wraith\n&quot;
+             + &quot;Demacia, Garen, Yeti&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

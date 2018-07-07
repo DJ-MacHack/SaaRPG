@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameVector.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.utility</a> &gt; <span class="el_source">GameVector.java</span></div><h1>GameVector.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.utility;
+import de.unisaarland.sopra.Direction;
+
+/**
+ * Created by Team 14 on 12.09.2016.
+ */
+public class GameVector {
+
+    private int x;
+    private int y;
+
+    /**
+     * Creates a new instance of {@link GameVector} with given parameters.
+     *
+     * @param x X Position.
+     * @param y Y Position.
+     */
+<span class="fc" id="L18">    public GameVector(int x, int y) {</span>
+<span class="fc" id="L19">        this.x = x;</span>
+<span class="fc" id="L20">        this.y = y;</span>
+<span class="fc" id="L21">    }</span>
+
+    /**
+     * Returns x position.
+     *
+     * @return X position of this {@link GameVector}.
+     */
+    public int getX() {
+<span class="fc" id="L29">        return x;</span>
+    }
+
+    /**
+     * Returns y position.
+     *
+     * @return Y position of this {@link GameVector}.
+     */
+    public int getY() {
+<span class="fc" id="L38">        return y;</span>
+    }
+
+    /**
+     * Calculates the distance between this {@link GameVector} and the given parameter {@link GameVector}.
+     *
+     * @param gameVector
+     * @return Distance between this {@link GameVector} and the parameter
+     */
+    public int distanceTo(GameVector gameVector) {
+<span class="fc" id="L48">        int z1 = -(x + y);</span>
+<span class="fc" id="L49">        int z2 = -(gameVector.getX() + gameVector.getY());</span>
+
+<span class="fc" id="L51">        int xDif = Math.abs(gameVector.getX() - x);</span>
+<span class="fc" id="L52">        int yDif = Math.abs(gameVector.getY() - y);</span>
+<span class="fc" id="L53">        int zDif = Math.abs(z2 - z1);</span>
+
+<span class="fc" id="L55">        int d = Math.max(xDif, yDif);</span>
+<span class="fc" id="L56">        d = Math.max(d, zDif);</span>
+
+<span class="fc" id="L58">        return d;</span>
+    }
+
+    /**
+     * Converts this {@link GameVector} to a {@link Direction}.
+     *
+     * @return
+     */
+    public Direction toDirection() {
+<span class="nc bnc" id="L67" title="All 4 branches missed.">        if (x == 1 &amp;&amp; y == -1) {</span>
+<span class="nc" id="L68">            return Direction.NORTH_EAST;</span>
+        } else {
+<span class="nc bnc" id="L70" title="All 4 branches missed.">            if (x == 1 &amp;&amp; y == 0) {</span>
+<span class="nc" id="L71">                return Direction.EAST;</span>
+            } else {
+<span class="nc bnc" id="L73" title="All 4 branches missed.">                if (x == 0 &amp;&amp; y == 1) {</span>
+<span class="nc" id="L74">                    return Direction.SOUTH_EAST;</span>
+                } else {
+<span class="nc bnc" id="L76" title="All 4 branches missed.">                    if (x == -1 &amp;&amp; y == 1) {</span>
+<span class="nc" id="L77">                        return Direction.SOUTH_WEST;</span>
+                    } else {
+<span class="nc bnc" id="L79" title="All 4 branches missed.">                        if (x == -1 &amp;&amp; y == 0) {</span>
+<span class="nc" id="L80">                            return Direction.WEST;</span>
+                        } else {
+<span class="nc bnc" id="L82" title="All 4 branches missed.">                            if (x == 0 &amp;&amp; y == -1) {</span>
+<span class="nc" id="L83">                                return Direction.NORTH_WEST;</span>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+<span class="nc" id="L91">        return null;</span>
+    }
+
+    /**
+     * Returns the sum of this {@link GameVector} and the parameter {@link GameVector}.
+     *
+     * @param other The summand.
+     * @return Sum of this {@link GameVector} and the parameter.
+     */
+    public GameVector add(GameVector other) {
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (other == null) {</span>
+<span class="nc" id="L102">            return null;</span>
+        }
+
+<span class="fc" id="L105">        return new GameVector(x + other.getX(), y + other.getY());</span>
+    }
+
+    public GameVector sub(GameVector other) {
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (other == null) {</span>
+<span class="nc" id="L110">            return null;</span>
+        }
+
+<span class="nc" id="L113">        return new GameVector(x - other.getX(), y - other.getY());</span>
+    }
+
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (!(o instanceof GameVector)) {</span>
+<span class="nc" id="L118">            return false;</span>
+        }
+
+<span class="fc" id="L121">        GameVector gameVector = (GameVector) o;</span>
+
+<span class="fc bfc" id="L123" title="All 4 branches covered.">        return y == gameVector.y &amp;&amp; x == gameVector.x;</span>
+    }
+
+    public int hashCode() {
+<span class="fc" id="L127">        int result = x;</span>
+<span class="fc" id="L128">        result = 997 * result + y;</span>
+<span class="fc" id="L129">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

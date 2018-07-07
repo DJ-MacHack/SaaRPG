@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NoHealTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">NoHealTest.java</span></div><h1>NoHealTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created on 20.09.16.
+ *
+ * @author Henrik Paul KÃ¶hn
+ */
+public class NoHealTest extends OurSystemTest {
+
+    public NoHealTest(){
+<span class="nc" id="L16">        super(&quot;NoHealTest&quot;);</span>
+<span class="nc" id="L17">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; lux = register(0, &quot;Lux&quot;, CreatureType.ELF, &quot;Light&quot;, 6, 0);</span>
+<span class="nc" id="L22">        ClientConnection&lt;Event&gt; noc = register(1, &quot;Nocturne&quot;, CreatureType.WRAITH, &quot;Shadow&quot;, 7, 0);</span>
+<span class="nc" id="L23">        assertRegisterEvent(lux.nextEvent(), 1, &quot;Nocturne&quot;, CreatureType.WRAITH, &quot;Shadow&quot;, 7, 0);</span>
+<span class="nc" id="L24">        assertRegisterEvent(noc.nextEvent(), 0, &quot;Lux&quot;, CreatureType.ELF, &quot;Light&quot;, 6, 0);</span>
+
+        //Spawn Fairy
+<span class="nc" id="L27">        assertFairySpawned(assertAndMerge(lux, noc), 2, 5, 0);</span>
+
+        //Round begin
+<span class="nc" id="L30">        assertRoundBegin(assertAndMerge(lux, noc), 1);</span>
+
+        //Move Fairy
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        for (int i = 0; i &lt; 4;  i++){</span>
+<span class="nc" id="L34">            assertMoved(assertAndMerge(lux, noc), 2, Direction.WEST);</span>
+        }
+
+        //Act phase: lux moves west, noc does nothing
+        //lux
+<span class="nc" id="L39">        assertActNow(assertAndMerge(lux, noc), 0);</span>
+<span class="nc" id="L40">        lux.sendMove(Direction.WEST);</span>
+<span class="nc" id="L41">        assertMoved(assertAndMerge(lux, noc), 0, Direction.WEST);</span>
+<span class="nc" id="L42">        assertActNow(assertAndMerge(lux, noc), 0);</span>
+<span class="nc" id="L43">        lux.sendDoneActing();</span>
+<span class="nc" id="L44">        assertDoneActing(assertAndMerge(lux, noc), 0);</span>
+        //noc
+<span class="nc" id="L46">        assertActNow(assertAndMerge(lux, noc), 1);</span>
+<span class="nc" id="L47">        noc.sendDoneActing();</span>
+<span class="nc" id="L48">        assertDoneActing(assertAndMerge(lux, noc), 1);</span>
+
+        // Round end since lux has full health (no heal event)
+<span class="nc" id="L51">        assertRoundEnd(assertAndMerge(lux, noc), 1, 1);</span>
+
+        // Now we wanna check if the heal heals if lux gets damage
+<span class="nc" id="L54">        assertRoundBegin(assertAndMerge(lux, noc), 2);</span>
+        // Move Fairy
+<span class="nc" id="L56">        assertMoved(assertAndMerge(lux, noc), 2, Direction.WEST);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        for (int i = 0; i &lt; 3;  i++){</span>
+<span class="nc" id="L58">            assertMoved(assertAndMerge(lux, noc), 2, Direction.EAST);</span>
+        }
+        // Now it is nocturnes turn since lux moved last time
+<span class="nc" id="L61">        assertActNow(assertAndMerge(lux, noc), 1);</span>
+        // Moves next to lux
+<span class="nc" id="L63">        noc.sendMove(Direction.WEST);</span>
+<span class="nc" id="L64">        assertMoved(assertAndMerge(lux, noc), 1, Direction.WEST);</span>
+<span class="nc" id="L65">        assertActNow(assertAndMerge(lux, noc), 1);</span>
+        // And stabs her
+<span class="nc" id="L67">        noc.sendStab(Direction.WEST);</span>
+<span class="nc" id="L68">        assertStabbed(assertAndMerge(lux, noc), 1, Direction.WEST);</span>
+        // Then he is done
+<span class="nc" id="L70">        assertActNow(assertAndMerge(lux, noc), 1);</span>
+<span class="nc" id="L71">        noc.sendDoneActing();</span>
+<span class="nc" id="L72">        assertDoneActing(assertAndMerge(lux,noc), 1);</span>
+
+        // Now it is lux turn
+<span class="nc" id="L75">        assertActNow(assertAndMerge(lux, noc), 0);</span>
+        // But she does nothing
+<span class="nc" id="L77">        lux.sendDoneActing();</span>
+<span class="nc" id="L78">        assertDoneActing(assertAndMerge(lux, noc), 0);</span>
+
+        // Now lux will get healed since she stands in a healing field
+<span class="nc" id="L81">        assertFieldEffect(assertAndMerge(lux, noc), 5, 0, -7);</span>
+
+<span class="nc" id="L83">        passed();</span>
+<span class="nc" id="L84">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L88">        return &quot;     +01&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L93">        return &quot;Light, Shadow\n&quot; +</span>
+                &quot;Light, Lux, Elf\n&quot; +
+                &quot;Shadow, Nocturne, Wraith&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

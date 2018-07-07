@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Human.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra</a> &gt; <span class="el_source">Human.java</span></div><h1>Human.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra;
+
+import de.unisaarland.sopra.messages.*;
+import de.unisaarland.sopra.messages.attack.*;
+import de.unisaarland.sopra.model.CreatureType;
+import de.unisaarland.sopra.model.Pc;
+import de.unisaarland.sopra.utility.LogString;
+
+import java.io.Console;
+
+/**
+ * Created by Lukas Kirschner and DJ MacHack
+ */
+public class Human extends Client {
+
+    private final static boolean DEBUGMODE = true; //Set verbose level
+
+    public static final String MOTD = &quot;Welcome to SaaRPG! Type \&quot;help\&quot; for a quick command reference.&quot;;
+    public static final String HELPTEXT = &quot;***SAARPG HUMAN PLAYER COMMAND REFERENCE***\n\n&quot; +
+            &quot;***Commands:\n&quot; +
+            &quot;bite &lt;Dir&gt; - Sends a bite command\n&quot; +
+            &quot;blink &lt;x&gt; &lt;y&gt; - Sends a blink command with given target coordinates\n&quot; +
+            &quot;burn - Sends a burn command\n&quot; +
+            &quot;cast &lt;x&gt; &lt;y&gt; - Sends a cast command with given target coordinates\n&quot; +
+            &quot;crush &lt;Dir&gt; - Sends a crush command\n&quot; +
+            &quot;cut &lt;Dir&gt; - Sends a cut command\n&quot; +
+            &quot;done|d|doneacting - Passes the round\n&quot; +
+            &quot;move &lt;Dir&gt; - Moves your player to the given direction.\n&quot; +
+            &quot;\tAliases:\n&quot; +
+            &quot;\t&lt;m|move&gt; &lt;Dir&gt; - Moves your player in the given direction\n&quot; +
+            &quot;\tmnw|mul|mol - Moves your player to north-west\n&quot; +
+            &quot;\tmw|ml - Moves your player to west\n&quot; +
+            &quot;\tmsw|mdl|mrl - Moves your player to south-west\n&quot; +
+            &quot;\tmse|mdr|mrr - Moves your player to south-east\n&quot; +
+            &quot;\tme|mr - Moves your player to east\n&quot; +
+            &quot;\tmne|mur|mor - Moves your player to north-east\n&quot; +
+            &quot;stab &lt;Dir&gt; - Sends a stab command\n&quot; +
+            &quot;slash &lt;Dir&gt; - Sends a slash command\n&quot; +
+            &quot;stare &lt;Dir&gt; - Sends a stare command\n&quot; +
+            &quot;claw &lt;Dir&gt; - Sends a claw command\n&quot; +
+            &quot;shoot &lt;Dir&gt; - sends a shoot command\n&quot; +
+            &quot;singe &lt;Dir&gt; - Sends a singe command\n&quot; +
+            &quot;stat|status|stats|who|players - Prints out a quick overview of players alive\n&quot; +
+            &quot;swap &lt;x&gt; &lt;y&gt; - Sends a swap command with given target coordinates\n&quot; +
+            &quot;&lt;warcry|cry&gt; &lt;message&gt; - Sends a war cry with the given message\n&quot; +
+            &quot;watch - Forfeits the game and turns yourself into an observer\n\n&quot; +
+            &quot;***Directions:\n&quot; +
+            &quot;north_west|northwest|nw - North west (the top left tile)\n&quot; +
+            &quot;west|w - West (the left tile)\n&quot; +
+            &quot;south_west|southwest|sw - South west (the bottom left tile)\n&quot; +
+            &quot;south_east|southeast|se - South east (the bottom right tile)\n&quot; +
+            &quot;east|e - East (the right tile)\n&quot; +
+            &quot;north_east|northeast|ne - North east (the top right tile)\n\n&quot; +
+            &quot;***Rules:\n&quot; +
+            &quot;For game rules, rtfm! ;)\n\n&quot;;
+
+    CreatureType creature;
+    String name;
+    String team;
+    MonsterType monster;
+
+    /**
+     * create a new human client
+     *
+     * @param host    IP or host
+     * @param port    port number
+     * @param timeout timeout in ms
+     */
+    public Human(String host, int port, int timeout, String name, String teamname, CreatureType creaturetype) {
+<span class="nc" id="L70">        super(host, port, timeout);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        this.name = (name != null) ? name : requestPlayerName();</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        this.team = (teamname != null) ? teamname : requestTeamName();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        this.creature = (creaturetype != null) ? creaturetype : requestCreatureType();</span>
+<span class="nc" id="L74">        MonsterType monster = MonsterType.valueOf(this.creature.name());</span>
+<span class="nc" id="L75">        this.monster = monster;</span>
+<span class="nc" id="L76">        register();</span>
+<span class="nc" id="L77">    }</span>
+
+    private CreatureType requestCreatureType() {
+<span class="nc" id="L80">        System.out.printf(&quot;Enter your CreatureType: &gt; &quot;);</span>
+<span class="nc" id="L81">        String t = System.console().readLine();</span>
+<span class="nc" id="L82">        return CreatureType.valueOf(t.toUpperCase());</span>
+    }
+
+    private String requestTeamName() {
+<span class="nc" id="L86">        System.out.printf(&quot;Enter your TeamName: &gt; &quot;);</span>
+<span class="nc" id="L87">        return System.console().readLine();</span>
+    }
+
+    private String requestPlayerName() {
+<span class="nc" id="L91">        System.out.printf(&quot;Enter your PlayerName: &gt; &quot;);</span>
+<span class="nc" id="L92">        return System.console().readLine();</span>
+    }
+
+    @Override
+    public void actNow() {
+<span class="nc" id="L97">        Pc thisPlayer = this.game.getMonsterById(this.ownCreatureId);</span>
+<span class="nc" id="L98">        System.out.printf(&quot;%dEP,%dHP &gt; &quot;, thisPlayer.getEnergy(), thisPlayer.getHp());</span>
+<span class="nc" id="L99">        String input = System.console().readLine();</span>
+
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (!parseInputString(input)) {</span>
+            if (DEBUGMODE) {
+<span class="nc" id="L103">                LogString.printInvalidEnterDebugLog(input);</span>
+            }
+<span class="nc" id="L105">            actNow();</span>
+        }
+<span class="nc" id="L107">    }</span>
+
+    public void run() {
+<span class="nc" id="L110">        System.out.printf(&quot;%s%n%n&quot;, MOTD);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        while (isRunning()) {</span>
+<span class="nc" id="L112">            Event event = this.clientConnection.nextEvent();</span>
+<span class="nc" id="L113">            LogString.printEventLog(event,this);</span>
+
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            if (event.validateEvent(game, this)) {</span>
+<span class="nc" id="L116">                event.executeEvent(game, this);</span>
+            } /*else {
+                if (DEBUGMODE) {
+                    //    System.out.printf(&quot;%s Event could not be executed: %s%n&quot;, DEBUGPREFIX, event.getClass().getName());
+                }
+            }*/
+<span class="nc" id="L122">        }</span>
+<span class="nc" id="L123">        clientConnection.close();</span>
+<span class="nc" id="L124">    }</span>
+
+    /**
+     * Parses the given user input string and executes the given commands.
+     * Arguments must be seperated by whitespaces
+     *
+     * @param input The user input string, eg from System.console().readLine()
+     * @return false if string could not be parsed
+     */
+    private boolean parseInputString(String input) {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if (input == null) {</span>
+<span class="nc" id="L135">            throw new IllegalArgumentException();</span>
+        }
+<span class="nc" id="L137">        String[] normalizedInput = input.toLowerCase().split(&quot;\\s+&quot;);</span>
+<span class="nc bnc" id="L138" title="All 158 branches missed.">        switch (normalizedInput[0]) {</span>
+            //case &quot;watch&quot;: //Disabled because server keeps crashing
+            //    watch();
+            //    break;
+            case &quot;m&quot;: //m is short alias of move
+            case &quot;move&quot;:
+<span class="nc bnc" id="L144" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L145">                    return false;</span>
+                }
+<span class="nc" id="L147">                return move(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+            case &quot;mnw&quot;: //MOVE ALIASES----------------------
+            case &quot;mol&quot;:
+            case &quot;mul&quot;:
+<span class="nc" id="L151">                return move(Direction.NORTH_WEST);</span>
+            case &quot;mw&quot;:
+            case &quot;ml&quot;:
+<span class="nc" id="L154">                return move(Direction.WEST);</span>
+            case &quot;msw&quot;:
+            case &quot;mrl&quot;:
+            case &quot;mdl&quot;:
+<span class="nc" id="L158">                return move(Direction.SOUTH_WEST);</span>
+            case &quot;mse&quot;:
+            case &quot;mdr&quot;:
+            case &quot;mrr&quot;:
+<span class="nc" id="L162">                return move(Direction.SOUTH_EAST);</span>
+            case &quot;me&quot;:
+            case &quot;mr&quot;:
+<span class="nc" id="L165">                return move(Direction.EAST);</span>
+            case &quot;mne&quot;:
+            case &quot;mur&quot;:
+            case &quot;mor&quot;:
+<span class="nc" id="L169">                return move(Direction.NORTH_EAST);</span>
+            case &quot;stab&quot;:
+<span class="nc bnc" id="L171" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L172">                    return false;</span>
+                }
+<span class="nc" id="L174">                return stab(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+            case &quot;slash&quot;:
+<span class="nc bnc" id="L176" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L177">                    return false;</span>
+                }
+<span class="nc" id="L179">                return slash(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+
+            case &quot;stare&quot;:
+<span class="nc bnc" id="L182" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L183">                    return false;</span>
+                }
+<span class="nc" id="L185">                return stare(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+            case &quot;claw&quot;:
+<span class="nc bnc" id="L187" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L188">                    return false;</span>
+                }
+<span class="nc" id="L190">                return claw(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+
+            case &quot;crush&quot;:
+<span class="nc bnc" id="L193" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L194">                    return false;</span>
+                }
+<span class="nc" id="L196">                return crush(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+            case &quot;singe&quot;:
+<span class="nc bnc" id="L198" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L199">                    return false;</span>
+                }
+<span class="nc" id="L201">                return singe(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+            case &quot;shoot&quot;:
+<span class="nc bnc" id="L203" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L204">                    return false;</span>
+                }
+<span class="nc" id="L206">                return shoot(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+            case &quot;burn&quot;:
+<span class="nc" id="L208">                return burn();</span>
+            case &quot;cast&quot;:
+<span class="nc bnc" id="L210" title="All 2 branches missed.">                if (normalizedInput.length != 3) {</span>
+<span class="nc" id="L211">                    return false;</span>
+                }
+                try {
+<span class="nc" id="L214">                    return cast(Integer.parseInt(normalizedInput[1]), Integer.parseInt(normalizedInput[2]));</span>
+<span class="nc" id="L215">                } catch (NumberFormatException e) {</span>
+<span class="nc" id="L216">                    return false;</span>
+                }
+            case &quot;blink&quot;:
+<span class="nc bnc" id="L219" title="All 2 branches missed.">                if (normalizedInput.length != 3) {</span>
+<span class="nc" id="L220">                    return false;</span>
+                }
+                try {
+<span class="nc" id="L223">                    return blink(Integer.parseInt(normalizedInput[1]), Integer.parseInt(normalizedInput[2]));</span>
+<span class="nc" id="L224">                } catch (NumberFormatException e) {</span>
+<span class="nc" id="L225">                    return false;</span>
+                }
+            case &quot;swap&quot;:
+<span class="nc bnc" id="L228" title="All 2 branches missed.">                if (normalizedInput.length != 3) {</span>
+<span class="nc" id="L229">                    return false;</span>
+                }
+                try {
+<span class="nc" id="L232">                    return swap(Integer.parseInt(normalizedInput[1]), Integer.parseInt(normalizedInput[2]));</span>
+<span class="nc" id="L233">                } catch (NumberFormatException e) {</span>
+<span class="nc" id="L234">                    return false;</span>
+                }
+            case &quot;cut&quot;:
+<span class="nc bnc" id="L237" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L238">                    return false;</span>
+                }
+<span class="nc" id="L240">                return cut(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+            case &quot;bite&quot;:
+<span class="nc bnc" id="L242" title="All 4 branches missed.">                if ((normalizedInput.length != 2) || (parseDirection(normalizedInput[1]) == null)) {</span>
+<span class="nc" id="L243">                    return false;</span>
+                }
+<span class="nc" id="L245">                return bite(Direction.valueOf(parseDirection(normalizedInput[1])));</span>
+            case &quot;done&quot;:
+            case &quot;doneacting&quot;:
+            case &quot;d&quot;:
+<span class="nc" id="L249">                done();</span>
+<span class="nc" id="L250">                break;</span>
+            case &quot;warcry&quot;:
+            case &quot;cry&quot;:
+<span class="nc bnc" id="L253" title="All 4 branches missed.">                if ((normalizedInput.length &lt; 2) || (input.length() &lt; normalizedInput[0].length() + 1)) {</span>
+<span class="nc" id="L254">                    return false;</span>
+                }
+<span class="nc" id="L256">                return cry(input.substring(normalizedInput[0].length() + 1));</span>
+            case &quot;help&quot;:
+            case &quot;?&quot;:
+            case &quot;h&quot;:
+<span class="nc" id="L260">                printHelp();</span>
+<span class="nc" id="L261">                return false;</span>
+            case &quot;stat&quot;:
+            case &quot;status&quot;:
+            case &quot;who&quot;:
+            case &quot;players&quot;:
+            case &quot;stats&quot;:
+<span class="nc" id="L267">                printPlayerInfo();</span>
+<span class="nc" id="L268">                return false;</span>
+            default:
+<span class="nc" id="L270">                return false;</span>
+        }
+<span class="nc" id="L272">        return true;</span>
+    }
+
+    private void printPlayerInfo() { //Unfortunately not sortable
+<span class="nc" id="L276">        System.out.printf(&quot;%n%5s%12s%12s%5s%12s%n&quot;, &quot;ID&quot;, &quot;PlayerName&quot;, &quot;TeamName&quot;, &quot;HP&quot;, &quot;Type&quot;);</span>
+<span class="nc bnc" id="L277" title="All 2 branches missed.">        for (Pc m : super.game.getMonsters()) {</span>
+<span class="nc" id="L278">            System.out.printf(&quot;%5d%12s%12s%5d%12s%n&quot;,</span>
+<span class="nc" id="L279">                    m.getId(),</span>
+<span class="nc" id="L280">                    super.game.getPlayerByMonsterId(m.getId()).getName(),</span>
+<span class="nc" id="L281">                    super.game.getPlayerByMonsterId(m.getId()).getTeamName(),</span>
+<span class="nc" id="L282">                    super.game.getMonsterById(m.getId()).getHp(),</span>
+<span class="nc" id="L283">                    super.game.getMonsterById(m.getId()).getCreatureType().toString());</span>
+<span class="nc" id="L284">        }</span>
+<span class="nc" id="L285">        System.out.printf(&quot;%n&quot;);</span>
+<span class="nc" id="L286">    }</span>
+
+
+    private String parseDirection(String s) {
+<span class="nc bnc" id="L290" title="All 2 branches missed.">        if (s == null) {</span>
+<span class="nc" id="L291">            return null;</span>
+        }
+<span class="nc" id="L293">        String normalizedDirection = s.toLowerCase();</span>
+<span class="nc bnc" id="L294" title="All 56 branches missed.">        switch (normalizedDirection) {</span>
+            case &quot;north_east&quot;:
+            case &quot;northeast&quot;:
+            case &quot;ne&quot;:
+<span class="nc" id="L298">                return &quot;NORTH_EAST&quot;;</span>
+            case &quot;north_west&quot;:
+            case &quot;northwest&quot;:
+            case &quot;nw&quot;:
+<span class="nc" id="L302">                return &quot;NORTH_WEST&quot;;</span>
+            case &quot;west&quot;:
+            case &quot;w&quot;:
+<span class="nc" id="L305">                return &quot;WEST&quot;;</span>
+            case &quot;south_west&quot;:
+            case &quot;southwest&quot;:
+            case &quot;sw&quot;:
+<span class="nc" id="L309">                return &quot;SOUTH_WEST&quot;;</span>
+            case &quot;south_east&quot;:
+            case &quot;southeast&quot;:
+            case &quot;se&quot;:
+<span class="nc" id="L313">                return &quot;SOUTH_EAST&quot;;</span>
+            case &quot;east&quot;:
+            case &quot;e&quot;:
+<span class="nc" id="L316">                return &quot;EAST&quot;;</span>
+            default:
+<span class="nc" id="L318">                return null;</span>
+        }
+    }
+
+    @Override
+    public String getName() {
+<span class="nc" id="L324">        return name;</span>
+    }
+
+    @Override
+    public String getTeamName() {
+<span class="nc" id="L329">        return team;</span>
+    }
+
+    private boolean move(Direction direction) {
+<span class="nc" id="L333">        Move e = new Move(null, this.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L335">            e.sendCommand(super.clientConnection);</span>
+<span class="nc" id="L336">            return true;</span>
+        }
+<span class="nc" id="L338">        return false;</span>
+        //super.clientConnection.sendMove(direction);
+    }
+
+    private void register() {
+<span class="nc" id="L343">        super.clientConnection.sendRegister(this.name, this.monster, this.team);</span>
+<span class="nc" id="L344">    }</span>
+
+    private void watch() {
+<span class="nc" id="L347">        super.clientConnection.sendWatch();</span>
+<span class="nc" id="L348">    }</span>
+
+    private boolean stab(Direction direction) {
+<span class="nc" id="L351">        Stab e = new Stab(null, super.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L352" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L353">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L354">            return true;</span>
+        }
+<span class="nc" id="L356">        return false;</span>
+    }
+
+    private boolean slash(Direction direction) {
+<span class="nc" id="L360">        Slash e = new Slash(null, super.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L361" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L362">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L363">            return true;</span>
+        }
+<span class="nc" id="L365">        return false;</span>
+    }
+
+    private boolean cry(String cry) {
+<span class="nc" id="L369">        WarCry e = new WarCry(null, super.ownCreatureId, cry);</span>
+<span class="nc bnc" id="L370" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L371">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L372">            return true;</span>
+        }
+<span class="nc" id="L374">        return false;</span>
+    }
+
+    private boolean singe(Direction direction) {
+
+<span class="nc" id="L379">        Singe e = new Singe(null, super.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L380" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L381">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L382">            return true;</span>
+        }
+<span class="nc" id="L384">        return false;</span>
+    }
+
+    private boolean swap(int x, int y) {
+<span class="nc" id="L388">        Swap e = new Swap(null, super.ownCreatureId, x, y);</span>
+<span class="nc bnc" id="L389" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L390">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L391">            return true;</span>
+        }
+<span class="nc" id="L393">        return false;</span>
+    }
+
+    private boolean cast(int x, int y) {
+<span class="nc" id="L397">        Cast e = new Cast(null, super.ownCreatureId, x, y);</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L399">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L400">            return true;</span>
+        }
+<span class="nc" id="L402">        return false;</span>
+    }
+
+    private boolean shoot(Direction direction) {
+
+<span class="nc" id="L407">        Shoot e = new Shoot(null, super.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L408" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L409">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L410">            return true;</span>
+        }
+<span class="nc" id="L412">        return false;</span>
+    }
+
+    private void done() {
+<span class="nc" id="L416">        super.clientConnection.sendDoneActing();</span>
+<span class="nc" id="L417">    }</span>
+
+    private boolean bite(Direction direction) {
+
+<span class="nc" id="L421">        Bite e = new Bite(null, super.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L422" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L423">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L424">            return true;</span>
+        }
+<span class="nc" id="L426">        return false;</span>
+    }
+
+    private boolean blink(int x, int y) {
+
+<span class="nc" id="L431">        Blink e = new Blink(null, super.ownCreatureId, x, y);</span>
+<span class="nc bnc" id="L432" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L433">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L434">            return true;</span>
+        }
+<span class="nc" id="L436">        return false;</span>
+    }
+
+    private boolean burn() {
+
+<span class="nc" id="L441">        Burn e = new Burn(null, super.ownCreatureId);</span>
+<span class="nc bnc" id="L442" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L443">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L444">            return true;</span>
+        }
+<span class="nc" id="L446">        return false;</span>
+    }
+
+    private boolean cut(Direction direction) {
+
+<span class="nc" id="L451">        Cut e = new Cut(null, super.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L452" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L453">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L454">            return true;</span>
+        }
+<span class="nc" id="L456">        return false;</span>
+    }
+
+    private boolean claw(Direction direction) {
+
+<span class="nc" id="L461">        Claw e = new Claw(null, super.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L462" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L463">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L464">            return true;</span>
+        }
+<span class="nc" id="L466">        return false;</span>
+    }
+
+    private boolean crush(Direction direction) {
+<span class="nc" id="L470">        Crush e = new Crush(null, super.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L471" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L472">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L473">            return true;</span>
+        }
+<span class="nc" id="L475">        return false;</span>
+    }
+
+    private boolean stare(Direction direction) {
+
+<span class="nc" id="L480">        Stare e = new Stare(null, super.ownCreatureId, direction);</span>
+<span class="nc bnc" id="L481" title="All 2 branches missed.">        if (e.validateEvent(super.game, this)) {</span>
+<span class="nc" id="L482">            e.sendCommand(this.clientConnection);</span>
+<span class="nc" id="L483">            return true;</span>
+        }
+<span class="nc" id="L485">        return false;</span>
+    }
+
+    private void printHelp() {
+<span class="nc" id="L489">        System.out.printf(&quot;%s%n&quot;, HELPTEXT);</span>
+<span class="nc" id="L490">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

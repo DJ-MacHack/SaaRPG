@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShootInWrongActNowPhase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">ShootInWrongActNowPhase.java</span></div><h1>ShootInWrongActNowPhase.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Wiebk on 23.09.2016.
+ */
+public class ShootInWrongActNowPhase extends OurSystemTest {
+
+    public ShootInWrongActNowPhase(){
+<span class="nc" id="L14">        super (&quot;ShootInWrongActNowPhase&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    public void executeTest(){
+        //register
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; a = register(0, &quot;Andreas&quot;, CreatureType.ELF, &quot;a&quot;, 0, 0);</span>
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; b = register(1, &quot;Benni&quot;, CreatureType.IFRIT, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L22">        assertRegisterEvent(a.nextEvent(), 1, &quot;Benni&quot;, CreatureType.IFRIT, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L23">        assertRegisterEvent(b.nextEvent(), 0, &quot;Andreas&quot;, CreatureType.ELF, &quot;a&quot;, 0, 0);</span>
+
+        //roundbegin
+<span class="nc" id="L26">        assertRoundBegin(assertAndMerge(a, b), 1);</span>
+
+        //a: sends done acting
+<span class="nc" id="L29">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L30">        a.sendDoneActing();</span>
+<span class="nc" id="L31">        assertDoneActing(assertAndMerge(a, b), 0);</span>
+
+        //b: does nothing, but a sends Shoot
+<span class="nc" id="L34">        assertActNow(assertAndMerge(a, b), 1);</span>
+<span class="nc" id="L35">        a.sendShoot(Direction.EAST);</span>
+<span class="nc" id="L36">        assertKicked(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L37">        b.sendDoneActing();</span>
+<span class="nc" id="L38">        assertDoneActing(assertAndMerge(a, b), 1);</span>
+
+        //roundend
+<span class="nc" id="L41">        assertRoundEnd(assertAndMerge(a, b), 1, 1);</span>
+<span class="nc" id="L42">        assertWinner(assertAndMerge(a, b), &quot;b&quot;);</span>
+<span class="nc" id="L43">    }</span>
+
+    @Override
+    public String getFightFile(){
+<span class="nc" id="L47">        return &quot;a, b\n&quot;</span>
+              +&quot;a, Andreas, Elf\n&quot;
+              +&quot;b, Benni, Kobold&quot;;
+    }
+
+    @Override
+    public String getMapFile(){
+<span class="nc" id="L54">        return &quot;01 \n&quot;</span>
+              +&quot;   \n&quot;
+              +&quot;   &quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

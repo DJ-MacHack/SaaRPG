@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="7.1">
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\ExampleTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\LkTests.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\ServerTests.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\CommandFactoryTests.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\DiedTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\MoveTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\RegisterTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\WarCryTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\BiteTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\BlinkTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\BurnTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\CastTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\ClawTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\CrushTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\CutTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\ShootTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\SingeTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\SlashTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\StareTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\messagestest\attacktest\SwapTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\modeltest\FieldEffectsTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\modeltest\GameTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\modeltest\GuiTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\modeltest\MapTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\modeltest\NpcTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\modeltest\PcTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\modeltest\PlayerTests.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\modeltest\TeamTests.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\utilitytest\DirectionTests.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\test\java\de\unisaarland\sopra\utilitytest\GameVectorTest.java">
+</file>
+</checkstyle>

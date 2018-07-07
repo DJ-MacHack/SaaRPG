@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.messagestest.CommandFactoryTests" tests="18" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="0.029">
+  <properties/>
+  <testcase name="testCreateWarCry" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.003"/>
+  <testcase name="testCreateBlink" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.001"/>
+  <testcase name="testCreateCrush" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.0"/>
+  <testcase name="testCreateShoot" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.0"/>
+  <testcase name="testCreateSinge" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.0"/>
+  <testcase name="testCreateSlash" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.0"/>
+  <testcase name="testCreateStare" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.0"/>
+  <testcase name="testCreateWatch" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.002"/>
+  <testcase name="testCreateRegister" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.004"/>
+  <testcase name="testCreateDoneActing" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.002"/>
+  <testcase name="testCreateBite" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.0"/>
+  <testcase name="testCreateBurn" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.001"/>
+  <testcase name="testCreateCast" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.002"/>
+  <testcase name="testCreateClaw" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.003"/>
+  <testcase name="testCreateMove" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.001"/>
+  <testcase name="testCreateStab" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.002"/>
+  <testcase name="testCreateSwap" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.0"/>
+  <testcase name="testCreateCut" classname="de.unisaarland.sopra.messagestest.CommandFactoryTests" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

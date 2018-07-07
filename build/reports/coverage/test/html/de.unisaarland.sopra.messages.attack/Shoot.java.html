@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Shoot.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages.attack</a> &gt; <span class="el_source">Shoot.java</span></div><h1>Shoot.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages.attack;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.messages.Command;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.*;
+import de.unisaarland.sopra.utility.DirectionHelper;
+import de.unisaarland.sopra.utility.GameVector;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+import de.unisaarland.sopra.utility.LogString;
+
+/**
+ * Created by Wiebk on 12.09.2016.
+ * Implemented by Karla
+ */
+
+public class Shoot implements Command, Event {
+
+    private static final int DAMAGE = 11;
+    private static final int RANGE = 5;
+    private static final int ENERGYCOST = 420;
+<span class="fc" id="L25">    private static final CreatureType[] VALIDCREATURES = {CreatureType.ELF};</span>
+
+
+    private int actorId;
+    private int targetId;
+    private boolean targetisDead;
+    private Direction direction;
+    private CommIds commIds;
+
+<span class="fc" id="L34">    public Shoot(CommIds commids, int actorId, Direction direction) {</span>
+<span class="fc" id="L35">        this.direction = direction;</span>
+<span class="fc" id="L36">        this.actorId = actorId;</span>
+<span class="fc" id="L37">        this.commIds = commids;</span>
+<span class="fc" id="L38">    }</span>
+
+    public void executeCommand(Game game) {
+<span class="fc" id="L41">        attack(game);</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (targetisDead) {</span>
+<span class="nc" id="L43">            Creature target = game.getCreatureById(targetId);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            if (target.getCreatureType() != CreatureType.BOAR) {</span>
+<span class="nc" id="L45">                game.removeCreature(target);</span>
+            }
+        }
+<span class="fc" id="L48">    }</span>
+
+    public boolean validateCommand(Game game) {
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (game.getRoundState() != RoundState.ACTNOW) {</span>
+<span class="nc" id="L52">            return false;</span>
+        }
+
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if(game.getMonsterActing() != actorId){</span>
+<span class="nc" id="L56">            return false;</span>
+        }
+
+<span class="fc" id="L59">        return canAttack(game);</span>
+    }
+
+    public void sendResults(ServerConnection serverconnection) {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        for (int commid : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L64">            serverconnection.sendShot(commid, actorId, direction);</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">            if (targetisDead) {</span>
+<span class="nc" id="L66">                serverconnection.sendDied(commid, targetId);</span>
+            }
+<span class="nc" id="L68">        }</span>
+<span class="nc" id="L69">    }</span>
+
+    public void sendCommand(ClientConnection clientconnection) {
+<span class="nc" id="L72">        clientconnection.sendShoot(direction);</span>
+<span class="nc" id="L73">    }</span>
+
+    @Override
+    public int getMonsterId() {
+<span class="nc" id="L77">        return actorId;</span>
+    }
+
+    public void executeEvent(Game game, Client client) {
+<span class="nc" id="L81">        attack(game);</span>
+<span class="nc" id="L82">    }</span>
+
+    public boolean validateEvent(Game game, Client client) {
+<span class="nc" id="L85">        return canAttack(game);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L90">        return String.format(&quot;%s shoots %s!&quot;, LogString.createVictimName(cli.getGame(),this.actorId),</span>
+<span class="nc" id="L91">                LogString.getReadableDirectionString(this.direction));</span>
+    }
+
+    /**
+     * Changes the status of the game
+     *
+     * @param game
+     */
+    private void attack(Game game) {
+
+<span class="fc" id="L101">        Pc monster = game.getMonsterById(actorId);</span>
+<span class="fc" id="L102">        GameVector position = monster.getPosition();</span>
+<span class="fc" id="L103">        GameVector direc = DirectionHelper.toVector(direction);</span>
+<span class="fc" id="L104">        GameVector neposition = position.add(direc);</span>
+
+<span class="fc" id="L106">        this.targetisDead = false;</span>
+<span class="fc" id="L107">        this.targetId = 0;</span>
+<span class="fc" id="L108">        Creature target = null;</span>
+<span class="fc" id="L109">        int newrange = RANGE + FieldEffects.getRangeIncrease(game.getFieldAt(position), monster.getCreatureType());</span>
+
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        for (int i = 0; i &lt; newrange; i++) {</span>
+<span class="fc" id="L112">            target = game.getCreatureByPosition(neposition);</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">            if (target != null) {</span>
+<span class="fc" id="L114">                int damage = (int) (DAMAGE * FieldEffects.getDefensiveMultiplier(game.getFieldAt(neposition), target.getCreatureType()));</span>
+<span class="fc" id="L115">                target.receiveDamage(damage);</span>
+<span class="fc" id="L116">                break;</span>
+            }
+<span class="fc" id="L118">            neposition = neposition.add(direc);</span>
+        }
+        //Energy cost
+<span class="fc" id="L121">        int energy = (int) (ENERGYCOST * FieldEffects.getAttackCostMultiplier(game.getFieldAt(position), monster.getCreatureType()));</span>
+<span class="fc" id="L122">        monster.drainEnergy(energy);</span>
+
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (target != null) {</span>
+<span class="fc" id="L125">            this.targetId = target.getId();</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">            if (target.isDead()) {</span>
+<span class="nc" id="L127">                this.targetisDead = true;</span>
+            }
+        }
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Proofs if the creature is able/allowed to attacktest in the curren {@Link game}
+     *
+     * @param game
+     * @return true if the creature can attacktest
+     */
+    private boolean canAttack(Game game) {
+<span class="fc" id="L139">        Pc monster = game.getMonsterById(actorId);</span>
+
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if(monster == null){</span>
+<span class="nc" id="L142">            return false;</span>
+        }
+
+        // Am I Dead? What is life?
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (monster.isDead()) {</span>
+<span class="nc" id="L147">            return false;</span>
+        }
+        // Who am I? Am I an Elf?
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (!(monster.getCreatureType() == CreatureType.ELF)) {</span>
+<span class="nc" id="L151">            return false;</span>
+        }
+
+<span class="fc" id="L154">        GameVector position = monster.getPosition();</span>
+
+        //Where am I? Can I attacktest?
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        if (!FieldEffects.canAttack(game.getFieldAt(position), monster.getCreatureType())) {</span>
+<span class="fc" id="L158">            return false;</span>
+        }
+
+<span class="fc" id="L161">        int energy = (int) (ENERGYCOST * FieldEffects.getAttackCostMultiplier(game.getFieldAt(position), monster.getCreatureType()));</span>
+        // Am I strong enough? Do I have enough energy?
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">        if (monster.getEnergy() &lt; energy) {</span>
+<span class="nc" id="L164">            return false;</span>
+        }
+
+<span class="fc" id="L167">        int newrange = RANGE + FieldEffects.getRangeIncrease(game.getFieldAt(position), monster.getCreatureType());</span>
+
+<span class="fc" id="L169">        GameVector direc = DirectionHelper.toVector(direction);</span>
+<span class="fc" id="L170">        GameVector neposition = position.add(direc);</span>
+
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        for (int i = 0; i &lt; newrange; i++) {</span>
+            // Is something blocking me?
+<span class="fc" id="L174">            Field f = game.getFieldAt(neposition);</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            if (FieldEffects.blockProjectile(f)) {</span>
+<span class="fc" id="L176">                return false;</span>
+            }
+            //Is someone there?
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            if (game.getCreatureByPosition(neposition) != null) {</span>
+<span class="fc" id="L180">                return true;</span>
+            }
+<span class="fc" id="L182">            neposition = neposition.add(direc);</span>
+        }
+<span class="fc" id="L184">        return false;</span>
+    }
+
+
+    public static int getDAMAGE() {
+<span class="nc" id="L189">        return DAMAGE;</span>
+    }
+
+    public static int getRANGE() {
+<span class="nc" id="L193">        return RANGE;</span>
+    }
+
+    public static int getENERGYCOST() {
+<span class="nc" id="L197">        return ENERGYCOST;</span>
+    }
+
+    public static CreatureType[] getVALIDCREATURES() {
+<span class="nc" id="L201">        return VALIDCREATURES;</span>
+    }
+
+    public int getActorId() {
+<span class="nc" id="L205">        return actorId;</span>
+    }
+
+    public int getTargetId() {
+<span class="nc" id="L209">        return targetId;</span>
+    }
+
+    public boolean isTargetisDead() {
+<span class="nc" id="L213">        return targetisDead;</span>
+    }
+
+    public Direction getDirection() {
+<span class="nc" id="L217">        return direction;</span>
+    }
+
+    public CommIds getCommIds() {
+<span class="nc" id="L221">        return commIds;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

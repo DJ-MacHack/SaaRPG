@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MovementTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">MovementTest.java</span></div><h1>MovementTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+/**
+ * Created by Team14 on 22/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class MovementTest extends OurSystemTest {
+
+    private final String map;
+    private final CreatureType monstertype;
+    private final int stepsBeforeTurn;
+    private final Direction lastDirection;
+
+    private MovementTest(String name, String map, CreatureType monsterType, int stepsBeforeTurn, Direction lastDirection) {
+<span class="nc" id="L23">        super(name);</span>
+<span class="nc" id="L24">        this.map = map;</span>
+<span class="nc" id="L25">        this.monstertype = monsterType;</span>
+<span class="nc" id="L26">        this.stepsBeforeTurn = stepsBeforeTurn;</span>
+<span class="nc" id="L27">        this.lastDirection = lastDirection;</span>
+<span class="nc" id="L28">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // registration of harry and statist23
+<span class="nc" id="L33">        ClientConnection&lt;Event&gt; harry = register(0, &quot;Harry&quot;, this.monstertype, &quot;Active&quot;, 1, 0);</span>
+<span class="nc" id="L34">        ClientConnection&lt;Event&gt; statist23 = register(1, &quot;Statist23&quot;, CreatureType.KOBOLD, &quot;Passive&quot;, 0, 0);</span>
+
+<span class="nc" id="L36">        assertRegisterEvent(harry.nextEvent(), 1, &quot;Statist23&quot;, CreatureType.KOBOLD, &quot;Passive&quot;, 0, 0);</span>
+<span class="nc" id="L37">        assertRegisterEvent(statist23.nextEvent(), 0, &quot;Harry&quot;, this.monstertype, &quot;Active&quot;, 1, 0);</span>
+
+        // round 1 begins
+<span class="nc" id="L40">        assertRoundBegin(assertAndMerge(harry, statist23), 1);</span>
+
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        for (int i = 0; i &lt; this.stepsBeforeTurn; i++) {</span>
+<span class="nc" id="L43">            assertActNow(assertAndMerge(harry, statist23), 0);</span>
+<span class="nc" id="L44">            harry.sendMove(Direction.EAST);</span>
+<span class="nc" id="L45">            assertMoved(assertAndMerge(harry, statist23), 0, Direction.EAST);</span>
+        }
+<span class="nc" id="L47">        assertActNow(assertAndMerge(harry, statist23), 0);</span>
+<span class="nc" id="L48">        harry.sendMove(this.lastDirection);</span>
+<span class="nc" id="L49">        assertKicked(assertAndMerge(harry, statist23), 0);</span>
+
+<span class="nc" id="L51">        assertActNow(assertAndMerge(harry, statist23), 1);</span>
+<span class="nc" id="L52">        statist23.sendDoneActing();</span>
+<span class="nc" id="L53">        assertDoneActing(assertAndMerge(harry, statist23), 1);</span>
+
+<span class="nc" id="L55">        assertRoundEnd(assertAndMerge(harry, statist23), 1, 0);</span>
+<span class="nc" id="L56">        assertWinner(assertAndMerge(harry, statist23), &quot;Passive&quot;);</span>
+<span class="nc" id="L57">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L61">        return map;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L66">        return &quot;Active, Passive\n&quot;</span>
+<span class="nc" id="L67">                + String.format(&quot;Active, Harry, %s %n&quot;, this.monstertype)</span>
+                + &quot;Passive, Statist23, KOBOLD&quot;;
+    }
+
+    public static Collection&lt;OurSystemTest&gt; getTests() {
+<span class="nc" id="L72">        ArrayList&lt;OurSystemTest&gt; sysTests = new ArrayList&lt;&gt;();</span>
+        //MovementTests
+        // different maps to test
+<span class="nc" id="L75">        final String grassMap = &quot;10            &quot;;</span>
+<span class="nc" id="L76">        final String iceMap = &quot;10_____________&quot;;</span>
+<span class="nc" id="L77">        final String rockMap = &quot;10#####&quot;;</span>
+<span class="nc" id="L78">        final String swampMap = &quot;10%%%%%%%%%%%%%&quot;;</span>
+<span class="nc" id="L79">        final String waterMap = &quot;10~~~~~~~~~~~~~~&quot;;</span>
+
+        // KoboldTests
+<span class="nc" id="L82">        sysTests.add(new MovementTest(&quot;KoboldOnGrassMovementTest&quot;, grassMap, CreatureType.KOBOLD, 10, Direction.WEST));</span>
+<span class="nc" id="L83">        sysTests.add(new MovementTest(&quot;KoboldOnIceMovementTest&quot;, iceMap, CreatureType.KOBOLD, 5, Direction.WEST));</span>
+<span class="nc" id="L84">        sysTests.add(new MovementTest(&quot;KoboldOnRockMovementTest&quot;, rockMap, CreatureType.KOBOLD, 0, Direction.EAST));</span>
+<span class="nc" id="L85">        sysTests.add(new MovementTest(&quot;KoboldOnSwampMovementTest&quot;, swampMap, CreatureType.KOBOLD, 3, Direction.EAST));</span>
+<span class="nc" id="L86">        sysTests.add(new MovementTest(&quot;KoboldOnWaterMovementTest&quot;, waterMap, CreatureType.KOBOLD, 2, Direction.EAST));</span>
+<span class="nc" id="L87">        sysTests.add(new MovementTest(&quot;KoboldOutOfBoundsMovementTest&quot;, waterMap, CreatureType.KOBOLD, 0, Direction.SOUTH_EAST));</span>
+<span class="nc" id="L88">        sysTests.add(new MovementTest(&quot;KoboldOnCreatureMovementTest&quot;, waterMap, CreatureType.KOBOLD, 0, Direction.WEST));</span>
+
+        // ElfTests
+<span class="nc" id="L91">        sysTests.add(new MovementTest(&quot;ElfOnGrassMovementTest&quot;, grassMap, CreatureType.ELF, 10, Direction.WEST));</span>
+<span class="nc" id="L92">        sysTests.add(new MovementTest(&quot;ElfOnIceMovementTest&quot;, iceMap, CreatureType.ELF, 5, Direction.WEST));</span>
+<span class="nc" id="L93">        sysTests.add(new MovementTest(&quot;ElfOnRockMovementTest&quot;, rockMap, CreatureType.ELF, 0, Direction.EAST));</span>
+<span class="nc" id="L94">        sysTests.add(new MovementTest(&quot;ElfOnSwampMovementTest&quot;, swampMap, CreatureType.ELF, 3, Direction.EAST));</span>
+<span class="nc" id="L95">        sysTests.add(new MovementTest(&quot;ElfOnWaterMovementTest&quot;, waterMap, CreatureType.ELF, 2, Direction.EAST));</span>
+<span class="nc" id="L96">        sysTests.add(new MovementTest(&quot;ElfOutOfBoundsMovementTest&quot;, waterMap, CreatureType.ELF, 0, Direction.SOUTH_EAST));</span>
+<span class="nc" id="L97">        sysTests.add(new MovementTest(&quot;ElfOnCreatureMovementTest&quot;, waterMap, CreatureType.ELF, 0, Direction.WEST));</span>
+
+        // NagaTests
+<span class="nc" id="L100">        sysTests.add(new MovementTest(&quot;NagaOnGrassMovementTest&quot;, grassMap, CreatureType.NAGA, 9, Direction.WEST));</span>
+<span class="nc" id="L101">        sysTests.add(new MovementTest(&quot;NagaOnIceMovementTest&quot;, iceMap, CreatureType.NAGA, 5, Direction.WEST));</span>
+<span class="nc" id="L102">        sysTests.add(new MovementTest(&quot;NagaOnRockMovementTest&quot;, rockMap, CreatureType.NAGA, 0, Direction.EAST));</span>
+<span class="nc" id="L103">        sysTests.add(new MovementTest(&quot;NagaOnSwampMovementTest&quot;, swampMap, CreatureType.NAGA, 9, Direction.EAST));</span>
+<span class="nc" id="L104">        sysTests.add(new MovementTest(&quot;NagaOnWaterMovementTest&quot;, waterMap, CreatureType.NAGA, 4, Direction.EAST));</span>
+<span class="nc" id="L105">        sysTests.add(new MovementTest(&quot;NagaOutOfBoundsMovementTest&quot;, waterMap, CreatureType.NAGA, 0, Direction.SOUTH_EAST));</span>
+<span class="nc" id="L106">        sysTests.add(new MovementTest(&quot;NagaOnCreatureMovementTest&quot;, waterMap, CreatureType.NAGA, 0, Direction.WEST));</span>
+
+        // RookTests
+<span class="nc" id="L109">        sysTests.add(new MovementTest(&quot;RookOnGrassMovementTest&quot;, grassMap, CreatureType.ROOK, 4, Direction.WEST));</span>
+<span class="nc" id="L110">        sysTests.add(new MovementTest(&quot;RookOnIceMovementTest&quot;, iceMap, CreatureType.ROOK, 3, Direction.WEST));</span>
+<span class="nc" id="L111">        sysTests.add(new MovementTest(&quot;RookOnRockMovementTest&quot;, rockMap, CreatureType.ROOK, 0, Direction.EAST));</span>
+<span class="nc" id="L112">        sysTests.add(new MovementTest(&quot;RookOnSwampMovementTest&quot;, swampMap, CreatureType.ROOK, 1, Direction.EAST));</span>
+<span class="nc" id="L113">        sysTests.add(new MovementTest(&quot;RookOnWaterMovementTest&quot;, waterMap, CreatureType.ROOK, 1, Direction.EAST));</span>
+<span class="nc" id="L114">        sysTests.add(new MovementTest(&quot;RookOutOfBoundsMovementTest&quot;, waterMap, CreatureType.ROOK, 0, Direction.SOUTH_EAST));</span>
+<span class="nc" id="L115">        sysTests.add(new MovementTest(&quot;RookOnCreatureMovementTest&quot;, waterMap, CreatureType.ROOK, 0, Direction.WEST));</span>
+
+        // YetiTests
+<span class="nc" id="L118">        sysTests.add(new MovementTest(&quot;YetiOnGrassMovementTest&quot;, grassMap, CreatureType.YETI, 5, Direction.WEST));</span>
+<span class="nc" id="L119">        sysTests.add(new MovementTest(&quot;YetiOnRockMovementTest&quot;, rockMap, CreatureType.YETI, 0, Direction.EAST));</span>
+<span class="nc" id="L120">        sysTests.add(new MovementTest(&quot;YetiOnSwampMovementTest&quot;, swampMap, CreatureType.YETI, 1, Direction.EAST));</span>
+<span class="nc" id="L121">        sysTests.add(new MovementTest(&quot;YetiOnWaterMovementTest&quot;, waterMap, CreatureType.YETI, 1, Direction.EAST));</span>
+<span class="nc" id="L122">        sysTests.add(new MovementTest(&quot;YetiOutOfBoundsMovementTest&quot;, waterMap, CreatureType.YETI, 0, Direction.SOUTH_EAST));</span>
+<span class="nc" id="L123">        sysTests.add(new MovementTest(&quot;YetiOnCreatureMovementTest&quot;, waterMap, CreatureType.YETI, 0, Direction.WEST));</span>
+
+        // IfritTests
+<span class="nc" id="L126">        sysTests.add(new MovementTest(&quot;IfritOnGrassMovementTest&quot;, grassMap, CreatureType.IFRIT, 10, Direction.WEST));</span>
+<span class="nc" id="L127">        sysTests.add(new MovementTest(&quot;IfritOnIceMovementTest&quot;, iceMap, CreatureType.IFRIT, 5, Direction.WEST));</span>
+<span class="nc" id="L128">        sysTests.add(new MovementTest(&quot;IfritOnRockMovementTest&quot;, rockMap, CreatureType.IFRIT, 0, Direction.EAST));</span>
+<span class="nc" id="L129">        sysTests.add(new MovementTest(&quot;IfritOnSwampMovementTest&quot;, swampMap, CreatureType.IFRIT, 3, Direction.EAST));</span>
+<span class="nc" id="L130">        sysTests.add(new MovementTest(&quot;IfritOnWaterMovementTest&quot;, waterMap, CreatureType.IFRIT, 2, Direction.EAST));</span>
+<span class="nc" id="L131">        sysTests.add(new MovementTest(&quot;IfritOutOfBoundsMovementTest&quot;, waterMap, CreatureType.IFRIT, 0, Direction.SOUTH_EAST));</span>
+<span class="nc" id="L132">        sysTests.add(new MovementTest(&quot;IfritOnCreatureMovementTest&quot;, waterMap, CreatureType.IFRIT, 0, Direction.WEST));</span>
+
+        // WraithTests
+<span class="nc" id="L135">        sysTests.add(new MovementTest(&quot;WraithOnGrassMovementTest&quot;, grassMap, CreatureType.WRAITH, 10, Direction.WEST));</span>
+<span class="nc" id="L136">        sysTests.add(new MovementTest(&quot;WraithOnIceMovementTest&quot;, iceMap, CreatureType.WRAITH, 5, Direction.WEST));</span>
+<span class="nc" id="L137">        sysTests.add(new MovementTest(&quot;WraithOnRockMovementTest&quot;, rockMap, CreatureType.WRAITH, 0, Direction.EAST));</span>
+<span class="nc" id="L138">        sysTests.add(new MovementTest(&quot;WraithOnSwampMovementTest&quot;, swampMap, CreatureType.WRAITH, 3, Direction.EAST));</span>
+<span class="nc" id="L139">        sysTests.add(new MovementTest(&quot;WraithOnWaterMovementTest&quot;, waterMap, CreatureType.WRAITH, 2, Direction.EAST));</span>
+<span class="nc" id="L140">        sysTests.add(new MovementTest(&quot;WraithOutOfBoundsMovementTest&quot;, waterMap, CreatureType.WRAITH, 0, Direction.SOUTH_EAST));</span>
+<span class="nc" id="L141">        sysTests.add(new MovementTest(&quot;WraithOnCreatureMovementTest&quot;, waterMap, CreatureType.WRAITH, 0, Direction.WEST));</span>
+<span class="nc" id="L142">        return sysTests;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

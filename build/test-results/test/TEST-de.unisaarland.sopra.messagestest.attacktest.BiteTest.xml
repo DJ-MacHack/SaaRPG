@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.messagestest.attacktest.BiteTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="0.017">
+  <properties/>
+  <testcase name="fieldTestEquals" classname="de.unisaarland.sopra.messagestest.attacktest.BiteTest" time="0.002"/>
+  <testcase name="biteDamage" classname="de.unisaarland.sopra.messagestest.attacktest.BiteTest" time="0.007"/>
+  <testcase name="getPoisonFirstRound" classname="de.unisaarland.sopra.messagestest.attacktest.BiteTest" time="0.001"/>
+  <testcase name="canBiteFalse" classname="de.unisaarland.sopra.messagestest.attacktest.BiteTest" time="0.004"/>
+  <testcase name="creaturetype1" classname="de.unisaarland.sopra.messagestest.attacktest.BiteTest" time="0.001"/>
+  <testcase name="canBiteTrue" classname="de.unisaarland.sopra.messagestest.attacktest.BiteTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

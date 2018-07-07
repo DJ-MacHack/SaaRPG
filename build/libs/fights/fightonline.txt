@@ -1,0 +1,5 @@
+Schwarz, Weiss
+Schwarz, A, Ifrit
+Schwaru, B, Yeti
+Weiss, Z, Naga
+Weiss, Y, Wraith

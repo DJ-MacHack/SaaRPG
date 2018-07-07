@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Swap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages.attack</a> &gt; <span class="el_source">Swap.java</span></div><h1>Swap.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages.attack;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.model.*;
+import de.unisaarland.sopra.utility.GameVector;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+import de.unisaarland.sopra.utility.LogString;
+
+/**
+ * Created by DJ MacHack on 12.09.2016.
+ */
+public class Swap extends MagicAttack {
+
+    private static final int DAMAGE = 6;
+    private static final int ENERGYCOST = 250;
+<span class="fc" id="L18">    private static final CreatureType[] VALIDCREATURES = {CreatureType.WRAITH};</span>
+
+    /**
+     * create new swap
+     *
+     * @param commIds CommID
+     * @param actorId PlayerID
+     * @param x       x_cord
+     * @param y       y_cord
+     */
+    public Swap(CommIds commIds, int actorId, int x, int y) {
+<span class="fc" id="L29">        super(commIds, actorId, x, y);</span>
+<span class="fc" id="L30">    }</span>
+
+    /**
+     * execute on game
+     *
+     * @param game
+     */
+    @Override
+    public void executeCommand(Game game) {
+<span class="fc" id="L39">        attack(game);</span>
+<span class="pc bpc" id="L40" title="3 of 4 branches missed.">        if (super.targetDied &amp;&amp; (game.getCreatureById(super.targetId).getCreatureType() != CreatureType.BOAR)) {</span>
+<span class="nc" id="L41">            game.removeCreature(game.getCreatureById(super.targetId));</span>
+        }
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * test on game
+     *
+     * @param game
+     * @return
+     */
+    @Override
+    public boolean validateCommand(Game game) {
+        // check if clientGame is in RoundState ActNow (first set by ActNow Event)
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (game.getRoundState() != RoundState.ACTNOW)</span>
+<span class="nc" id="L55">            return false;</span>
+
+        // check if it is acting monster's turn
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (game.getMonsterActing() != this.actorId) {</span>
+<span class="nc" id="L59">            return false;</span>
+        }
+
+<span class="fc" id="L62">        return canAttack(game);</span>
+    }
+
+    /**
+     * send result
+     *
+     * @param sc
+     */
+    @Override
+    public void sendResults(ServerConnection sc) {
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        for (int id : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L73">            sc.sendSwapped(id, super.actorId, super.xCoord, super.yCoord);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (super.targetDied) {</span>
+<span class="nc" id="L75">                sc.sendDied(id, super.targetId);</span>
+            }
+<span class="nc" id="L77">        }</span>
+<span class="nc" id="L78">    }</span>
+
+    /**
+     * send command
+     *
+     * @param cc
+     */
+    @Override
+    public void sendCommand(ClientConnection cc) {
+<span class="nc" id="L87">        cc.sendSwap(xCoord, yCoord);</span>
+<span class="nc" id="L88">    }</span>
+
+    /**
+     * execute on client
+     *
+     * @param client
+     */
+    @Override
+    public void executeEvent(Game game, Client client) {
+<span class="nc" id="L97">        attack(game);</span>
+<span class="nc" id="L98">    }</span>
+
+    /**
+     * test on client
+     *
+     * @param client
+     * @return
+     */
+    @Override
+    public boolean validateEvent(Game game, Client client) {
+<span class="nc" id="L108">        return canAttack(game);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L113">        return String.format(&quot;%s swaps with %s!&quot;, LogString.createVictimName(cli.getGame(),this.actorId),</span>
+<span class="nc" id="L114">                LogString.createVictimName(cli.getGame(),this.xCoord,this.yCoord));</span>
+    }
+
+    private void attack(Game game) {
+<span class="fc" id="L118">        Pc attacker = game.getMonsterById(this.actorId);</span>
+<span class="fc" id="L119">        attacker.setLastDirection(null);</span>
+<span class="fc" id="L120">        GameVector targetpos = new GameVector(super.xCoord, super.yCoord);</span>
+
+<span class="fc" id="L122">        int range = attacker.getPosition().distanceTo(targetpos);           //enough Energy</span>
+<span class="fc" id="L123">        int energycost = this.ENERGYCOST * range * FieldEffects.getAttackCostMultiplier(game.getFieldAt(attacker.getPosition()), attacker.getCreatureType());</span>
+<span class="fc" id="L124">        attacker.drainEnergy(energycost);</span>
+
+<span class="fc" id="L126">        Creature target = game.getCreatureByPosition(targetpos);</span>
+<span class="fc" id="L127">        int damage = (int) (this.DAMAGE * FieldEffects.getDefensiveMultiplier(game.getFieldAt(targetpos), target.getCreatureType()));</span>
+<span class="fc" id="L128">        target.receiveDamage(damage);</span>
+
+<span class="fc" id="L130">        target.setPosition(attacker.getPosition());</span>
+<span class="fc" id="L131">        attacker.setPosition(targetpos);</span>
+
+<span class="fc" id="L133">        super.targetId = target.getId();</span>
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if (target.isDead()) {</span>
+<span class="nc" id="L135">            super.targetDied = true;</span>
+        }
+<span class="fc" id="L137">    }</span>
+
+    private boolean canAttack(Game game) {
+<span class="fc" id="L140">        Pc attacker = game.getMonsterById(this.actorId);</span>
+
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if(attacker == null){</span>
+<span class="nc" id="L143">            return false;</span>
+        }
+
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (attacker.isDead()) {</span>
+<span class="nc" id="L147">            return false;</span>
+        }
+
+<span class="fc" id="L150">        boolean allowed = false;</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        for (CreatureType t : this.VALIDCREATURES) {</span>
+<span class="pc bpc" id="L152" title="2 of 4 branches missed.">            allowed = allowed || (attacker.getCreatureType() == t);</span>
+        }
+
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if (!allowed) {</span>
+<span class="nc" id="L156">            return false; //Check if me is a valid creature</span>
+        }
+
+<span class="fc" id="L159">        GameVector targetpos = new GameVector(super.xCoord, super.yCoord);</span>
+<span class="fc" id="L160">        int range = attacker.getPosition().distanceTo(targetpos);           //enough energy</span>
+<span class="fc" id="L161">        int energycost = this.ENERGYCOST * range * FieldEffects.getAttackCostMultiplier(game.getFieldAt(attacker.getPosition()), attacker.getCreatureType());</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (attacker.getEnergy() &lt; energycost){</span>
+<span class="fc" id="L163">            return false;</span>
+        }
+
+<span class="fc" id="L166">        Creature target = game.getCreatureByPosition(targetpos);</span>
+<span class="pc bpc" id="L167" title="2 of 4 branches missed.">        if (target == null || target.isDead()){                  //is there an enemy?</span>
+<span class="nc" id="L168">            return false;</span>
+        }
+
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        if (!FieldEffects.canAttack(game.getFieldAt(attacker.getPosition()), attacker.getCreatureType())) {      // can attacktest from field</span>
+<span class="nc" id="L172">            return false;</span>
+        }
+
+<span class="fc" id="L175">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

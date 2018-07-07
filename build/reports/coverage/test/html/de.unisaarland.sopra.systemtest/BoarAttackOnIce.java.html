@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoarAttackOnIce.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">BoarAttackOnIce.java</span></div><h1>BoarAttackOnIce.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.messages.PoisonEffect;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
+
+/**
+ * Created by Team14 on 21/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class BoarAttackOnIce extends OurSystemTest {
+
+    public BoarAttackOnIce() {
+<span class="nc" id="L21">        super(&quot;BoarAttackOnIce&quot;);</span>
+<span class="nc" id="L22">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // registration
+<span class="nc" id="L27">        ClientConnection&lt;Event&gt; sansa = register(0, &quot;Sansa&quot;, CreatureType.NAGA, &quot;Stark&quot;, 3, 0);</span>
+<span class="nc" id="L28">        ClientConnection&lt;Event&gt; tyrion = register(1, &quot;Tyrion&quot;, CreatureType.KOBOLD, &quot;Lannister&quot;, 5, 1);</span>
+<span class="nc" id="L29">        assertRegisterEvent(sansa.nextEvent(), 1, &quot;Tyrion&quot;, CreatureType.KOBOLD, &quot;Lannister&quot;, 5, 1);</span>
+<span class="nc" id="L30">        assertRegisterEvent(tyrion.nextEvent(), 0, &quot;Sansa&quot;, CreatureType.NAGA, &quot;Stark&quot;, 3, 0);</span>
+
+        // round 1: init-Order: Sansa -&gt; Tyrion
+<span class="nc" id="L33">        assertRoundBegin(assertAndMerge(sansa, tyrion), 1);</span>
+
+        // boar moves to (3, 1)
+<span class="nc" id="L36">        assertBoarSpawned(assertAndMerge(sansa, tyrion), 2, 1, 1);</span>
+<span class="nc" id="L37">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+<span class="nc" id="L38">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+
+        // Sansa's turn: cut on boar (5 dmg)
+<span class="nc" id="L41">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L42">        sansa.sendCut(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L43">        assertCut(assertAndMerge(sansa, tyrion), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L44">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L45">        sansa.sendDoneActing();</span>
+<span class="nc" id="L46">        assertDoneActing(assertAndMerge(sansa, tyrion), 0);</span>
+
+        // Tyrion's turn: moves to (4, 0) (BushField) in BoarAttack line for next round
+<span class="nc" id="L49">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L50">        tyrion.sendMove(Direction.NORTH_WEST);</span>
+<span class="nc" id="L51">        assertMoved(assertAndMerge(sansa, tyrion), 1, Direction.NORTH_WEST);</span>
+<span class="nc" id="L52">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L53">        tyrion.sendMove(Direction.WEST);</span>
+<span class="nc" id="L54">        assertMoved(assertAndMerge(sansa, tyrion), 1, Direction.WEST);</span>
+<span class="nc" id="L55">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L56">        tyrion.sendDoneActing();</span>
+<span class="nc" id="L57">        assertDoneActing(assertAndMerge(sansa, tyrion), 1);</span>
+
+<span class="nc" id="L59">        assertRoundEnd(assertAndMerge(sansa, tyrion), 1, 1);</span>
+        // sansa: 100hp
+        // tyrion: 100hp
+        // boar: 15hp
+
+        // round 2: init-Order: Sansa -&gt; Tyrion
+<span class="nc" id="L65">        assertRoundBegin(assertAndMerge(sansa, tyrion), 2);</span>
+
+        // boarattack on Tyrion (2 dmg) and on Sansa (5 dmg)
+<span class="nc" id="L68">        assertBoarAttack(assertAndMerge(sansa, tyrion), 2, 1);</span>
+<span class="nc" id="L69">        assertBoarAttack(assertAndMerge(sansa, tyrion), 2, 0);</span>
+<span class="nc" id="L70">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L71">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L72">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L73">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+<span class="nc" id="L74">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+<span class="nc" id="L75">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+
+        // Tyrion's turn: 2x slash on sansa (24 dmg)
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L79">            assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L80">            tyrion.sendSlash(Direction.WEST);</span>
+<span class="nc" id="L81">            assertSlashed(assertAndMerge(sansa, tyrion), 1, Direction.WEST);</span>
+        }
+<span class="nc" id="L83">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L84">        tyrion.sendDoneActing();</span>
+<span class="nc" id="L85">        assertDoneActing(assertAndMerge(sansa, tyrion), 1);</span>
+
+        // Sansa's turn: 5x cut on tyrion (10 dmg)
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        for (int i = 0; i &lt; 5; i++) {</span>
+<span class="nc" id="L89">            assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L90">            sansa.sendCut(Direction.EAST);</span>
+<span class="nc" id="L91">            assertCut(assertAndMerge(sansa, tyrion), 0, Direction.EAST);</span>
+        }
+<span class="nc" id="L93">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L94">        sansa.sendDoneActing();</span>
+<span class="nc" id="L95">        assertDoneActing(assertAndMerge(sansa, tyrion), 0);</span>
+
+<span class="nc" id="L97">        assertRoundEnd(assertAndMerge(sansa, tyrion), 2, 0);</span>
+        // sansa: 71hp
+        // tyrion: 88hp
+        // boar: 15hp
+
+        // round 3: init-Order: Tyrion -&gt; Sansa
+<span class="nc" id="L103">        assertRoundBegin(assertAndMerge(sansa, tyrion), 3);</span>
+
+        // boarattack on Tyrion (2 dmg) and on Sansa (5 dmg)
+<span class="nc" id="L106">        assertBoarAttack(assertAndMerge(sansa, tyrion), 2, 1);</span>
+<span class="nc" id="L107">        assertBoarAttack(assertAndMerge(sansa, tyrion), 2, 0);</span>
+<span class="nc" id="L108">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L109">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L110">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L111">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+<span class="nc" id="L112">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+<span class="nc" id="L113">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+
+        // Tyrion's turn: 4x stab on Sansa (28 dmg)
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        for (int i = 0; i &lt; 4; i++) {</span>
+<span class="nc" id="L117">            assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L118">            tyrion.sendStab(Direction.WEST);</span>
+<span class="nc" id="L119">            assertStabbed(assertAndMerge(sansa, tyrion), 1, Direction.WEST);</span>
+        }
+<span class="nc" id="L121">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L122">        tyrion.sendDoneActing();</span>
+<span class="nc" id="L123">        assertDoneActing(assertAndMerge(sansa, tyrion), 1);</span>
+
+        // Sansa's turn: 1x bite on boar (6 dmg + FIRSTROUND) and 1x bite on Tyrion (3 dmg + FIRSTROUND)
+<span class="nc" id="L126">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L127">        sansa.sendBite(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L128">        assertBitten(assertAndMerge(sansa, tyrion), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L129">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L130">        sansa.sendBite(Direction.EAST);</span>
+<span class="nc" id="L131">        assertBitten(assertAndMerge(sansa, tyrion), 0, Direction.EAST);</span>
+<span class="nc" id="L132">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L133">        sansa.sendDoneActing();</span>
+<span class="nc" id="L134">        assertDoneActing(assertAndMerge(sansa, tyrion), 0);</span>
+
+<span class="nc" id="L136">        assertRoundEnd(assertAndMerge(sansa, tyrion), 3, 0);</span>
+        // sansa: 38hp
+        // tyrion: 83hp [FIRSTROUND] -&gt; [HEAVY]
+        // boar: 9hp [FIRSTROUND] -&gt; [HEAVY]
+
+        // round 4: init-Order: Sansa -&gt; Tyrion
+<span class="nc" id="L142">        assertRoundBegin(assertAndMerge(sansa, tyrion), 4);</span>
+
+        // boar movement and attack on Tyrion (2 dmg) and Sansa (5 dmg)
+<span class="nc" id="L145">        assertBoarAttack(assertAndMerge(sansa, tyrion), 2, 1);</span>
+<span class="nc" id="L146">        assertBoarAttack(assertAndMerge(sansa, tyrion), 2, 0);</span>
+<span class="nc" id="L147">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L148">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L149">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L150">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+<span class="nc" id="L151">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+<span class="nc" id="L152">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+
+        // Sansa's turn: 1x bite on Tyrion (3 dmg + FIRSTROUND) and moves 3 steps west
+<span class="nc" id="L155">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L156">        sansa.sendBite(Direction.EAST);</span>
+<span class="nc" id="L157">        assertBitten(assertAndMerge(sansa, tyrion), 0, Direction.EAST);</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        for (int i = 0; i &lt; 3; i++) {</span>
+<span class="nc" id="L159">            assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L160">            sansa.sendMove(Direction.WEST);</span>
+<span class="nc" id="L161">            assertMoved(assertAndMerge(sansa, tyrion), 0, Direction.WEST);</span>
+        }
+<span class="nc" id="L163">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L164">        sansa.sendDoneActing();</span>
+<span class="nc" id="L165">        assertDoneActing(assertAndMerge(sansa, tyrion), 0);</span>
+
+        // Tyrions's turn: moves 3 steps west and slashes Sansa (12 dmg)
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        for (int i = 0; i &lt; 3; i++) {</span>
+<span class="nc" id="L169">            assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L170">            tyrion.sendMove(Direction.WEST);</span>
+<span class="nc" id="L171">            assertMoved(assertAndMerge(sansa, tyrion), 1, Direction.WEST);</span>
+        }
+<span class="nc" id="L173">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L174">        tyrion.sendSlash(Direction.WEST);</span>
+<span class="nc" id="L175">        assertSlashed(assertAndMerge(sansa, tyrion), 1, Direction.WEST);</span>
+<span class="nc" id="L176">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L177">        tyrion.sendDoneActing();</span>
+<span class="nc" id="L178">        assertDoneActing(assertAndMerge(sansa, tyrion), 1);</span>
+
+<span class="nc" id="L180">        Event e = assertAndMerge(sansa, tyrion);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        if (!(e instanceof PoisonEffect)) {</span>
+<span class="nc" id="L182">            failed(&quot;PoisonEffect was expected but Event was of other kind.&quot;);</span>
+        }
+<span class="nc" id="L184">        PoisonEffect pe = (PoisonEffect) e;</span>
+
+<span class="nc bnc" id="L186" title="All 2 branches missed.">        if (pe.getValue() != 4) {</span>
+<span class="nc" id="L187">            throw new IllegalArgumentException(&quot;PoisonEffect was expected to have value 4 but was different.&quot;);</span>
+        } else {
+<span class="nc bnc" id="L189" title="All 2 branches missed.">            if (pe.getEntityId() == 1) {</span>
+<span class="nc" id="L190">                assertPoisonEffect(assertAndMerge(sansa, tyrion), 2, 4);</span>
+            } else {
+<span class="nc bnc" id="L192" title="All 2 branches missed.">                if (pe.getEntityId() == 2) {</span>
+<span class="nc" id="L193">                    assertPoisonEffect(assertAndMerge(sansa, tyrion), 1, 4);</span>
+                } else {
+<span class="nc" id="L195">                    throw new IllegalArgumentException(&quot;PoisonEffect targetId was neither 1 nor 2 which were expected.&quot;);</span>
+                }
+            }
+        }
+<span class="nc" id="L199">        assertRoundEnd(assertAndMerge(sansa, tyrion), 4, 0);</span>
+        // sansa: 21hp
+        // tyrion: 74hp [HEAVY, FIRSTROUND] -&gt; [MINOR, HEAVY]
+        // boar: 5hp [HEAVY] -&gt; [MINOR]
+
+        // round 5: init-Order: Sansa -&gt; Tyrion
+<span class="nc" id="L205">        assertRoundBegin(assertAndMerge(sansa, tyrion), 5);</span>
+
+        // boar movement with attack on Tyrion (5 dmg)
+<span class="nc" id="L208">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.NORTH_EAST);</span>
+<span class="nc" id="L209">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L210">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.WEST);</span>
+<span class="nc" id="L211">        assertBoarAttack(assertAndMerge(sansa, tyrion), 2, 1);</span>
+<span class="nc" id="L212">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.SOUTH_WEST);</span>
+<span class="nc" id="L213">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+<span class="nc" id="L214">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.EAST);</span>
+
+        // Sansa's turn: moves SE and uses bite and cut on Tyrion (11 dmg + FIRSTROUND) and moves 2 times east
+<span class="nc" id="L217">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L218">        sansa.sendMove(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L219">        assertMoved(assertAndMerge(sansa, tyrion), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L220">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L221">        sansa.sendBite(Direction.NORTH_EAST);</span>
+<span class="nc" id="L222">        assertBitten(assertAndMerge(sansa, tyrion), 0, Direction.NORTH_EAST);</span>
+<span class="nc" id="L223">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L224">        sansa.sendCut(Direction.NORTH_EAST);</span>
+
+<span class="nc" id="L226">        assertCut(assertAndMerge(sansa, tyrion), 0, Direction.NORTH_EAST);</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L228">            assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L229">            sansa.sendMove(Direction.EAST);</span>
+<span class="nc" id="L230">            assertMoved(assertAndMerge(sansa, tyrion), 0, Direction.EAST);</span>
+        }
+<span class="nc" id="L232">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L233">        sansa.sendDoneActing();</span>
+<span class="nc" id="L234">        assertDoneActing(assertAndMerge(sansa, tyrion), 0);</span>
+
+        // Tyrions' turn: moves 2 steps east
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L238">            assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L239">            tyrion.sendMove(Direction.EAST);</span>
+<span class="nc" id="L240">            assertMoved(assertAndMerge(sansa, tyrion), 1, Direction.EAST);</span>
+        }
+<span class="nc" id="L242">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L243">        tyrion.sendDoneActing();</span>
+<span class="nc" id="L244">        assertDoneActing(assertAndMerge(sansa, tyrion), 1);</span>
+
+<span class="nc" id="L246">        List&lt;Event&gt; events = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L247">        events.add(assertAndMerge(sansa, tyrion));</span>
+<span class="nc" id="L248">        events.add(assertAndMerge(sansa, tyrion));</span>
+<span class="nc" id="L249">        events.add(assertAndMerge(sansa, tyrion));</span>
+<span class="nc" id="L250">        assertEquals(events.size(), 3);</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        for (Event e1 : events) {</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">            if (!(e1 instanceof PoisonEffect)) {</span>
+<span class="nc" id="L253">                failed(&quot;PoisonEffect was expected but Event was of other kind.&quot;);</span>
+            }
+<span class="nc" id="L255">        }</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">        if (!(events.contains(new PoisonEffect(2, 2)))) {</span>
+<span class="nc" id="L257">            throw new IllegalArgumentException(&quot;PoisonEffect (2, 2) was missing!&quot;);</span>
+        }
+<span class="nc bnc" id="L259" title="All 2 branches missed.">        if (!(events.contains(new PoisonEffect(1, 2)))) {</span>
+<span class="nc" id="L260">            throw new IllegalArgumentException(&quot;PoisonEffect (1, 2) was missing!&quot;);</span>
+        }
+<span class="nc bnc" id="L262" title="All 2 branches missed.">        if (!(events.contains(new PoisonEffect(1, 4)))) {</span>
+<span class="nc" id="L263">            throw new IllegalArgumentException(&quot;PoisonEffect (1, 4) was missing!&quot;);</span>
+        }
+
+<span class="nc" id="L266">        assertRoundEnd(assertAndMerge(sansa, tyrion), 5, 0);</span>
+        // sansa: 21hp
+        // tyrion: 52 [MINOR, HEAVY, FIRSTROUND] -&gt; [MINOR, HEAVY]
+        // boar: 3hp [MINOR] -&gt; []
+
+        // round 6: init-Order: Tyrion -&gt; Sansa
+<span class="nc" id="L272">        assertRoundBegin(assertAndMerge(sansa, tyrion), 6);</span>
+
+        // boar movement with attack on Tyrion (5 dmg)
+<span class="nc" id="L275">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.NORTH_EAST);</span>
+<span class="nc" id="L276">        assertBoarAttack(assertAndMerge(sansa, tyrion), 2, 1);</span>
+<span class="nc" id="L277">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.SOUTH_WEST);</span>
+
+        // Tyrion's turn: slash and stab on Sansa (19 dmg)
+<span class="nc" id="L280">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L281">        tyrion.sendStab(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L282">        assertStabbed(assertAndMerge(sansa, tyrion), 1, Direction.SOUTH_WEST);</span>
+<span class="nc" id="L283">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L284">        tyrion.sendSlash(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L285">        assertSlashed(assertAndMerge(sansa, tyrion), 1, Direction.SOUTH_WEST);</span>
+<span class="nc" id="L286">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L287">        tyrion.sendDoneActing();</span>
+<span class="nc" id="L288">        assertDoneActing(assertAndMerge(sansa, tyrion), 1);</span>
+
+        // Sansa's turn: 5x Cut on Tyrion (25 dmg)
+<span class="nc bnc" id="L291" title="All 2 branches missed.">        for (int i = 0; i &lt; 5; i++) {</span>
+<span class="nc" id="L292">            assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L293">            sansa.sendCut(Direction.NORTH_EAST);</span>
+<span class="nc" id="L294">            assertCut(assertAndMerge(sansa, tyrion), 0, Direction.NORTH_EAST);</span>
+        }
+<span class="nc" id="L296">        assertActNow(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L297">        sansa.sendDoneActing();</span>
+<span class="nc" id="L298">        assertDoneActing(assertAndMerge(sansa, tyrion), 0);</span>
+
+<span class="nc" id="L300">        events = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L301">        events.add(assertAndMerge(sansa, tyrion));</span>
+<span class="nc" id="L302">        events.add(assertAndMerge(sansa, tyrion));</span>
+<span class="nc" id="L303">        assertEquals(events.size(), 2);</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">        for (Event e2 : events) {</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">            if (!(e2 instanceof PoisonEffect)) {</span>
+<span class="nc" id="L306">                failed(&quot;PoisonEffect was expected but Event was of other kind.&quot;);</span>
+            }
+<span class="nc" id="L308">        }</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">        if (!events.contains(new PoisonEffect(1, 2))) {</span>
+<span class="nc" id="L310">            failed(&quot;PoisonEffect on Tyrion (id: 1) and value of 2 was expected but not included!&quot;);</span>
+        }
+<span class="nc bnc" id="L312" title="All 2 branches missed.">        if (!events.contains(new PoisonEffect(1, 4))) {</span>
+<span class="nc" id="L313">            failed(&quot;PoisonEffect on Tyrion (id: 1) and value of 4 was expected but not included!&quot;);</span>
+        }
+
+<span class="nc" id="L316">        assertRoundEnd(assertAndMerge(sansa, tyrion), 6, 0);</span>
+        // sansa: 2hp
+        // tyrion: 16hp [MINOR, HEAVY] -&gt; [MINOR]
+        // boar: 3hp
+
+        // round 7: init-Order: Sansa -&gt; Tyrion
+<span class="nc" id="L322">        assertRoundBegin(assertAndMerge(sansa, tyrion), 7);</span>
+
+        // boar movement with attack on Tyrion (5 dmg)
+<span class="nc" id="L325">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.NORTH_EAST);</span>
+<span class="nc" id="L326">        assertBoarAttack(assertAndMerge(sansa, tyrion), 2, 1);</span>
+<span class="nc" id="L327">        assertMoved(assertAndMerge(sansa, tyrion), 2, Direction.SOUTH_WEST);</span>
+
+        // Tyrion's turn: WarCry and stab on Sansa
+<span class="nc" id="L330">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L331">        tyrion.sendWarCry(&quot;Finish her - Fatality!&quot;);</span>
+<span class="nc" id="L332">        assertWarCry(assertAndMerge(sansa, tyrion), 1, &quot;Finish her - Fatality!&quot;);</span>
+<span class="nc" id="L333">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L334">        tyrion.sendStab(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L335">        assertStabbed(assertAndMerge(sansa, tyrion), 1, Direction.SOUTH_WEST);</span>
+<span class="nc" id="L336">        assertDied(assertAndMerge(sansa, tyrion), 0);</span>
+<span class="nc" id="L337">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L338">        tyrion.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L339">        assertStabbed(assertAndMerge(sansa, tyrion), 1, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L340">        assertDied(assertAndMerge(sansa, tyrion), 2);</span>
+<span class="nc" id="L341">        assertActNow(assertAndMerge(sansa, tyrion), 1);</span>
+<span class="nc" id="L342">        tyrion.sendDoneActing();</span>
+<span class="nc" id="L343">        assertDoneActing(assertAndMerge(sansa, tyrion), 1);</span>
+
+<span class="nc" id="L345">        assertPoisonEffect(assertAndMerge(sansa, tyrion), 1, 2);</span>
+<span class="nc" id="L346">        assertRoundEnd(assertAndMerge(sansa, tyrion), 7, 0);</span>
+
+<span class="nc" id="L348">        assertWinner(assertAndMerge(sansa, tyrion), &quot;Lannister&quot;);</span>
+<span class="nc" id="L349">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L353">        return &quot;   0x \n&quot;</span>
+             + &quot; .__#1&quot;;
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L359">        return &quot;Stark, Lannister\n&quot;</span>
+             + &quot;Stark, Sansa, Naga\n&quot;
+             + &quot;Lannister, Tyrion, Kobold&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

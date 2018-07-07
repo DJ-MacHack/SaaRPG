@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationAbortedTestFour.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">RegistrationAbortedTestFour.java</span></div><h1>RegistrationAbortedTestFour.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created on 21.09.16.
+ *
+ * @author Henrik Paul Koehn
+ */
+public class RegistrationAbortedTestFour extends OurSystemTest {
+
+    public RegistrationAbortedTestFour() {
+<span class="nc" id="L15">        super(&quot;RegistrationAbortedTestAnotherCommand(4)&quot;);</span>
+<span class="nc" id="L16">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // Valid registrations
+<span class="nc" id="L21">        expectServerFail();</span>
+
+<span class="nc" id="L23">        ClientConnection&lt;Event&gt; shy = register(0, &quot;Shiggy&quot;, CreatureType.NAGA, &quot;Wasser&quot;, 1, 0);</span>
+<span class="nc" id="L24">        ClientConnection&lt;Event&gt; bisa = register(1, &quot;Bisasam&quot;, CreatureType.ELF, &quot;Gras&quot;, 0, 1);</span>
+<span class="nc" id="L25">        assertRegisterEvent(bisa.nextEvent(), 0, &quot;Shiggy&quot;, CreatureType.NAGA, &quot;Wasser&quot;, 1, 0);</span>
+<span class="nc" id="L26">        assertRegisterEvent(shy.nextEvent(), 1, &quot;Bisasam&quot;, CreatureType.ELF, &quot;Gras&quot;, 0, 1);</span>
+
+<span class="nc" id="L28">        bisa.sendWarCry(&quot;Wann geht es los?&quot;);</span>
+<span class="nc" id="L29">        assertRegistrationAborted(assertAndMerge(shy, bisa));</span>
+<span class="nc" id="L30">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L34">        return &quot;01\n&quot; +</span>
+                &quot;20&quot;;
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L40">        return &quot;Feuer, Wasser, Gras\n&quot; +</span>
+                &quot;Feuer, Glumanda, Ifrit\n&quot; +
+                &quot;Wasser, Shiggy, Naga\n&quot; +
+                &quot;Gras, Bisasam, Elf&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

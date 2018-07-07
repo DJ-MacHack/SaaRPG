@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.messagestest.attacktest.CutTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="0.058">
+  <properties/>
+  <testcase name="koboldTreeDamageReductionTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.003"/>
+  <testcase name="invalidNoTargetRockTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.001"/>
+  <testcase name="invalidFairyCutTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.005"/>
+  <testcase name="invalidKoboldCutTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.003"/>
+  <testcase name="teamAttackTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.0"/>
+  <testcase name="invalidBoarCutTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.0"/>
+  <testcase name="treeEnergieCostReductionTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.001"/>
+  <testcase name="curseEnergieCostReductionTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.004"/>
+  <testcase name="invalidWraithCutTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.001"/>
+  <testcase name="boarTreeDamageReductionTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.002"/>
+  <testcase name="invalidYetiCutTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.001"/>
+  <testcase name="fairyAttackTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.003"/>
+  <testcase name="invalidIfritCutTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.005"/>
+  <testcase name="wraithTreeDamageReductionTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.001"/>
+  <testcase name="boarAttackTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.0"/>
+  <testcase name="invalidNoTargetGrassTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.003"/>
+  <testcase name="koboldBushDamageReductionTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.001"/>
+  <testcase name="invalidElfCutTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.0"/>
+  <testcase name="invalidRookCutTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.001"/>
+  <testcase name="fairyTreeReductionTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.001"/>
+  <testcase name="standardEnemyAttackTest" classname="de.unisaarland.sopra.messagestest.attacktest.CutTest" time="0.011"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

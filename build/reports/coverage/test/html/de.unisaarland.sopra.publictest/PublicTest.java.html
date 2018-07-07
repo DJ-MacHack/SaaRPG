@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PublicTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.publictest</a> &gt; <span class="el_source">PublicTest.java</span></div><h1>PublicTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.publictest;
+
+    import de.unisaarland.sopra.MonsterType;
+    import de.unisaarland.sopra.comm.ClientConnection;
+    import de.unisaarland.sopra.systemtest.SystemTest;
+    import org.junit.Assert;
+
+    import java.util.Arrays;
+    import java.util.List;
+
+/**
+ * Diese Klasse enthÃ¤lt Code, den wir in den public tests immer wieder gebraucht haben.
+ * &lt;p&gt;
+ * Diese Helfer machen nur fÃ¼r die String TestEventFactory Sinn, von deren Verwendung wir abraten. Wir raten also
+ * auch davon ab diese Klasse zu benutzen, Sie kÃ¶nnen aber fÃ¼r Ihre eigenen Tests einen
+ * Ã¤hnlichen Mechanismus bauen.
+ * &lt;p&gt;
+ * Created by akampmann on 08/09/16.
+ */
+@SuppressWarnings(&quot;unchecked&quot;)
+public abstract class PublicTest extends SystemTest {
+
+    /**
+     * @param name der Name des Tests.
+     */
+    protected PublicTest(String name) {
+<span class="nc" id="L27">        super(name);</span>
+<span class="nc" id="L28">    }</span>
+
+    /**
+     * Diese Methode registriert einen Spieler und gibt die Connection zurÃ¼ck.
+     * &lt;p&gt;
+     * Diese Methode prÃ¼ft NICHT, ob die Koordinaten des Spielers korrekt sind.
+     *
+     * @param id          die Id des Spielers.
+     * @param name        der Name des Spielers.
+     * @param monsterType der Monstertyp, der registiret werden soll.
+     * @param team        das Team, zu dem der Spieler gehÃ¶rt
+     * @return die entsprechende Verbindung
+     */
+    public ClientConnection&lt;String&gt; register(int id, String name, MonsterType monsterType, String team) {
+<span class="nc" id="L42">        ClientConnection&lt;String&gt; cc = openClient(new TestEventFactory());</span>
+<span class="nc" id="L43">        cc.sendRegister(name, monsterType, team);</span>
+<span class="nc" id="L44">        Assert.assertEquals(&quot;Map(&quot; + getMapFile() + ')', cc.nextEvent());</span>
+        // String equality is not enough to compare fight files
+<span class="nc" id="L46">        Assert.assertTrue(cc.nextEvent().startsWith(&quot;Fight&quot;));</span>
+<span class="nc" id="L47">        String regEvent = cc.nextEvent();</span>
+<span class="nc" id="L48">        Assert.assertTrue(regEvent.startsWith(String.format(&quot;Registered(%d, %s, %s, %s, %d, &quot;, id, name, monsterType, team, id)));</span>
+<span class="nc" id="L49">        return cc;</span>
+    }
+
+    /**
+     * Diese Methode erwartet, dass alle Ã¼bergebenen ClientConnections das selbe Event empfangen.
+     *
+     * @param expected das erwartete Event.
+     * @param ccs      die ClientConnections, auf denen dieses Event kommen sollte
+     */
+    @SafeVarargs
+    public final void assertSameEvent(String expected, ClientConnection&lt;String&gt;... ccs) {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        for (ClientConnection&lt;String&gt; cc : ccs) {</span>
+<span class="nc" id="L61">            String actual = cc.nextEvent();</span>
+<span class="nc" id="L62">            Assert.assertEquals(expected, actual);</span>
+        }
+<span class="nc" id="L64">    }</span>
+
+    /**
+     * Checks whether the given client list contains one of the expected items.
+     * The method returns the index of the matching value in the expected list,
+     * because the order of the entities may change.
+     *
+     */
+    public final int assertSameEvent(List&lt;String&gt; expected, ClientConnection&lt;String&gt;[] ccs) {
+<span class="nc" id="L73">        int index = 0;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for (ClientConnection&lt;String&gt; cc : ccs) {</span>
+<span class="nc" id="L75">            String actual = cc.nextEvent();</span>
+<span class="nc" id="L76">            boolean hitExpectedVal = false;</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">            for (int i = 0; i &lt; expected.size(); i++) {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                if (expected.get(i).equals(actual)) {</span>
+<span class="nc" id="L79">                    hitExpectedVal = true;</span>
+<span class="nc" id="L80">                    index = i;</span>
+<span class="nc" id="L81">                    break;</span>
+                }
+            }
+<span class="nc" id="L84">            Assert.assertTrue(&quot;actual was &quot; + actual, hitExpectedVal);</span>
+        }
+<span class="nc" id="L86">        return index;</span>
+    }
+
+    /**
+     * Diese Methode lÃ¤sst alle Spieler nichts machen.
+     *
+     */
+    protected void allPlayersMove(ClientConnection&lt;String&gt;[] ccs) {
+        // durch die Schleife kann ich nicht asserten,
+        // dass die Initiativreihenfolge korrekt ist,
+        // aber da gibt es ja andere Tests fÃ¼r
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        for (int i = 0; i &lt; ccs.length; i++) {</span>
+<span class="nc" id="L98">            int actorId = receiveActNow(ccs);</span>
+            // die Connection dieses Monsters ist in ccs[actorId]
+<span class="nc" id="L100">            ccs[actorId].sendDoneActing();</span>
+<span class="nc" id="L101">            assertSameEvent(String.format(&quot;DoneActing(%d)&quot;, actorId), ccs);</span>
+        }
+<span class="nc" id="L103">    }</span>
+
+    /**
+     * Diese Methode erwartet, dass alle Monster ein ActNow bekommen. Sie
+     * returned, wer dran ist.
+     *
+     * @param ccs die Connections der Monster, die das ActNow bekommen sollen.
+     * @return die Id des Monsters, dass dran ist.
+     */
+    int receiveActNow(ClientConnection&lt;String&gt;[] ccs) {
+        // Diese Methode ist wieder ein Grund, NICHT die TestEventFactory zu benutzen.
+        // Ein Wunder, dass weder PMD noch FindBugs mich umbringen
+
+        // erstmal eins holen und schauen, ob es ein ActNow ist
+<span class="nc" id="L117">        String actNow = ccs[0].nextEvent();</span>
+<span class="nc" id="L118">        Assert.assertTrue(String.format(&quot;Habe unerwarteterweise '%s' statt ActNow bekommen&quot;, actNow), actNow.startsWith(&quot;ActNow(&quot;));</span>
+        // dann gucken, ob alle anderen das auch bekommen haben
+<span class="nc" id="L120">        assertSameEvent(actNow, Arrays.copyOfRange(ccs, 1, ccs.length));</span>
+
+        // jetzt herausfinden, wer denn dran ist, das steht an der 7. Stelle
+<span class="nc" id="L123">        return Integer.parseInt(String.valueOf(actNow.charAt(7)));</span>
+    }
+
+    /**
+     * Diese Methode erwartet, dass alle Ã¼bergebenen ClientConnections das selbe Event empfangen.
+     * Dabei wird nur der Anfang des Event-String verglichen.
+     *
+     * @param expected das erwartete Event.
+     * @param ccs      die ClientConnections, auf denen dieses Event kommen sollte
+     */
+    @SafeVarargs
+    public final void assertSameEventStartsWith(String expected, ClientConnection&lt;String&gt;... ccs) {
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        for (ClientConnection&lt;String&gt; cc : ccs) {</span>
+<span class="nc" id="L136">            String actual = cc.nextEvent();</span>
+<span class="nc" id="L137">            Assert.assertTrue(String.format(&quot;Ich habe '%s' statt '%s' bekommen&quot;, actual, expected), actual.startsWith(expected));</span>
+        }
+<span class="nc" id="L139">    }</span>
+
+    /**
+     * Checks ActNow and DoneActing events on the given client list. This is a helper
+     * method for lazy monster actions.
+     *
+     */
+    protected void checkAndHandleLazyMonster(ClientConnection&lt;String&gt;[] ccs, List&lt;String&gt; actNowList, List&lt;String&gt; doneActingList) {
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        for (int j = 0; j &lt; ccs.length; j++) {</span>
+<span class="nc" id="L148">            int index = assertSameEvent(actNowList, ccs);</span>
+
+<span class="nc" id="L150">            ClientConnection&lt;String&gt; cc = ccs[index];</span>
+<span class="nc" id="L151">            cc.sendDoneActing();</span>
+
+<span class="nc" id="L153">            assertSameEvent(doneActingList, ccs);</span>
+        }
+<span class="nc" id="L155">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

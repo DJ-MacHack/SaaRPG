@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoarSpawned.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages</a> &gt; <span class="el_source">BoarSpawned.java</span></div><h1>BoarSpawned.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.model.CreatureType;
+import de.unisaarland.sopra.model.Field;
+import de.unisaarland.sopra.model.Game;
+import de.unisaarland.sopra.model.Npc;
+import de.unisaarland.sopra.utility.GameVector;
+
+/**
+ * Created by Team14 on 9/12/16.
+ * Responsible for stub creation: LUKAS KIRSCHNER
+ */
+public class BoarSpawned extends SpawnEvent {
+    /**
+     * Creates a new instance of a BoarSpawned Event
+     *
+     * @param id Actor ID of the fairy
+     * @param x  x coord of the healing tile
+     * @param y  y coord of the healing tile
+     */
+    public BoarSpawned(int id, int x, int y) {
+<span class="nc" id="L24">        super(id, x, y);</span>
+<span class="nc" id="L25">    }</span>
+
+    /**
+     * Executes the event at a given {@link Client}
+     *
+     * @param cli {@link Client} to be changed
+     */
+    @Override
+    public void executeEvent(Game game, Client cli) {
+<span class="nc" id="L34">        Npc boar = new Npc(super.creatureId, new GameVector(super.x_coord, super.y_coord), 20, CreatureType.BOAR, 6, 20);</span>
+<span class="nc" id="L35">        game.addNpc(boar);</span>
+<span class="nc" id="L36">    }</span>
+
+    /**
+     * Tests the event using a given {@link Client}
+     *
+     * @param cli {@link Client} to test on
+     * @return true, if test was successful
+     */
+    @Override
+    public boolean validateEvent(Game game, Client cli) {
+<span class="nc" id="L46">        Field myField = game.getFieldAt(new GameVector(super.x_coord, super.y_coord));</span>
+<span class="nc bnc" id="L47" title="All 10 branches missed.">        return ( //Check if boar spawns on an anchor point</span>
+                (myField == Field.GRASS) ||
+                        (myField == Field.SWAMP) ||
+                        (myField == Field.BUSH) ||
+                        (myField == Field.TREE) ||
+                        (myField == Field.HILL));
+    }
+
+    @Override
+    public void sendCommand(ClientConnection cc) {
+<span class="nc" id="L57">        throw new UnsupportedOperationException(&quot;You are not allowed to call a BoarSpawnedEvent!&quot;);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L62">        return String.format(&quot;Boar(%d) spawned at %d,%d!&quot;,super.creatureId,super.x_coord,super.y_coord);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

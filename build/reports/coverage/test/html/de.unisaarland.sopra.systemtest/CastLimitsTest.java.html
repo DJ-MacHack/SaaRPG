@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CastLimitsTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">CastLimitsTest.java</span></div><h1>CastLimitsTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Lukas Kirschner on 9/23/16.
+ */
+public class CastLimitsTest extends OurSystemTest {
+    private final static String PLAYERA = &quot;VictimIfrit&quot;;
+    private final static String PLAYERB = &quot;IfritTheBoss&quot;;
+    private final static String PLAYERC = &quot;AnotherVictimIfrit&quot;;
+    private final static String TEAMA = &quot;TeamLappen&quot;;
+    private final static String TEAMB = &quot;TeamIfrit&quot;;
+<span class="nc" id="L16">    private final static CreatureType CREATUREA = CreatureType.IFRIT;</span>
+<span class="nc" id="L17">    private final static CreatureType CREATUREB = CreatureType.ROOK;</span>
+<span class="nc" id="L18">    private final static CreatureType CREATUREC = CreatureType.IFRIT;</span>
+<span class="nc" id="L19">    private final static String VALIDFIGHTFILE =</span>
+            TEAMA + &quot;, &quot; + TEAMB + &quot;\n&quot; +
+<span class="nc" id="L21">                    TEAMA + &quot;, &quot; + PLAYERA + &quot;, &quot; + CREATUREA.toString() + &quot;\n&quot; +</span>
+<span class="nc" id="L22">                    TEAMB + &quot;, &quot; + PLAYERB + &quot;, &quot; + CREATUREB.toString() + &quot;\n&quot; +</span>
+<span class="nc" id="L23">                    TEAMA + &quot;, &quot; + PLAYERC + &quot;, &quot; + CREATUREC.toString();</span>
+    public final static String VALIDMAPFILE = &quot;1    00&quot;;
+
+    public CastLimitsTest() {
+<span class="nc" id="L27">        super(&quot;CastLimitsTest&quot;);</span>
+<span class="nc" id="L28">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L32">        ClientConnection&lt;Event&gt; pa = register(0, PLAYERA, CREATUREA, TEAMA, 5, 0);</span>
+<span class="nc" id="L33">        ClientConnection&lt;Event&gt; pb = register(1, PLAYERB, CREATUREB, TEAMB, 0, 0);</span>
+<span class="nc" id="L34">        assertRegisterEvent(pb.nextEvent(), 0, PLAYERA, CREATUREA, TEAMA, 5, 0);</span>
+<span class="nc" id="L35">        assertRegisterEvent(pa.nextEvent(), 1, PLAYERB, CREATUREB, TEAMB, 0, 0);</span>
+<span class="nc" id="L36">        ClientConnection&lt;Event&gt; pc = register(2, PLAYERC, CREATUREC, TEAMA, 6, 0);</span>
+<span class="nc" id="L37">        assertRegisterEvent(pa.nextEvent(), 2, PLAYERC, CREATUREC, TEAMA, 6, 0);</span>
+<span class="nc" id="L38">        assertRegisterEvent(pb.nextEvent(), 2, PLAYERC, CREATUREC, TEAMA, 6, 0);</span>
+<span class="nc" id="L39">        assertRegisterEvent(pc.nextEvent(), 0, PLAYERA, CREATUREA, TEAMA, 5, 0);</span>
+<span class="nc" id="L40">        assertRegisterEvent(pc.nextEvent(), 1, PLAYERB, CREATUREB, TEAMB, 0, 0);</span>
+
+<span class="nc" id="L42">        assertRoundBegin(assertAndMerge(pa, pb, pc), 1);</span>
+<span class="nc" id="L43">        assertActNow(assertAndMerge(pa, pb, pc),0);</span>
+<span class="nc" id="L44">        pa.sendDoneActing();</span>
+<span class="nc" id="L45">        assertDoneActing(assertAndMerge(pa, pb, pc),0);</span>
+
+<span class="nc" id="L47">        assertActNow(assertAndMerge(pa, pb, pc),1);</span>
+<span class="nc" id="L48">        pb.sendCast(5,0);</span>
+<span class="nc" id="L49">        assertCast(assertAndMerge(pa, pb, pc),1,5,0);</span>
+<span class="nc" id="L50">        assertActNow(assertAndMerge(pa, pb, pc),1);</span>
+<span class="nc" id="L51">        pb.sendCast(6,0);</span>
+<span class="nc" id="L52">        assertKicked(assertAndMerge(pa, pb, pc),1);</span>
+
+<span class="nc" id="L54">        assertActNow(assertAndMerge(pa, pb, pc),2);</span>
+<span class="nc" id="L55">        pc.sendDoneActing();</span>
+<span class="nc" id="L56">        assertDoneActing(assertAndMerge(pa, pb, pc),2);</span>
+
+<span class="nc" id="L58">        assertRoundEnd(assertAndMerge(pa, pb, pc),1,0);</span>
+<span class="nc" id="L59">        assertWinner(assertAndMerge(pa, pb, pc),TEAMA);</span>
+<span class="nc" id="L60">        }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L64">        return VALIDMAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L69">        return VALIDFIGHTFILE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

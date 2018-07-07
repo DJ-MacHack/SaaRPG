@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoarAndFairyTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">BoarAndFairyTest.java</span></div><h1>BoarAndFairyTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by hpk on 19.09.16.
+ */
+public class BoarAndFairyTest extends OurSystemTest {
+
+    public BoarAndFairyTest() {
+<span class="nc" id="L17">        super(&quot;Boar and Fairy Test&quot;);</span>
+<span class="nc" id="L18">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L22">        return &quot;  +~  X\n&quot; +</span>
+                &quot;  0A^^_\n&quot; +
+                &quot;##+.   \n&quot; +
+                &quot;     1 \n&quot; +
+                &quot;~~~###~\n&quot; +
+                &quot;$$$$$T_&quot;;
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L32">        return &quot;Alpha, Beta\n&quot; +</span>
+                &quot;Alpha, Floppy, Rook\n&quot; +
+                &quot;Beta, Bobby, Ifrit&quot;;
+    }
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L39">        List&lt;ClientConnection&lt;Event&gt;&gt; ccs = new ArrayList&lt;&gt;();</span>
+
+        // Registration Phase
+<span class="nc" id="L42">        ClientConnection&lt;Event&gt; floppy = register(0, &quot;Floppy&quot;, CreatureType.ROOK, &quot;Alpha&quot;, 2, 1);</span>
+<span class="nc" id="L43">        ccs.add(floppy);</span>
+<span class="nc" id="L44">        ClientConnection&lt;Event&gt; bobby = register(1, &quot;Bobby&quot;, CreatureType.IFRIT, &quot;Beta&quot;, 4, 3);</span>
+<span class="nc" id="L45">        ccs.add(bobby);</span>
+<span class="nc" id="L46">        assertRegisterEvent(floppy.nextEvent(), 1, &quot;Bobby&quot;, CreatureType.IFRIT, &quot;Beta&quot;, 4, 3);</span>
+<span class="nc" id="L47">        assertRegisterEvent(bobby.nextEvent(), 0, &quot;Floppy&quot;, CreatureType.ROOK, &quot;Alpha&quot;, 2, 1);</span>
+
+        // Fairy Spawn Events
+<span class="nc" id="L50">        assertFairySpawned(assertAndMerge(ccs), 2, 2, 0); // Fairy 1</span>
+<span class="nc" id="L51">        assertFairySpawned(assertAndMerge(ccs), 3, 1, 2); // Fairy 2</span>
+
+        // Round Begin
+<span class="nc" id="L54">        assertRoundBegin(assertAndMerge(ccs), 1);</span>
+
+        // Boar Spawn
+<span class="nc" id="L57">        assertBoarSpawned(assertAndMerge(ccs), 4, 6, 0); // Boar 1</span>
+<span class="nc" id="L58">        assertBoarSpawned(assertAndMerge(ccs), 5, 3, 1); // Boar 2</span>
+<span class="nc" id="L59">        assertBoarSpawned(assertAndMerge(ccs), 6, 2, 2); // Boar 3</span>
+<span class="nc" id="L60">        assertBoarSpawned(assertAndMerge(ccs), 7, 3, 5); // Boar 4</span>
+
+        // Fairy 1 Move
+<span class="nc" id="L63">        assertMoved(assertAndMerge(ccs), 2, Direction.WEST);</span>
+<span class="nc" id="L64">        assertMoved(assertAndMerge(ccs), 2, Direction.WEST);</span>
+<span class="nc" id="L65">        assertMoved(assertAndMerge(ccs), 2, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L66">        assertMoved(assertAndMerge(ccs), 2, Direction.EAST);</span>
+
+        // Fairy 2 Move
+<span class="nc" id="L69">        assertMoved(assertAndMerge(ccs), 3,Direction.SOUTH_WEST);</span>
+<span class="nc" id="L70">        assertMoved(assertAndMerge(ccs), 3,Direction.EAST);</span>
+<span class="nc" id="L71">        assertMoved(assertAndMerge(ccs), 3,Direction.EAST);</span>
+<span class="nc" id="L72">        assertMoved(assertAndMerge(ccs), 3,Direction.EAST);</span>
+
+        // Boar 1 Move
+<span class="nc" id="L75">        assertMoved(assertAndMerge(ccs), 4, Direction.WEST);</span>
+<span class="nc" id="L76">        assertMoved(assertAndMerge(ccs), 4, Direction.WEST);</span>
+<span class="nc" id="L77">        assertBoarAttack(assertAndMerge(ccs), 4, 5);</span>
+<span class="nc" id="L78">        assertMoved(assertAndMerge(ccs), 4, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L79">        assertMoved(assertAndMerge(ccs), 4, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L80">        assertBoarAttack(assertAndMerge(ccs), 4, 1);</span>
+<span class="nc" id="L81">        assertMoved(assertAndMerge(ccs), 4, Direction.EAST);</span>
+<span class="nc" id="L82">        assertMoved(assertAndMerge(ccs), 4, Direction.NORTH_EAST);</span>
+
+        // Boar 2 Move
+<span class="nc" id="L85">        assertMoved(assertAndMerge(ccs), 5, Direction.EAST);</span>
+<span class="nc" id="L86">        assertMoved(assertAndMerge(ccs), 5, Direction.EAST);</span>
+<span class="nc" id="L87">        assertBoarAttack(assertAndMerge(ccs), 5, 4);</span>
+<span class="nc" id="L88">        assertMoved(assertAndMerge(ccs), 5, Direction.NORTH_EAST);</span>
+<span class="nc" id="L89">        assertMoved(assertAndMerge(ccs), 5, Direction.WEST);</span>
+<span class="nc" id="L90">        assertMoved(assertAndMerge(ccs), 5, Direction.WEST);</span>
+<span class="nc" id="L91">        assertMoved(assertAndMerge(ccs), 5, Direction.SOUTH_WEST);</span>
+
+        // Boar 3 Move
+<span class="nc" id="L94">        assertMoved(assertAndMerge(ccs), 6, Direction.EAST);</span>
+<span class="nc" id="L95">        assertMoved(assertAndMerge(ccs), 6, Direction.EAST);</span>
+<span class="nc" id="L96">        assertMoved(assertAndMerge(ccs), 6, Direction.EAST);</span>
+<span class="nc" id="L97">        assertBoarAttack(assertAndMerge(ccs), 6, 4);</span>
+<span class="nc" id="L98">        assertMoved(assertAndMerge(ccs), 6, Direction.NORTH_WEST);</span>
+<span class="nc" id="L99">        assertMoved(assertAndMerge(ccs), 6, Direction.NORTH_WEST);</span>
+<span class="nc" id="L100">        assertMoved(assertAndMerge(ccs), 6, Direction.WEST);</span>
+
+        // Boar 4 Move
+<span class="nc" id="L103">        assertMoved(assertAndMerge(ccs), 7, Direction.EAST);</span>
+
+<span class="nc" id="L105">        assertActNow(assertAndMerge(ccs), 0);</span>
+<span class="nc" id="L106">        passed();</span>
+<span class="nc" id="L107">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

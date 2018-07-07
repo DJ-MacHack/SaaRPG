@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.modeltest.GameTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="0.009">
+  <properties/>
+  <testcase name="addMonsterTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="testGameGetFightFile" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="handleFightFile1Test" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.001"/>
+  <testcase name="handleFightFile2Test" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.001"/>
+  <testcase name="handleFightFile3Test" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="removeNpcTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.001"/>
+  <testcase name="createTeamTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="removeMonsterTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.001"/>
+  <testcase name="testGameGetMapFile" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="roundStateTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="createPlayerTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="addNpcTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="roundCounterTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="initOrderTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.001"/>
+  <testcase name="handleMapTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.0"/>
+  <testcase name="boringRoundsTest" classname="de.unisaarland.sopra.modeltest.GameTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

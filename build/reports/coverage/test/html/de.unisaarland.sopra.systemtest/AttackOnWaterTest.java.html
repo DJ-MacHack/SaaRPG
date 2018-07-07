@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AttackOnWaterTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">AttackOnWaterTest.java</span></div><h1>AttackOnWaterTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Wiebk on 19.09.2016.
+ */
+public class AttackOnWaterTest extends OurSystemTest {
+
+
+    public AttackOnWaterTest(){
+<span class="nc" id="L16">        super(&quot;AttackOnWaterTest&quot;);</span>
+<span class="nc" id="L17">    }</span>
+
+    @Override
+    public void executeTest(){
+        //register
+<span class="nc" id="L22">        ClientConnection&lt;Event&gt; flamara = register(0, &quot;Flamara&quot;, CreatureType.IFRIT, &quot;Fire&quot;, 1, 1);</span>
+<span class="nc" id="L23">        ClientConnection&lt;Event&gt; aquana = register(1, &quot;Aquana&quot;, CreatureType.ELF, &quot;Water&quot;, 3, 1);</span>
+<span class="nc" id="L24">        Event registerflamara = aquana.nextEvent();</span>
+<span class="nc" id="L25">        assertRegisterEvent(registerflamara, 0, &quot;Flamara&quot;, CreatureType.IFRIT, &quot;Fire&quot;, 1, 1);</span>
+<span class="nc" id="L26">        assertRegisterEvent(flamara.nextEvent(), 1, &quot;Aquana&quot;, CreatureType.ELF, &quot;Water&quot;, 3, 1);</span>
+
+<span class="nc" id="L28">        assertRoundBegin(assertAndMerge(flamara, aquana), 1);</span>
+
+        //flamara: moves west on water, then singe east, gets Kicked
+<span class="nc" id="L31">        assertActNow(assertAndMerge(flamara, aquana), 0);</span>
+<span class="nc" id="L32">        flamara.sendMove(Direction.WEST);</span>
+<span class="nc" id="L33">        assertMoved(assertAndMerge(flamara, aquana), 0, Direction.WEST);</span>
+
+<span class="nc" id="L35">        assertActNow(assertAndMerge(flamara, aquana), 0);</span>
+<span class="nc" id="L36">        flamara.sendSinge(Direction.WEST);</span>
+<span class="nc" id="L37">        assertKicked(assertAndMerge(flamara, aquana), 0);</span>
+
+<span class="nc" id="L39">        assertActNow(assertAndMerge(flamara, aquana), 1);</span>
+<span class="nc" id="L40">        aquana.sendDoneActing();</span>
+<span class="nc" id="L41">        assertDoneActing(assertAndMerge(flamara, aquana), 1);</span>
+
+<span class="nc" id="L43">        assertRoundEnd(assertAndMerge(flamara, aquana), 1, 0);</span>
+
+        //Water wins
+<span class="nc" id="L46">        assertWinner(assertAndMerge(flamara, aquana), &quot;Water&quot;);</span>
+<span class="nc" id="L47">    }</span>
+
+    @Override
+    public String getMapFile(){
+<span class="nc" id="L51">        return &quot;~~~~\n&quot;</span>
+              +&quot;~0~1\n&quot;
+              +&quot;~~~~\n&quot;
+              +&quot;~~~~&quot;;
+    }
+
+    public String getFightFile(){
+<span class="nc" id="L58">        return &quot;Fire, Water\n&quot;</span>
+              +&quot;Fire, Flamara, Ifrit\n&quot;
+              +&quot;Water, Aquana, Elf&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

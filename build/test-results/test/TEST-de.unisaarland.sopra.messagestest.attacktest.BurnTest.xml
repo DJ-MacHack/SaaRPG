@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.messagestest.attacktest.BurnTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="0.024">
+  <properties/>
+  <testcase name="consumeEnergyFieldTest" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.007"/>
+  <testcase name="damageReducedTest2" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.002"/>
+  <testcase name="damageTest" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.0"/>
+  <testcase name="noEnergyTest" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.001"/>
+  <testcase name="fieldEffectTest" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.002"/>
+  <testcase name="noIfritTest" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.0"/>
+  <testcase name="consumeEnergyTest" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.001"/>
+  <testcase name="noEnemiesTest" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.001"/>
+  <testcase name="energyFieldTest" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.001"/>
+  <testcase name="damageTest2" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.001"/>
+  <testcase name="damageReducedTest" classname="de.unisaarland.sopra.messagestest.attacktest.BurnTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

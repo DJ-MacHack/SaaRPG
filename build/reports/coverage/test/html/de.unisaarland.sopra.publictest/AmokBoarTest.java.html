@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AmokBoarTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.publictest</a> &gt; <span class="el_source">AmokBoarTest.java</span></div><h1>AmokBoarTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.publictest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.MonsterType;
+import de.unisaarland.sopra.comm.ClientConnection;
+
+/**
+ * Achtung, in diesem Test begegnen Sie einem panischen Schwein.
+ * &lt;p&gt;
+ * Created by akampmann on 08/09/16.
+ */
+@SuppressWarnings(&quot;unchecked&quot;)
+public class AmokBoarTest extends PublicTest {
+
+    public AmokBoarTest() {
+<span class="nc" id="L16">        super(&quot;AmokBoarTest&quot;);</span>
+<span class="nc" id="L17">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // register alle und schreib die Connections in ein Array
+<span class="nc" id="L22">        ClientConnection&lt;String&gt;[] ccs = new ClientConnection[8];</span>
+<span class="nc" id="L23">        ccs[0] = register(0, &quot;A1&quot;, MonsterType.IFRIT, &quot;A&quot;);</span>
+<span class="nc" id="L24">        ccs[1] = register(1, &quot;A2&quot;, MonsterType.IFRIT, &quot;A&quot;);</span>
+<span class="nc" id="L25">        ccs[2] = register(2, &quot;A3&quot;, MonsterType.IFRIT, &quot;A&quot;);</span>
+<span class="nc" id="L26">        ccs[3] = register(3, &quot;A4&quot;, MonsterType.IFRIT, &quot;A&quot;);</span>
+
+<span class="nc" id="L28">        ccs[4] = register(4, &quot;B1&quot;, MonsterType.NAGA, &quot;B&quot;);</span>
+<span class="nc" id="L29">        ccs[5] = register(5, &quot;B2&quot;, MonsterType.NAGA, &quot;B&quot;);</span>
+<span class="nc" id="L30">        ccs[6] = register(6, &quot;B3&quot;, MonsterType.NAGA, &quot;B&quot;);</span>
+<span class="nc" id="L31">        ccs[7] = register(7, &quot;B4&quot;, MonsterType.NAGA, &quot;B&quot;);</span>
+
+        // alle bekommen die Registrierungen der anderen
+        // das heiÃŸt es kommen noch 7 Registrierungen, deren Korrektheit ich nicht prÃ¼fe
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        for (int i = 0; i &lt; 7; i++) {</span>
+<span class="nc" id="L36">            assertSameEventStartsWith(&quot;Registered(&quot;, ccs);</span>
+        }
+
+        // keine Feen, also geht es jetzt los
+
+<span class="nc" id="L41">        assertSameEvent(&quot;RoundBegin(1)&quot;, ccs);</span>
+
+        // das Wildschwein spawnt
+<span class="nc" id="L44">        assertSameEvent(&quot;BoarSpawned(8, 2, 1)&quot;, ccs);</span>
+
+        // und das Wildschwein beginnt seinen Killing Spree
+        // erstmal ein bisschen angreifen, weil da Leute im Weg stehen
+        // das Schwein dreht sich im Kreis, bis es endlich laufen kann
+<span class="nc" id="L49">        assertSameEvent(&quot;BoarAttack(8, 3)&quot;, ccs);</span>
+<span class="nc" id="L50">        assertSameEvent(&quot;BoarAttack(8, 1)&quot;, ccs);</span>
+        // das Schwein hat zwar schon zweimal angegrifen, aber noch keine Bewegung gemacht.
+        // es kann also noch sechs Bewegungen, wie in jeder anderen Runde
+<span class="nc" id="L53">        usualBoarMoves(ccs);</span>
+
+
+        // und jetzt sollte alle acht Spieler dran sein
+<span class="nc" id="L57">        allPlayersMove(ccs);</span>
+
+        // das waren alle acht, also Rundenende
+<span class="nc" id="L60">        assertSameEvent(&quot;RoundEnd(1, 0)&quot;, ccs);</span>
+
+        // Ifrit A4 hat 10 Schaden bekommen, ist also bei 77.
+
+        // die nÃ¤chsten 15 Runden sind alle gleich
+        // dabei bekommt A4 5 * 15 = 75 Schaden
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (int round = 2; round &lt; 6; round++) {</span>
+<span class="nc" id="L67">            assertSameEvent(String.format(&quot;RoundBegin(%d)&quot;, round), ccs);</span>
+
+<span class="nc" id="L69">            usualBoarMoves(ccs);</span>
+<span class="nc" id="L70">            allPlayersMove(ccs);</span>
+
+<span class="nc" id="L72">            assertSameEvent(String.format(&quot;RoundEnd(%d, 0)&quot;, round), ccs);</span>
+        }
+
+        // jetzt kommt Runde 17. A4 ist bei 2 Lebenspunkten.
+<span class="nc" id="L76">        assertSameEvent(&quot;RoundBegin(6)&quot;, ccs);</span>
+
+        // das Schwein fÃ¤ngt an wie immer
+<span class="nc" id="L79">        oneBoarLoop(ccs);</span>
+        // bei seiner zweiten Runde tÃ¶tet es jemanden
+<span class="nc" id="L81">        assertSameEvent(&quot;BoarAttack(8, 0)&quot;, ccs);</span>
+<span class="nc" id="L82">        assertSameEvent(&quot;BoarAttack(8, 2)&quot;, ccs);</span>
+<span class="nc" id="L83">        assertSameEvent(&quot;BoarAttack(8, 4)&quot;, ccs);</span>
+        // ah, da ist eine LÃ¼cke
+<span class="nc" id="L85">        assertSameEvent(&quot;Moved(8, SOUTH_EAST)&quot;, ccs);</span>
+        // und wieder wer im Weg
+<span class="nc" id="L87">        assertSameEvent(&quot;BoarAttack(8, 7)&quot;, ccs);</span>
+<span class="nc" id="L88">        assertSameEvent(&quot;BoarAttack(8, 5)&quot;, ccs);</span>
+<span class="nc" id="L89">        assertSameEvent(&quot;BoarAttack(8, 3)&quot;, ccs);</span>
+        // das ist A4, der jetzt stirbt
+<span class="nc" id="L91">        assertSameEvent(&quot;Died(3)&quot;, ccs);</span>
+        // und das Schwein geht noch einen Schritt
+<span class="nc" id="L93">        assertSameEvent(&quot;Moved(8, NORTH_WEST)&quot;, ccs);</span>
+        // und dann kommt seine nÃ¤chste Runde
+<span class="nc" id="L95">        assertSameEvent(&quot;BoarAttack(8, 0)&quot;, ccs);</span>
+        // Oh, wieder einer tot ...
+<span class="nc" id="L97">        assertSameEvent(&quot;Died(0)&quot;, ccs);</span>
+<span class="nc" id="L98">        assertSameEvent(&quot;BoarAttack(8, 2)&quot;, ccs);</span>
+        // und noch einer
+<span class="nc" id="L100">        assertSameEvent(&quot;Died(2)&quot;, ccs);</span>
+<span class="nc" id="L101">        assertSameEvent(&quot;BoarAttack(8, 4)&quot;, ccs);</span>
+        // ah, da ist eine LÃ¼cke
+<span class="nc" id="L103">        assertSameEvent(&quot;Moved(8, SOUTH_EAST)&quot;, ccs);</span>
+        // und wieder wer im Weg
+<span class="nc" id="L105">        assertSameEvent(&quot;BoarAttack(8, 7)&quot;, ccs);</span>
+<span class="nc" id="L106">        assertSameEvent(&quot;BoarAttack(8, 5)&quot;, ccs);</span>
+        // da A4 tot ist, kann das Schwein da jetzt hin gehen
+<span class="nc" id="L108">        assertSameEvent(&quot;Moved(8, NORTH_EAST)&quot;, ccs);</span>
+
+        // es leben nurnoch 4 Monster
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        for (int i = 0; i &lt; 5; i++) {</span>
+<span class="nc" id="L112">            int actorId = receiveActNow(ccs);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            if (actorId &lt;= 3) {</span>
+                // das ist einer aus Team A
+<span class="nc" id="L115">                ccs[actorId].sendMove(Direction.NORTH_EAST);</span>
+                // da ist Felsen
+<span class="nc" id="L117">                assertSameEventStartsWith(String.format(&quot;Kicked(%d,&quot;, actorId), ccs);</span>
+            } else {
+                // das ist einer aus Team B
+<span class="nc" id="L120">                ccs[actorId].sendDoneActing();</span>
+<span class="nc" id="L121">                assertSameEvent(String.format(&quot;DoneActing(%d)&quot;, actorId), ccs);</span>
+            }
+        }
+
+<span class="nc" id="L125">        assertSameEvent(&quot;RoundEnd(6, 0)&quot;, ccs);</span>
+
+<span class="nc" id="L127">        assertSameEvent(&quot;Winner(B)&quot;, ccs);</span>
+<span class="nc" id="L128">    }</span>
+
+    /**
+     * Diese Methode assertet die Standardbewegungen, die das Schwein in diesem Test jede Runde macht.
+     *
+     * @param ccs
+     */
+    private void usualBoarMoves(ClientConnection&lt;String&gt;[] ccs) {
+        // zwei Moves in der Schleife, das Boar macht 6 Bewegungen, also 3 SchleifendurchlÃ¤ufe
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        for (int i = 0; i &lt; 3; i++) {</span>
+<span class="nc" id="L138">            oneBoarLoop(ccs);</span>
+        }
+<span class="nc" id="L140">    }</span>
+
+    private void oneBoarLoop(ClientConnection&lt;String&gt;[] ccs) {
+<span class="nc" id="L143">        assertSameEvent(&quot;BoarAttack(8, 0)&quot;, ccs);</span>
+<span class="nc" id="L144">        assertSameEvent(&quot;BoarAttack(8, 2)&quot;, ccs);</span>
+<span class="nc" id="L145">        assertSameEvent(&quot;BoarAttack(8, 4)&quot;, ccs);</span>
+        // ah, da ist eine LÃ¼cke
+<span class="nc" id="L147">        assertSameEvent(&quot;Moved(8, SOUTH_EAST)&quot;, ccs);</span>
+        // und wieder wer im Weg
+<span class="nc" id="L149">        assertSameEvent(&quot;BoarAttack(8, 7)&quot;, ccs);</span>
+<span class="nc" id="L150">        assertSameEvent(&quot;BoarAttack(8, 5)&quot;, ccs);</span>
+<span class="nc" id="L151">        assertSameEvent(&quot;BoarAttack(8, 3)&quot;, ccs);</span>
+        // wieder eine LÃ¼cke
+<span class="nc" id="L153">        assertSameEvent(&quot;Moved(8, NORTH_WEST)&quot;, ccs);</span>
+        // jetzt steht es so, dass es als nÃ¤chstes 0 angreift, das ist dann in der nÃ¤chsten Iteration der Schleife
+<span class="nc" id="L155">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L159">        return    &quot;##00#\n&quot;</span>
+                + &quot;#0.0#\n&quot;
+                + &quot;##1 1\n&quot;
+                + &quot;##11#&quot;;
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L167">        return &quot;A,B\n\n&quot;</span>
+                + &quot;A,A1,Ifrit\n&quot;
+                + &quot;A,A2,Ifrit\n&quot;
+                + &quot;A,A3,Ifrit\n&quot;
+                + &quot;A,A4,Ifrit\n&quot;
+                + &quot;B,B1,naga\n&quot;
+                + &quot;B,B2,naga\n&quot;
+                + &quot;B,B3,naga\n&quot;
+                + &quot;B,B4,naga\n&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

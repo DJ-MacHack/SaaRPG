@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Move.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages.attack</a> &gt; <span class="el_source">Move.java</span></div><h1>Move.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages.attack;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.messages.Command;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.*;
+import de.unisaarland.sopra.utility.DirectionHelper;
+import de.unisaarland.sopra.utility.GameVector;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+import de.unisaarland.sopra.utility.LogString;
+
+/**
+ * Created by Wiebk on 12.09.2016.
+ * Implemented by Lukas Kirschner
+ */
+public class Move implements Command, Event {
+
+    private int actorId;
+    private Direction direction;
+    private CommIds commid;
+
+<span class="fc" id="L25">    public Move(CommIds commid, int actorId, Direction direction) {</span>
+<span class="fc" id="L26">        this.actorId = actorId;</span>
+<span class="fc" id="L27">        this.direction = direction;</span>
+<span class="fc" id="L28">        this.commid = commid;</span>
+
+
+<span class="fc" id="L31">    }</span>
+
+    @Override
+    public void executeCommand(Game game) {
+<span class="fc" id="L35">        this.move(game);</span>
+<span class="fc" id="L36">    }</span>
+
+    @Override
+    public boolean validateCommand(Game game) {
+<span class="fc" id="L40">        Creature me = game.getCreatureById(this.actorId);</span>
+
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (me == null) {</span>
+<span class="nc" id="L43">            return false;</span>
+        }
+
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (me.isDead()) {</span>
+<span class="nc" id="L47">            return false;</span>
+        }
+
+        //Check if current game state fits to the CreatureType of the actor
+<span class="pc bpc" id="L51" title="2 of 3 branches missed.">        switch (me.getCreatureType()) {</span>
+            case FAIRY:
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                if (game.getRoundState() != RoundState.MOVEFAIRIES) {</span>
+<span class="nc" id="L54">                    return false;</span>
+                }
+                break;
+            case BOAR:
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                if (game.getRoundState() != RoundState.MOVEBOARS) {</span>
+<span class="nc" id="L59">                    return false;</span>
+                }
+                break;
+            default:
+<span class="pc bpc" id="L63" title="2 of 4 branches missed.">                if (game.getMonsterActing() != this.actorId || game.getRoundState() != RoundState.ACTNOW) {</span>
+<span class="nc" id="L64">                    return false; //Check if actor is on turn</span>
+                }
+        }
+
+<span class="fc" id="L68">        return this.canMove(game);</span>
+    }
+
+    @Override
+    public void sendResults(ServerConnection serverconnection) {
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        for (int commid : this.commid.getCommLibIds())</span>
+<span class="nc" id="L74">            serverconnection.sendMoved(commid, this.actorId, this.direction);</span>
+<span class="nc" id="L75">    }</span>
+
+    @Override
+    public void sendCommand(ClientConnection clientconnection) {
+<span class="nc" id="L79">        clientconnection.sendMove(this.direction);</span>
+<span class="nc" id="L80">    }</span>
+
+    @Override
+    public int getMonsterId() {
+<span class="nc" id="L84">        return actorId;</span>
+    }
+
+    @Override
+    public void executeEvent(Game game, Client client) {
+<span class="fc" id="L89">        Creature me = game.getCreatureById(this.actorId);</span>
+<span class="fc" id="L90">        move(game);</span>
+
+        //Set Round State for client games to the corresponding value
+<span class="pc bpc" id="L93" title="2 of 3 branches missed.">        switch (me.getCreatureType()) {</span>
+            case FAIRY:
+<span class="nc" id="L95">                game.setRoundState(RoundState.MOVEFAIRIES);</span>
+<span class="nc" id="L96">                break;</span>
+            case BOAR:
+<span class="nc" id="L98">                game.setRoundState(RoundState.MOVEBOARS);</span>
+<span class="nc" id="L99">                break;</span>
+            default:
+<span class="fc" id="L101">                game.setRoundState(RoundState.ACTNOW);</span>
+        }
+
+<span class="fc" id="L104">    }</span>
+
+    @Override
+    public boolean validateEvent(Game game, Client client) {
+<span class="fc" id="L108">        return canMove(game);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L113">        return String.format(&quot;%s moves %s!&quot;, LogString.createVictimName(cli.getGame(),this.actorId), LogString.getReadableDirectionString(this.direction));</span>
+    }
+
+    private void move(Game game) {
+        //We assume that testComand has been executed before executeCommand
+<span class="fc" id="L118">        Creature me = game.getCreatureById(this.actorId);</span>
+<span class="fc" id="L119">        GameVector newPosition = me.getPosition().add(DirectionHelper.toVector(this.direction));</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (me instanceof Pc) {</span>
+<span class="fc" id="L121">            ((Pc) me).drainEnergy(calculateActualMovementCosts((Pc) me, game, newPosition)); //Drain energy</span>
+        }
+<span class="fc" id="L123">        me.setPosition(newPosition);</span>
+<span class="fc" id="L124">        me.setLastDirection(this.direction);</span>
+<span class="fc" id="L125">    }</span>
+
+    private boolean canMove(Game game) {
+<span class="fc" id="L128">        Creature me = game.getCreatureById(this.actorId);</span>
+
+<span class="fc" id="L130">        GameVector newPosition = me.getPosition().add(DirectionHelper.toVector(this.direction));</span>
+
+        //Check if Direction fits to the last direction of monster if monster stands on an ice tile
+<span class="pc bpc" id="L133" title="3 of 4 branches missed.">        if ((game.getFieldAt(me.getPosition()) == Field.ICE) &amp;&amp; (me.getCreatureType() != CreatureType.YETI)){</span>
+<span class="nc bnc" id="L134" title="All 4 branches missed.">            if ((me.getLastDirection() != null) &amp;&amp; (me.getLastDirection() != this.direction)) {</span>
+<span class="nc" id="L135">                return false;</span>
+            }
+        }
+
+        //Check if target field is obstructed
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (game.getCreatureByPosition(newPosition) != null) {</span>
+<span class="fc" id="L141">            return false;</span>
+        }
+
+        //Check if me is allowed to enter the target field
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (!(FieldEffects.canEnter(game.getFieldAt(newPosition),me.getCreatureType()))) {</span>
+<span class="fc" id="L146">            return false;</span>
+        }
+
+        //Check if (Pc)me has enough energy to move
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (me instanceof Pc) {</span>
+<span class="fc" id="L151">            int actualMovementCosts = calculateActualMovementCosts((Pc) me, game, newPosition);</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            if (((Pc) me).getEnergy() &lt; actualMovementCosts) {</span>
+<span class="fc" id="L153">                return false;</span>
+            }
+        }
+
+<span class="fc" id="L157">        return true;</span>
+    }
+
+    private int calculateActualMovementCosts(Pc me, Game game, GameVector newPosition) {
+<span class="fc" id="L161">        int actualMovementCosts = -1;</span>
+<span class="pc bpc" id="L162" title="2 of 4 branches missed.">        switch (me.getCreatureType()) {</span>
+            case NAGA:
+<span class="fc" id="L164">                actualMovementCosts = 110;</span>
+<span class="fc" id="L165">                break;</span>
+            case ROOK:
+<span class="nc" id="L167">                actualMovementCosts = 230;</span>
+<span class="nc" id="L168">                break;</span>
+            case YETI:
+<span class="nc" id="L170">                actualMovementCosts = 200;</span>
+<span class="nc" id="L171">                break;</span>
+            case ELF:
+            case KOBOLD:
+            case IFRIT:
+            case WRAITH:
+            default:
+<span class="fc" id="L177">                actualMovementCosts = 100;</span>
+                break;
+        }
+<span class="fc" id="L180">        actualMovementCosts *= FieldEffects.getMovementCostMultiplier(game.getFieldAt(newPosition), me.getCreatureType());</span>
+<span class="fc" id="L181">        return actualMovementCosts;</span>
+    }
+
+    public int getActorId() {
+<span class="nc" id="L185">        return this.actorId;</span>
+    }
+
+    public Direction getDirection() {
+<span class="nc" id="L189">        return this.direction;</span>
+    }
+
+    public CommIds getCommids() {
+<span class="nc" id="L193">        return this.commid;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

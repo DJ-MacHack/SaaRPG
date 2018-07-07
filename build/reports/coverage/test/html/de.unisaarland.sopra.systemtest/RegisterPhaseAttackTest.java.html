@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegisterPhaseAttackTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">RegisterPhaseAttackTest.java</span></div><h1>RegisterPhaseAttackTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+/**
+ * Created on 23.09.16.
+ *
+ * @author Henrik Paul Koehn
+ */
+public class RegisterPhaseAttackTest extends OurSystemTest {
+
+    String attack;
+
+    public RegisterPhaseAttackTest(String attack) {
+<span class="nc" id="L21">        super(&quot;RegisterPhaseAttackTest: &quot;.concat(attack));</span>
+<span class="nc" id="L22">        this.attack = attack;</span>
+<span class="nc" id="L23">    }</span>
+
+    public static Collection&lt;OurSystemTest&gt; getTests() {
+<span class="nc" id="L26">        ArrayList&lt;OurSystemTest&gt; sysTests = new ArrayList&lt;OurSystemTest&gt;();</span>
+
+<span class="nc" id="L28">        sysTests.add(new RegisterPhaseAttackTest(&quot;bite&quot;));</span>
+<span class="nc" id="L29">        sysTests.add(new RegisterPhaseAttackTest(&quot;blink&quot;));</span>
+<span class="nc" id="L30">        sysTests.add(new RegisterPhaseAttackTest(&quot;claw&quot;));</span>
+<span class="nc" id="L31">        sysTests.add(new RegisterPhaseAttackTest(&quot;crush&quot;));</span>
+<span class="nc" id="L32">        sysTests.add(new RegisterPhaseAttackTest(&quot;cut&quot;));</span>
+<span class="nc" id="L33">        sysTests.add(new RegisterPhaseAttackTest(&quot;shoot&quot;));</span>
+<span class="nc" id="L34">        sysTests.add(new RegisterPhaseAttackTest(&quot;singe&quot;));</span>
+<span class="nc" id="L35">        sysTests.add(new RegisterPhaseAttackTest(&quot;slash&quot;));</span>
+<span class="nc" id="L36">        sysTests.add(new RegisterPhaseAttackTest(&quot;stab&quot;));</span>
+<span class="nc" id="L37">        sysTests.add(new RegisterPhaseAttackTest(&quot;stare&quot;));</span>
+<span class="nc" id="L38">        sysTests.add(new RegisterPhaseAttackTest(&quot;swap&quot;));</span>
+
+<span class="nc" id="L40">        return sysTests;</span>
+    }
+
+    @Override
+    protected void executeTest() {
+
+<span class="nc" id="L46">        expectServerFail();</span>
+
+<span class="nc" id="L48">        ClientConnection&lt;Event&gt; kobo = register(0, &quot;alpha&quot;, CreatureType.KOBOLD, &quot;A&quot;, 0, 0);</span>
+<span class="nc bnc" id="L49" title="All 46 branches missed.">        switch(attack) {</span>
+<span class="nc" id="L50">            case &quot;bite&quot; :kobo.sendBite(Direction.NORTH_EAST);break;</span>
+<span class="nc" id="L51">            case &quot;blink&quot;:kobo.sendBlink(0, 1);break;</span>
+<span class="nc" id="L52">            case &quot;claw&quot; :kobo.sendCast(0, 0);break;</span>
+<span class="nc" id="L53">            case &quot;crush&quot;:kobo.sendCrush(Direction.SOUTH_EAST);break;</span>
+<span class="nc" id="L54">            case &quot;cut&quot;  :kobo.sendCut(Direction.NORTH_WEST);break;</span>
+<span class="nc" id="L55">            case &quot;shoot&quot;:kobo.sendShoot(Direction.NORTH_EAST);break;</span>
+<span class="nc" id="L56">            case &quot;singe&quot;:kobo.sendSinge(Direction.WEST);break;</span>
+<span class="nc" id="L57">            case &quot;slash&quot;:kobo.sendSlash(Direction.EAST);break;</span>
+<span class="nc" id="L58">            case &quot;stab&quot; :kobo.sendStab(Direction.WEST); break;</span>
+<span class="nc" id="L59">            case &quot;stare&quot;:kobo.sendStare(Direction.EAST);break;</span>
+<span class="nc" id="L60">            case &quot;swap&quot; :kobo.sendSwap(0, 0);break;</span>
+<span class="nc" id="L61">            default     :kobo.sendDoneActing();</span>
+        }
+<span class="nc" id="L63">        assertRegistrationAborted(kobo.nextEvent());</span>
+
+<span class="nc" id="L65">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L69">        return &quot;01&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L74">        return &quot;A, B\n&quot; +</span>
+                &quot;A, alpha, kobold\n&quot; +
+                &quot;B, beta, wraith&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

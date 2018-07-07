@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Crush.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages.attack</a> &gt; <span class="el_source">Crush.java</span></div><h1>Crush.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages.attack;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.model.CreatureType;
+import de.unisaarland.sopra.model.Game;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+import de.unisaarland.sopra.model.RoundState;
+import de.unisaarland.sopra.utility.LogString;
+
+/**
+ * Created by Team14 on 12/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class Crush extends SimpleAttack{
+
+    private static final int DAMAGE = 16;
+    private static final int ENERGYCOST = 460;
+<span class="fc" id="L21">    private static final CreatureType[] VALIDCREATURES = {CreatureType.YETI};</span>
+
+    /**
+     * creates new instance of {@link Crush} with given parameters
+     * @param commIds {@link CommIds} for communication
+     * @param actorId monsterId of creature executing this crush-attacktest
+     * @param direction {@link Direction} direction of the attacktest
+     */
+    public Crush(CommIds commIds, int actorId, Direction direction) {
+<span class="fc" id="L30">        super(commIds, actorId, direction);</span>
+<span class="fc" id="L31">    }</span>
+
+    @Override
+    public void executeCommand(Game game) {
+<span class="fc" id="L35">        attack(game);</span>
+<span class="pc bpc" id="L36" title="3 of 4 branches missed.">        if (super.targetDied &amp;&amp; (game.getCreatureById(super.targetId).getCreatureType() != CreatureType.BOAR))</span>
+<span class="nc" id="L37">            game.removeCreature(game.getCreatureById(super.targetId));</span>
+<span class="fc" id="L38">    }</span>
+
+    @Override
+    public boolean validateCommand(Game game) {
+        // check if clientGame is in RoundState ActNow (first set by ActNow Event)
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (game.getRoundState() != RoundState.ACTNOW) {</span>
+<span class="nc" id="L44">            return false;</span>
+        }
+
+        // check if it is acting monster's turn
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (game.getMonsterActing() != this.actorId) {</span>
+<span class="fc" id="L49">            return false;</span>
+        }
+
+<span class="fc" id="L52">        return canAttack(game);</span>
+    }
+
+    @Override
+    public void sendResults(ServerConnection serverConn) {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        for (int commId : super.commIDs.commLibIds) {</span>
+<span class="nc" id="L58">            serverConn.sendCrushed(commId, super.actorId, super.direction);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">            if (super.targetDied)</span>
+<span class="nc" id="L60">                serverConn.sendDied(commId, super.targetId);</span>
+<span class="nc" id="L61">        }</span>
+<span class="nc" id="L62">    }</span>
+
+    @Override
+    public void sendCommand(ClientConnection cliConn) {
+<span class="nc" id="L66">        cliConn.sendCrush(super.direction);</span>
+<span class="nc" id="L67">    }</span>
+
+    @Override
+    public void executeEvent(Game game, Client cli) {
+<span class="nc" id="L71">        attack(game);</span>
+<span class="nc" id="L72">    }</span>
+
+    @Override
+    public boolean validateEvent(Game game, Client cli) {
+<span class="nc" id="L76">        return canAttack(game);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L81">        return String.format(&quot;%s crushes %s!&quot;, LogString.createVictimName(cli.getGame(),this.actorId),</span>
+<span class="nc" id="L82">                LogString.createVictimName(cli.getGame(),this.actorId,super.direction));</span>
+    }
+
+    /**
+     * executes the attacktest on the given {@link Game} model and therefore changes its condition
+     * @param game {@link Game} on which the attacktest is executed
+     */
+    private void attack(Game game) {
+<span class="fc" id="L90">        meleeAttack(game, this.ENERGYCOST, this.VALIDCREATURES, this.DAMAGE);</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * checks if the attacktest is possible on the given {@link Game} model
+     * @param game model on which the possibility of the attacktest is tested
+     * @return boolean value if the attacktest is possible
+     */
+    private boolean canAttack(Game game) {
+<span class="fc" id="L99">        return meleeTestCommand(game, this.ENERGYCOST, this.VALIDCREATURES);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

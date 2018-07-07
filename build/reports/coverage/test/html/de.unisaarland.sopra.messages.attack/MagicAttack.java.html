@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MagicAttack.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages.attack</a> &gt; <span class="el_source">MagicAttack.java</span></div><h1>MagicAttack.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages.attack;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.messages.Command;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+import de.unisaarland.sopra.model.Game;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+
+/**
+ * Created by Karla on 12.09.2016.
+ */
+public abstract class MagicAttack implements Command, Event {
+
+    protected int actorId;
+    protected int xCoord;
+    protected int yCoord;
+    protected int targetId;
+    protected boolean targetDied;
+    protected int damage;
+    protected int range;
+    protected int energyCost;
+<span class="fc" id="L25">    protected CreatureType[] validCreatures = new CreatureType[0];</span>
+    protected CommIds commIds;
+
+    /**
+     * creates an instance of MagicAttack (abstract but used in Cast and Swap avoiding duplicated code)
+     *
+     * @param commIds CommIds instance for communication
+     * @param actorId id of monster executing the attacktest
+     * @param x       x-coordination of target-position
+     * @param y       y-coordination of target-position
+     */
+<span class="fc" id="L36">    public MagicAttack(CommIds commIds, int actorId, int x, int y) {</span>
+<span class="fc" id="L37">        this.actorId = actorId;</span>
+<span class="fc" id="L38">        this.commIds = commIds;</span>
+<span class="fc" id="L39">        this.xCoord = x;</span>
+<span class="fc" id="L40">        this.yCoord = y;</span>
+<span class="fc" id="L41">        this.targetId = -1; //default value</span>
+<span class="fc" id="L42">        this.targetDied = false;</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * Executes the command at the given {@link Game} instance.
+     *
+     * @param game Game model to change by the command
+     */
+    @Override
+    public abstract void executeCommand(Game game);
+
+    /**
+     * Tests the command using the given {@link Game} instance
+     *
+     * @param game {@link Game} instance
+     * @return true, if command test was successful
+     */
+    @Override
+    public abstract boolean validateCommand(Game game);
+
+    /**
+     * Sends the result of the executed command to the client using a given {@link ServerConnection}
+     *
+     * @param sc Connection to the clients
+     */
+    @Override
+    public abstract void sendResults(ServerConnection sc);
+
+    /**
+     * Sends a command to the server using a given {@link ClientConnection} instance
+     *
+     * @param cc Connection instance to use for sending
+     */
+    @Override
+    public abstract void sendCommand(ClientConnection cc);
+
+    /**
+     * Executes the event at a given {@link Client}
+     *
+     * @param client {@link Client} to be changed
+     */
+    @Override
+    public abstract void executeEvent(Game game, Client client);
+
+    /**
+     * Tests the event using a given {@link Client}
+     *
+     * @param client {@link Client} to test on
+     * @return true, if test was successful
+     */
+    @Override
+    public abstract boolean validateEvent(Game game, Client client);
+
+    // Getter for test purposes
+
+    public int getActorId() {
+<span class="nc" id="L98">        return actorId;</span>
+    }
+
+    public int getxCoord() {
+<span class="nc" id="L102">        return xCoord;</span>
+    }
+
+    public int getyCoord() {
+<span class="nc" id="L106">        return yCoord;</span>
+    }
+
+    public int getTargetId() {
+<span class="nc" id="L110">        return targetId;</span>
+    }
+
+    public boolean isTargetDead() {
+<span class="nc" id="L114">        return targetDied;</span>
+    }
+
+    public int getDamage() {
+<span class="nc" id="L118">        return damage;</span>
+    }
+
+    public int getRange() {
+<span class="nc" id="L122">        return range;</span>
+    }
+
+    public int getEnergyCost() {
+<span class="nc" id="L126">        return energyCost;</span>
+    }
+
+    public CreatureType[] getValidCreatures() {
+<span class="nc" id="L130">        return validCreatures;</span>
+    }
+
+    public CommIds getCommIds() {
+<span class="nc" id="L134">        return commIds;</span>
+    }
+
+    @Override
+    public int getMonsterId() {
+<span class="nc" id="L139">        return actorId;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

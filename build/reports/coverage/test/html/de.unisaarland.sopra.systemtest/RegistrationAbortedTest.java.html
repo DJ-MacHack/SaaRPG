@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationAbortedTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">RegistrationAbortedTest.java</span></div><h1>RegistrationAbortedTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Karla on 22.09.2016.
+ */
+public class RegistrationAbortedTest extends OurSystemTest {
+
+    private static final String MAPFILE = &quot;0 ttt\n&quot;
+                                        + &quot;1   x&quot;;
+
+    private static final String FIGHTFILE = &quot;Targaryen, Lannister \n&quot;
+            + &quot;Targaryen, Daenerys, Elf\n&quot;
+            + &quot;Lannister, Cersei, Naga&quot;;
+
+    public RegistrationAbortedTest() {
+<span class="nc" id="L21">        super(&quot;RegistrationAbortedTest&quot;);</span>
+<span class="nc" id="L22">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L26">        expectServerFail();</span>
+<span class="nc" id="L27">        ClientConnection&lt;Event&gt; dany = register(0, &quot;Daenerys&quot;, CreatureType.ELF, &quot;Targaryen&quot;, 0, 0);</span>
+<span class="nc" id="L28">        dany.sendSlash(Direction.NORTH_WEST);</span>
+<span class="nc" id="L29">        assertRegistrationAborted(assertAndMerge(dany));</span>
+<span class="nc" id="L30">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L34">        return MAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L39">        return FIGHTFILE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

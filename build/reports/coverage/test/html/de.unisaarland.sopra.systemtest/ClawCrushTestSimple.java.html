@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClawCrushTestSimple.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">ClawCrushTestSimple.java</span></div><h1>ClawCrushTestSimple.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Wiebk on 19.09.2016.
+ */
+public class ClawCrushTestSimple extends OurSystemTest {
+
+    public ClawCrushTestSimple() {
+<span class="nc" id="L14">        super(&quot;ClawCrushTestSimple&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    public void executeTest() {
+        //registration
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; tucker = register(0, &quot;Tucker&quot;, CreatureType.YETI, &quot;Tucker and Dale&quot;, 0, 1);</span>
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; allison = register(1, &quot;Allison&quot;, CreatureType.ROOK, &quot;Evil&quot;, 1, 1);</span>
+<span class="nc" id="L22">        Event registertucker = allison.nextEvent();</span>
+<span class="nc" id="L23">        assertRegisterEvent(registertucker, 0, &quot;Tucker&quot;, CreatureType.YETI, &quot;Tucker and Dale&quot;, 0, 1);</span>
+<span class="nc" id="L24">        assertRegisterEvent(tucker.nextEvent(), 1, &quot;Allison&quot;, CreatureType.ROOK, &quot;Evil&quot;, 1, 1);</span>
+
+<span class="nc" id="L26">        assertRoundBegin(assertAndMerge(tucker, allison), 1);</span>
+
+        //tucker's turn, claw at allison, then crush
+<span class="nc" id="L29">        assertActNow(assertAndMerge(tucker, allison), 0);</span>
+<span class="nc" id="L30">        tucker.sendClaw(Direction.EAST);</span>
+<span class="nc" id="L31">        assertClaw(assertAndMerge(tucker, allison), 0, Direction.EAST);</span>
+<span class="nc" id="L32">        assertActNow(assertAndMerge(tucker, allison), 0);</span>
+<span class="nc" id="L33">        tucker.sendCrush(Direction.EAST);</span>
+<span class="nc" id="L34">        assertCrush(assertAndMerge(tucker, allison), 0, Direction.EAST);</span>
+<span class="nc" id="L35">        assertActNow(assertAndMerge(tucker, allison), 0);</span>
+<span class="nc" id="L36">        tucker.sendDoneActing();</span>
+<span class="nc" id="L37">        assertDoneActing(assertAndMerge(tucker, allison), 0);</span>
+
+        //allison's turn, stare at tucker
+<span class="nc" id="L40">        assertActNow(assertAndMerge(tucker, allison), 1);</span>
+<span class="nc" id="L41">        allison.sendStare(Direction.WEST);</span>
+<span class="nc" id="L42">        assertStared(assertAndMerge(tucker, allison), 1, Direction.WEST);</span>
+<span class="nc" id="L43">        assertActNow(assertAndMerge(tucker, allison), 1);</span>
+<span class="nc" id="L44">        allison.sendDoneActing();</span>
+<span class="nc" id="L45">        assertDoneActing(assertAndMerge(tucker, allison), 1);</span>
+
+<span class="nc" id="L47">        assertRoundEnd(assertAndMerge(tucker, allison), 1, 0);</span>
+<span class="nc" id="L48">        assertRoundBegin(assertAndMerge(tucker, allison), 2);</span>
+
+        //allison's turn: no action
+<span class="nc" id="L51">        assertActNow(assertAndMerge(tucker, allison), 1);</span>
+<span class="nc" id="L52">        allison.sendDoneActing();</span>
+<span class="nc" id="L53">        assertDoneActing(assertAndMerge(tucker, allison), 1);</span>
+
+        //tucker's turn: sends burn, gets kicked
+<span class="nc" id="L56">        assertActNow(assertAndMerge(tucker, allison), 0);</span>
+<span class="nc" id="L57">        tucker.sendCrush(Direction.EAST);</span>
+<span class="nc" id="L58">        assertCrush(assertAndMerge(tucker, allison), 0, Direction.EAST);</span>
+<span class="nc" id="L59">        assertActNow(assertAndMerge(tucker, allison), 0);</span>
+<span class="nc" id="L60">        tucker.sendBurn();</span>
+<span class="nc" id="L61">        assertKicked(assertAndMerge(tucker, allison), 0);</span>
+
+<span class="nc" id="L63">        assertRoundEnd(assertAndMerge(tucker, allison), 2, 0);</span>
+
+        //Evil wins
+<span class="nc" id="L66">        assertWinner(assertAndMerge(tucker, allison), &quot;Evil&quot;);</span>
+
+<span class="nc" id="L68">    }</span>
+
+    @Override
+    public String getMapFile() {
+<span class="nc" id="L72">        return &quot;tttt\n&quot;</span>
+                + &quot;01tt\n&quot;
+                + &quot;tttt\n&quot;
+                + &quot;tttt&quot;;
+    }
+
+    public String getFightFile() {
+<span class="nc" id="L79">        return &quot;Tucker and Dale, Evil\n&quot;</span>
+                + &quot;Tucker and Dale, Tucker, YETI\n&quot;
+                + &quot;Evil, Allison, rook&quot;;
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

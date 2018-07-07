@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TooManyMonstersInTeamTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">TooManyMonstersInTeamTest.java</span></div><h1>TooManyMonstersInTeamTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.TimeoutException;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.junit.Assert;
+
+/**
+ * Created by Team14 on 9/22/16.
+ */
+public class TooManyMonstersInTeamTest extends OurSystemTest {
+    private final static String PLAYERA = &quot;AndreasKieling&quot;;
+    private final static String PLAYERB = &quot;MarcelDavis&quot;;
+    private final static String PLAYERC = &quot;PeterLustig&quot;;
+    private final static String TEAMA = &quot;YTK&quot;;
+    private final static String TEAMB = &quot;VollerEmpfang&quot;;
+<span class="nc" id="L22">    private final static CreatureType CREATUREA = CreatureType.YETI;</span>
+<span class="nc" id="L23">    private final static CreatureType CREATUREB = CreatureType.NAGA;</span>
+<span class="nc" id="L24">    private final static CreatureType CREATUREC = CreatureType.ELF;</span>
+<span class="nc" id="L25">    private final static String VALIDFIGHTFILE =</span>
+            TEAMA + &quot;, &quot; + TEAMB + &quot;\n&quot; +
+<span class="nc" id="L27">                    TEAMA + &quot;, &quot; + PLAYERA + &quot;, &quot; + CREATUREA.toString() + &quot;\n&quot; +</span>
+<span class="nc" id="L28">                    TEAMA + &quot;, &quot; + PLAYERB + &quot;, &quot; + CREATUREB.toString() + &quot;\n&quot; +</span>
+<span class="nc" id="L29">                    TEAMB + &quot;, &quot; + PLAYERC + &quot;, &quot; + CREATUREC.toString();</span>
+    private  String VALIDMAPFILE;
+
+    private TooManyMonstersInTeamTest(String mapfile, String testname) {
+<span class="nc" id="L33">        super(&quot;TooManyMonstersInTeamTest.&quot; + testname);</span>
+<span class="nc" id="L34">        this.VALIDMAPFILE = mapfile;</span>
+<span class="nc" id="L35">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L39">        expectServerFail();</span>
+        try {
+<span class="nc" id="L41">            ClientConnection&lt;Event&gt; pa = register(0, PLAYERA, CREATUREA, TEAMA, 0, 0);</span>
+<span class="nc" id="L42">            ClientConnection&lt;Event&gt; pb = register(1, PLAYERB, CREATUREB, TEAMA, 0, 0);</span>
+<span class="nc" id="L43">            assertRegisterEvent(pb.nextEvent(), 0, PLAYERA, CREATUREA, TEAMA, 0, 0);</span>
+<span class="nc" id="L44">            assertRegisterEvent(pa.nextEvent(), 1, PLAYERB, CREATUREB, TEAMA, 0, 0);</span>
+<span class="nc" id="L45">            ClientConnection&lt;Event&gt; pc = register(2, PLAYERC, CREATUREC, TEAMB, 1, 0);</span>
+<span class="nc" id="L46">            assertRegisterEvent(pa.nextEvent(), 2, PLAYERC, CREATUREC, TEAMB, 1, 0);</span>
+<span class="nc" id="L47">            assertRegisterEvent(pb.nextEvent(), 2, PLAYERC, CREATUREC, TEAMB, 1, 0);</span>
+<span class="nc" id="L48">            assertRegisterEvent(pc.nextEvent(), 0, PLAYERA, CREATUREA, TEAMA, 0, 0);</span>
+<span class="nc" id="L49">            assertRegisterEvent(pc.nextEvent(), 1, PLAYERB, CREATUREB, TEAMA, 0, 0);</span>
+<span class="nc" id="L50">        } catch (TimeoutException | IllegalArgumentException e) {</span>
+<span class="nc" id="L51">            Assert.assertNotNull(e);</span>
+<span class="nc" id="L52">        }</span>
+<span class="nc" id="L53">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L57">        return VALIDMAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L62">        return VALIDFIGHTFILE;</span>
+    }
+
+    public static Collection&lt;OurSystemTest&gt; getTests(){
+<span class="nc" id="L66">        ArrayList&lt;OurSystemTest&gt; sysTests = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L67">        sysTests.add(new TooManyMonstersInTeamTest(&quot;01\n  &quot;, &quot;SimpleMap&quot;));</span>
+<span class="nc" id="L68">        sysTests.add(new TooManyMonstersInTeamTest(&quot;011#\n####&quot;, &quot;MoreComplexMap&quot;));</span>
+<span class="nc" id="L69">        sysTests.add(new TooManyMonstersInTeamTest(&quot;011#~*xxx\n####___^^&quot;, &quot;EvenMoreComplexMap&quot;));</span>
+<span class="nc" id="L70">        return sysTests;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

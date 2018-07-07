@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Npc.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.model</a> &gt; <span class="el_source">Npc.java</span></div><h1>Npc.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.model;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.utility.GameVector;
+
+/**
+ * Created by Team14 on 12/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class Npc extends Creature {
+
+    private static final int HASH_PRIME = 31;
+
+    // Boar data
+    private static final int BOAR_HP = 20;
+    private static final int BOAR_ANCHOR_DIS = 20;
+    private static final int BOAR_MAX_STEPS = 6;
+
+    // Fairy data
+    private static final int FAIRY_HP = 100;
+    private static final int FAIRY_ANCHOR_DIS = 10;
+    private static final int FAIRY_MAX_STEPS = 4;
+
+    // Fields
+    private GameVector anchorPoint;
+    private Direction currentDirection;
+    private int maxSteps;
+    private int maxAnchorPointDistance;
+    private int roundsDead;
+
+    /**
+     * creates a new instance of {@link Npc} representing a neutral creature (fairy/ boar)
+     *
+     * @param id                     id of the creature
+     * @param position               {@link GameVector} position of the creature on the map
+     * @param hp                     health points of the creature
+     * @param creatureType           {@link CreatureType} type of the creature
+     * @param maxSteps               number of movements this Npc does in its turn
+     * @param maxAnchorPointDistance {@link GameVector} maximal distance the Npc can move away from its anchorPoint. This can not be exceeded in its own movement!
+     */
+    public Npc(int id, GameVector position, int hp, CreatureType creatureType, int maxSteps, int maxAnchorPointDistance) throws IllegalArgumentException {
+<span class="fc" id="L42">        super(id, position, hp, creatureType);</span>
+
+        /*
+        if (id &lt; 0 || hp &lt; 0) {
+            throw new IllegalArgumentException();
+        }
+        if (creatureType != CreatureType.BOAR &amp;&amp; creatureType != CreatureType.FAIRY) {
+            throw new IllegalArgumentException();
+        }
+        if (creatureType == CreatureType.BOAR
+                &amp;&amp; (hp &gt; BOAR_HP || maxSteps != BOAR_MAX_STEPS || maxAnchorPointDistance != BOAR_ANCHOR_DIS)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (creatureType == CreatureType.FAIRY
+                &amp;&amp; (hp &gt; FAIRY_HP || maxSteps != FAIRY_MAX_STEPS || maxAnchorPointDistance != FAIRY_ANCHOR_DIS)) {
+            throw new IllegalArgumentException();
+        }
+        */
+<span class="fc" id="L61">        this.anchorPoint = position;</span>
+<span class="fc" id="L62">        this.maxSteps = maxSteps;</span>
+<span class="fc" id="L63">        this.maxAnchorPointDistance = maxAnchorPointDistance;</span>
+<span class="fc" id="L64">        this.currentDirection = Direction.EAST;</span>
+<span class="fc" id="L65">    }</span>
+
+    /*
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        
+        Npc npc = (Npc) o;
+
+        if (maxSteps != npc.maxSteps) {
+            return false;
+        }
+        if (maxAnchorPointDistance != npc.maxAnchorPointDistance) {
+            return false;
+        }
+        if (roundsDead != npc.roundsDead) {
+            return false;
+        }
+        if (anchorPoint != null ? !anchorPoint.equals(npc.anchorPoint) : npc.anchorPoint != null) {
+            return false;
+        }
+        if (super.getId() != npc.getId()) {
+            return false;
+        }
+        if (super.getHp() != npc.getHp()) {
+            return false;
+        }
+        if (super.getMaxHp() != npc.getMaxHp()) {
+            return false;
+        }
+        if (!super.getPosition().equals(npc.getPosition())) {
+            return false;
+        }
+        if (super.isDead() != npc.isDead()) {
+            return false;
+        }
+        if (!super.getPoisons().equals(npc.getPoisons())) {
+            return false;
+        }
+        if (super.getCreatureType() != npc.getCreatureType()) {
+            return false;
+        }
+        if (super.getLastDirection() != npc.getLastDirection()) {
+            return false;
+        }
+        return currentDirection == npc.currentDirection;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = anchorPoint != null ? anchorPoint.hashCode() : 0;
+        result = HASH_PRIME * result + (currentDirection != null ? currentDirection.hashCode() : 0);
+        result = HASH_PRIME * result + maxSteps;
+        result = HASH_PRIME * result + maxAnchorPointDistance;
+        result = HASH_PRIME * result + roundsDead;
+
+        result = HASH_PRIME * result + super.hp;
+        result = HASH_PRIME * result + super.id;
+        result = HASH_PRIME * result + super.getMaxHp();
+        result = HASH_PRIME * result + super.getPosition().hashCode();
+        result = HASH_PRIME * result + (super.isDead() ? 1 : 0);
+        result = HASH_PRIME * result + super.getPoisons().hashCode();
+        result = HASH_PRIME * result + super.getCreatureType().hashCode();
+        if (this.lastDirection != null) {
+            result = HASH_PRIME * result + super.getLastDirection().hashCode();
+        }
+        return result;
+    }
+    */
+
+    /**
+     * copy constructor of Npc
+     *
+     * @param npc Npc which is copied
+     */
+    public Npc(Npc npc) {
+<span class="nc" id="L147">        super(npc);</span>
+<span class="nc" id="L148">        this.maxSteps = npc.getMaxSteps();</span>
+<span class="nc" id="L149">        this.maxAnchorPointDistance = npc.getMaxAnchorPointDistance();</span>
+<span class="nc" id="L150">        this.roundsDead = npc.getRoundsDead();</span>
+<span class="nc" id="L151">        this.anchorPoint = npc.getAnchorPoint();</span>
+<span class="nc" id="L152">        this.currentDirection = npc.getCurrentDirection();</span>
+<span class="nc" id="L153">    }</span>
+
+    /**
+     * gets the {@link Npc} anchorPoint as a {@link GameVector}
+     *
+     * @return {@link Npc} anchorPoint
+     */
+    public GameVector getAnchorPoint() {
+<span class="fc" id="L161">        return this.anchorPoint;</span>
+    }
+
+    /**
+     * gets current movement {@link Direction} of the {@link Npc}
+     *
+     * @return {@link Npc} current movement {@link Direction}
+     */
+    public Direction getCurrentDirection() {
+<span class="fc" id="L170">        return this.currentDirection;</span>
+    }
+
+    /**
+     * gets max amount of movements the {@link Npc} does in its turn
+     *
+     * @return {@link Npc} max amount of steps
+     */
+    public int getMaxSteps() {
+<span class="fc" id="L179">        return this.maxSteps;</span>
+    }
+
+    /**
+     * gets max possible distance of {@link Npc} to its anchorPoint
+     *
+     * @return {@link Npc} max distance
+     */
+    public int getMaxAnchorPointDistance() {
+<span class="fc" id="L188">        return this.maxAnchorPointDistance;</span>
+    }
+
+    public int getRoundsDead() {
+<span class="fc" id="L192">        return this.roundsDead;</span>
+    }
+
+    public void increaseRoundsDead() {
+<span class="fc" id="L196">        this.roundsDead += 1;</span>
+<span class="fc" id="L197">    }</span>
+
+    public void setRoundsDead(int r){
+<span class="nc" id="L200">        this.roundsDead = r;</span>
+<span class="nc" id="L201">    }</span>
+
+    public void setCurrentDirection(Direction direction) {
+<span class="nc" id="L204">        this.currentDirection = direction;</span>
+<span class="nc" id="L205">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

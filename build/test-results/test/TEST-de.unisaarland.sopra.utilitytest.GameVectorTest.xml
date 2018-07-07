@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.utilitytest.GameVectorTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:41" hostname="Guantanamo-Bay" time="0.002">
+  <properties/>
+  <testcase name="testAddVectorDirection2" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.0"/>
+  <testcase name="testEqualsFalse" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.0"/>
+  <testcase name="testAdd" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.0"/>
+  <testcase name="testDistanceTo1" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.001"/>
+  <testcase name="testDistanceTo2" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.0"/>
+  <testcase name="testDistanceTo3" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.0"/>
+  <testcase name="testDistanceTo4" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.0"/>
+  <testcase name="testDistanceTo5" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.0"/>
+  <testcase name="testEqualsTrue" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.0"/>
+  <testcase name="testAddVectorDirection" classname="de.unisaarland.sopra.utilitytest.GameVectorTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

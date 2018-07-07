@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FairyKilledTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">FairyKilledTest.java</span></div><h1>FairyKilledTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Karla on 21.09.2016.
+ */
+public class FairyKilledTest extends OurSystemTest {
+
+    private static final String FIGHTFILE =
+                    &quot;Red, Blue, Green\n&quot;
+                    + &quot;Red, Lukas, Naga\n&quot;
+                    + &quot;Green, Lukas2, Ifrit\n&quot;
+                    + &quot;Blue, Chris, Wraith&quot;;
+//MAP
+    private static final String MAPFILE =
+                      &quot;^0   \n&quot;
+                    + &quot;  xx1\n&quot;
+                    + &quot;tt2xx\n&quot;
+                    + &quot;ttt+x\n&quot;
+                    + &quot;~~~~x\n&quot;
+                    + &quot;~~~~x\n&quot;
+                    + &quot;x  ~~&quot;;
+
+    public FairyKilledTest(){
+<span class="nc" id="L29">        super(&quot;Fairy killed Test&quot;);</span>
+<span class="nc" id="L30">    }</span>
+    @Override
+    protected void executeTest() {
+
+<span class="nc" id="L34">        ClientConnection&lt;Event&gt; lukas = register(0,&quot;Lukas&quot;, CreatureType.NAGA,&quot;Red&quot;,1,0);</span>
+<span class="nc" id="L35">        ClientConnection&lt;Event&gt; chris = register(1,&quot;Chris&quot;,CreatureType.WRAITH,&quot;Blue&quot;,4,1);</span>
+<span class="nc" id="L36">        ClientConnection&lt;Event&gt; lukas2 = register(2,&quot;Lukas2&quot;,CreatureType.IFRIT,&quot;Green&quot;,1,2);</span>
+
+<span class="nc" id="L38">        assertRegisterEvent(chris.nextEvent(),0,&quot;Lukas&quot;, CreatureType.NAGA,&quot;Red&quot;,1,0);</span>
+<span class="nc" id="L39">        assertRegisterEvent(chris.nextEvent(),2,&quot;Lukas2&quot;,CreatureType.IFRIT,&quot;Green&quot;,1,2);</span>
+
+<span class="nc" id="L41">        assertRegisterEvent(lukas.nextEvent(),1,&quot;Chris&quot;,CreatureType.WRAITH,&quot;Blue&quot;,4,1);</span>
+<span class="nc" id="L42">        assertRegisterEvent(lukas.nextEvent(),2,&quot;Lukas2&quot;,CreatureType.IFRIT,&quot;Green&quot;,1,2);</span>
+
+<span class="nc" id="L44">        assertRegisterEvent(lukas2.nextEvent(),0,&quot;Lukas&quot;, CreatureType.NAGA,&quot;Red&quot;,1,0);</span>
+<span class="nc" id="L45">        assertRegisterEvent(lukas2.nextEvent(),1,&quot;Chris&quot;,CreatureType.WRAITH,&quot;Blue&quot;,4,1);</span>
+
+<span class="nc" id="L47">        assertFairySpawned(assertAndMerge(chris,lukas,lukas2),3,2,3);</span>
+        //Round 1 starts------------------- Fairy HP:100
+<span class="nc" id="L49">        assertRoundBegin(assertAndMerge(chris,lukas,lukas2),1);</span>
+        //Fairy moves
+<span class="nc" id="L51">        assertMoved(assertAndMerge(chris,lukas2,lukas),3,Direction.EAST);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for(int i =0; i &lt;3; i++){</span>
+<span class="nc" id="L53">            assertMoved(assertAndMerge(chris,lukas2,lukas),3,Direction.NORTH_WEST);</span>
+        }
+
+        //Lukas' turn
+        //Lukas moves E:890, HP:100
+<span class="nc" id="L58">        assertActNow(assertAndMerge(chris,lukas,lukas2),0);</span>
+<span class="nc" id="L59">        lukas.sendMove(Direction.EAST);</span>
+<span class="nc" id="L60">        assertMoved(assertAndMerge(chris,lukas,lukas2),0,Direction.EAST);</span>
+        //Lukas attacks E:90, HP:100
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        for(int i = 0; i &lt; 4; i++){</span>
+<span class="nc" id="L63">            assertActNow(assertAndMerge(chris,lukas,lukas2),0);</span>
+<span class="nc" id="L64">            lukas.sendCut(Direction.EAST);</span>
+<span class="nc" id="L65">            assertCut(assertAndMerge(chris,lukas,lukas2),0,Direction.EAST);//Fairy HP:80</span>
+        }
+        //Lukas passes
+<span class="nc" id="L68">        assertActNow(assertAndMerge(chris,lukas,lukas2),0);</span>
+<span class="nc" id="L69">        lukas.sendDoneActing();</span>
+<span class="nc" id="L70">        assertDoneActing(assertAndMerge(chris,lukas,lukas2),0);</span>
+
+        //Chris' turn
+        //Chris E:900, HP:100
+<span class="nc" id="L74">        assertActNow(assertAndMerge(chris,lukas,lukas2),1);</span>
+<span class="nc" id="L75">        chris.sendMove(Direction.NORTH_WEST);</span>
+<span class="nc" id="L76">        assertMoved(assertAndMerge(chris,lukas,lukas2),1,Direction.NORTH_WEST);</span>
+        //Chris attacks E:150 HP:100
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        for(int i = 0; i &lt; 3; i++){</span>
+<span class="nc" id="L79">            assertActNow(assertAndMerge(chris,lukas,lukas2),1);</span>
+<span class="nc" id="L80">            chris.sendStab(Direction.WEST);</span>
+<span class="nc" id="L81">            assertStabbed(assertAndMerge(chris,lukas,lukas2),1,Direction.WEST);//Fairy HP:59</span>
+        }
+        //Chris passes
+<span class="nc" id="L84">        assertActNow(assertAndMerge(chris,lukas,lukas2),1);</span>
+<span class="nc" id="L85">        chris.sendDoneActing();</span>
+<span class="nc" id="L86">        assertDoneActing(assertAndMerge(chris,lukas,lukas2),1);</span>
+
+        //Lukas2's turn
+        //Lukas2 moves E:900, HP:100
+<span class="nc" id="L90">        assertActNow(assertAndMerge(chris,lukas,lukas2),2);</span>
+<span class="nc" id="L91">        lukas2.sendMove(Direction.NORTH_EAST);</span>
+<span class="nc" id="L92">        assertMoved(assertAndMerge(chris,lukas2,lukas),2,Direction.NORTH_EAST);</span>
+        //Lukas2 attacks E:135 HP:100
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        for(int i = 0; i &lt; 3; i++){</span>
+<span class="nc" id="L95">            assertActNow(assertAndMerge(chris,lukas,lukas2),2);</span>
+<span class="nc" id="L96">            lukas2.sendSinge(Direction.NORTH_EAST);</span>
+<span class="nc" id="L97">            assertSinged(assertAndMerge(chris,lukas2,lukas),2,Direction.NORTH_EAST); //Fairy HP:38</span>
+        }
+        //Lukas2 passes
+<span class="nc" id="L100">        assertActNow(assertAndMerge(chris,lukas,lukas2),2);</span>
+<span class="nc" id="L101">        lukas2.sendDoneActing();</span>
+<span class="nc" id="L102">        assertDoneActing(assertAndMerge(chris,lukas2,lukas),2);</span>
+        //Round ends
+<span class="nc" id="L104">        assertRoundEnd(assertAndMerge(chris,lukas2,lukas),1,0);</span>
+
+        //Round2 starts-------------------------------------------------------------
+<span class="nc" id="L107">        assertRoundBegin(assertAndMerge(chris,lukas2,lukas),2);</span>
+
+        //Fairy moves
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        for(int i =0; i &lt;3; i++){</span>
+<span class="nc" id="L111">            assertMoved(assertAndMerge(chris,lukas2,lukas),3,Direction.SOUTH_EAST);</span>
+        }
+<span class="nc" id="L113">        assertMoved(assertAndMerge(chris,lukas2,lukas),3,Direction.NORTH_WEST);</span>
+
+        //Chris' turn
+        //Chris moves E:900,HP:100
+<span class="nc" id="L117">        assertActNow(assertAndMerge(chris,lukas,lukas2),1);</span>
+<span class="nc" id="L118">        chris.sendMove(Direction.WEST);</span>
+<span class="nc" id="L119">        assertMoved(assertAndMerge(chris,lukas2,lukas),1,Direction.WEST);</span>
+        //Chris swaps E:400, HP:100
+<span class="nc" id="L121">        assertActNow(assertAndMerge(chris,lukas,lukas2),1);</span>
+<span class="nc" id="L122">        chris.sendSwap(3,2);</span>
+<span class="nc" id="L123">        assertSwapped(assertAndMerge(chris,lukas2,lukas),1,3,2);    //Fairy HP:32</span>
+        //Chris moves E:300,HP:100
+<span class="nc" id="L125">        assertActNow(assertAndMerge(chris,lukas,lukas2),1);</span>
+<span class="nc" id="L126">        chris.sendMove(Direction.NORTH_WEST);</span>
+<span class="nc" id="L127">        assertMoved(assertAndMerge(chris,lukas2,lukas),1,Direction.NORTH_WEST);</span>
+        //Chris attacks E:50, HP:100
+<span class="nc" id="L129">        assertActNow(assertAndMerge(chris,lukas,lukas2),1);</span>
+<span class="nc" id="L130">        chris.sendStab(Direction.NORTH_WEST);</span>
+<span class="nc" id="L131">        assertStabbed(assertAndMerge(chris,lukas2,lukas),1,Direction.NORTH_WEST);//Fairy HP:25</span>
+        //Chris passes
+<span class="nc" id="L133">        assertActNow(assertAndMerge(chris,lukas,lukas2),1);</span>
+<span class="nc" id="L134">        chris.sendDoneActing();</span>
+<span class="nc" id="L135">        assertDoneActing(assertAndMerge(chris,lukas,lukas2),1);</span>
+
+        //Lukas2' turn
+        //Lukas2 attacks E:235,HP:100
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        for(int i = 0; i &lt; 3; i++){</span>
+<span class="nc" id="L140">            assertActNow(assertAndMerge(chris,lukas,lukas2),2);</span>
+<span class="nc" id="L141">            lukas2.sendSinge(Direction.NORTH_EAST);</span>
+<span class="nc" id="L142">            assertSinged(assertAndMerge(chris,lukas2,lukas),2,Direction.NORTH_EAST); //Fairy HP:4</span>
+        }
+        //Lukas2 passes
+<span class="nc" id="L145">        assertActNow(assertAndMerge(chris,lukas,lukas2),2);</span>
+<span class="nc" id="L146">        lukas2.sendDoneActing();</span>
+<span class="nc" id="L147">        assertDoneActing(assertAndMerge(chris,lukas2,lukas),2);</span>
+
+        //Lukas' turn
+        //Lukas attacks
+<span class="nc" id="L151">        assertActNow(assertAndMerge(chris,lukas,lukas2),0);</span>
+<span class="nc" id="L152">        lukas.sendCut(Direction.EAST);</span>
+<span class="nc" id="L153">        assertCut(assertAndMerge(chris,lukas,lukas2),0,Direction.EAST);//Fairy HP:0</span>
+<span class="nc" id="L154">        assertDied(assertAndMerge(chris,lukas2,lukas),3);</span>
+        //Lukas kicked out
+<span class="nc" id="L156">        assertActNow(assertAndMerge(chris,lukas,lukas2),0);</span>
+<span class="nc" id="L157">        lukas.sendSlash(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L158">        assertKicked(assertAndMerge(chris,lukas2,lukas),0);</span>
+
+        //Round ends
+<span class="nc" id="L161">        assertRoundEnd(assertAndMerge(chris,lukas2,lukas),2,0);</span>
+
+        //Round3 starts------------------------------------------------------------------------------
+<span class="nc" id="L164">        assertRoundBegin(assertAndMerge(chris,lukas2,lukas),3);</span>
+
+        //Lukas2' turn
+        //Lukas kicked out
+<span class="nc" id="L168">        assertActNow(assertAndMerge(chris,lukas,lukas2),2);</span>
+<span class="nc" id="L169">        lukas2.sendSlash(Direction.WEST);</span>
+<span class="nc" id="L170">        assertKicked(assertAndMerge(chris,lukas2,lukas),2);</span>
+
+        //Chris turns
+        //Chris passes
+<span class="nc" id="L174">        assertActNow(assertAndMerge(chris,lukas,lukas2),1);</span>
+<span class="nc" id="L175">        chris.sendDoneActing();</span>
+<span class="nc" id="L176">        assertDoneActing(assertAndMerge(chris,lukas,lukas2),1);</span>
+
+<span class="nc" id="L178">        assertRoundEnd(assertAndMerge(chris,lukas2,lukas),3,0);</span>
+<span class="nc" id="L179">        assertWinner(assertAndMerge(chris,lukas2,lukas),&quot;Blue&quot;);</span>
+<span class="nc" id="L180">        passed();</span>
+
+
+<span class="nc" id="L183">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L187">        return MAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L192">        return FIGHTFILE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

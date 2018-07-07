@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BurnFourTargetsTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">BurnFourTargetsTest.java</span></div><h1>BurnFourTargetsTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Team14 on 23/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class BurnFourTargetsTest extends OurSystemTest {
+    public BurnFourTargetsTest() {
+<span class="nc" id="L17">        super(&quot;BurnFourTargetsTest&quot;);</span>
+<span class="nc" id="L18">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // register phase
+<span class="nc" id="L23">        List&lt;ClientConnection&lt;Event&gt;&gt; clientList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L24">        ClientConnection&lt;Event&gt; vashjir = register(0, &quot;Vashjir&quot;, CreatureType.NAGA, &quot;Water&quot;, 1, 0);</span>
+<span class="nc" id="L25">        clientList.add(vashjir);</span>
+
+<span class="nc" id="L27">        ClientConnection&lt;Event&gt; hakkar = register(1, &quot;Hakkar&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 1);</span>
+<span class="nc" id="L28">        clientList.add(hakkar);</span>
+<span class="nc" id="L29">        assertRegisterEvent(vashjir.nextEvent(), 1, &quot;Hakkar&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 1);</span>
+<span class="nc" id="L30">        assertRegisterEvent(hakkar.nextEvent(), 0, &quot;Vashjir&quot;, CreatureType.NAGA, &quot;Water&quot;, 1, 0);</span>
+
+<span class="nc" id="L32">        ClientConnection&lt;Event&gt; tyrande = register(2, &quot;Tyrande&quot;, CreatureType.ELF, &quot;Wood&quot;, 2, 1);</span>
+<span class="nc" id="L33">        assertRegisterEvent(assertAndMerge(clientList), 2, &quot;Tyrande&quot;, CreatureType.ELF, &quot;Wood&quot;, 2, 1);</span>
+<span class="nc" id="L34">        assertRegisterEvent(tyrande.nextEvent(), 0, &quot;Vashjir&quot;, CreatureType.NAGA, &quot;Water&quot;, 1, 0);</span>
+<span class="nc" id="L35">        assertRegisterEvent(tyrande.nextEvent(), 1, &quot;Hakkar&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 1);</span>
+<span class="nc" id="L36">        clientList.add(tyrande);</span>
+
+<span class="nc" id="L38">        ClientConnection&lt;Event&gt; therazane = register(3, &quot;Therazane&quot;, CreatureType.KOBOLD, &quot;Earth&quot;, 0, 2);</span>
+<span class="nc" id="L39">        assertRegisterEvent(assertAndMerge(clientList), 3, &quot;Therazane&quot;, CreatureType.KOBOLD, &quot;Earth&quot;, 0, 2);</span>
+<span class="nc" id="L40">        assertRegisterEvent(therazane.nextEvent(), 0, &quot;Vashjir&quot;, CreatureType.NAGA, &quot;Water&quot;, 1, 0);</span>
+<span class="nc" id="L41">        assertRegisterEvent(therazane.nextEvent(), 1, &quot;Hakkar&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 1);</span>
+<span class="nc" id="L42">        assertRegisterEvent(therazane.nextEvent(), 2, &quot;Tyrande&quot;, CreatureType.ELF, &quot;Wood&quot;, 2, 1);</span>
+<span class="nc" id="L43">        clientList.add(therazane);</span>
+
+<span class="nc" id="L45">        ClientConnection&lt;Event&gt; ragnaros = register(4, &quot;Ragnaros&quot;, CreatureType.IFRIT, &quot;Fire&quot;, 1, 1);</span>
+<span class="nc" id="L46">        assertRegisterEvent(assertAndMerge(clientList), 4, &quot;Ragnaros&quot;, CreatureType.IFRIT, &quot;Fire&quot;, 1, 1);</span>
+<span class="nc" id="L47">        assertRegisterEvent(ragnaros.nextEvent(), 0, &quot;Vashjir&quot;, CreatureType.NAGA, &quot;Water&quot;, 1, 0);</span>
+<span class="nc" id="L48">        assertRegisterEvent(ragnaros.nextEvent(), 1, &quot;Hakkar&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 1);</span>
+<span class="nc" id="L49">        assertRegisterEvent(ragnaros.nextEvent(), 2, &quot;Tyrande&quot;, CreatureType.ELF, &quot;Wood&quot;, 2, 1);</span>
+<span class="nc" id="L50">        assertRegisterEvent(ragnaros.nextEvent(), 3, &quot;Therazane&quot;, CreatureType.KOBOLD, &quot;Earth&quot;, 0, 2);</span>
+<span class="nc" id="L51">        clientList.add(ragnaros);</span>
+
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        for (int round = 1; round &lt; 34; round++) {</span>
+            // round begins
+<span class="nc" id="L55">            assertRoundBegin(assertAndMerge(clientList), round);</span>
+
+            // acting phase all passive players
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            for (int actingId = 0; actingId &lt; 4; actingId++) {</span>
+<span class="nc" id="L59">                assertActNow(assertAndMerge(clientList), actingId);</span>
+<span class="nc" id="L60">                clientList.get(actingId).sendDoneActing();</span>
+<span class="nc" id="L61">                assertDoneActing(assertAndMerge(clientList), actingId);</span>
+            }
+
+            // ragnaros' turn: Let's burn some $%&amp;@=!
+<span class="nc" id="L65">            assertActNow(assertAndMerge(clientList), 4);</span>
+<span class="nc" id="L66">            ragnaros.sendBurn();</span>
+<span class="nc" id="L67">            assertBurned(assertAndMerge(clientList), 4);</span>
+<span class="nc" id="L68">            assertActNow(assertAndMerge(clientList), 4);</span>
+<span class="nc" id="L69">            ragnaros.sendDoneActing();</span>
+<span class="nc" id="L70">            assertDoneActing(assertAndMerge(clientList), 4);</span>
+
+            // round i ends
+<span class="nc" id="L73">            assertRoundEnd(assertAndMerge(clientList), round, 0);</span>
+        }
+
+        // round 34 begins
+<span class="nc" id="L77">        assertRoundBegin(assertAndMerge(clientList), 34);</span>
+
+        // acting phase all passive players
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        for (int actingId = 0; actingId &lt; 4; actingId++) {</span>
+<span class="nc" id="L81">            assertActNow(assertAndMerge(clientList), actingId);</span>
+<span class="nc" id="L82">            clientList.get(actingId).sendDoneActing();</span>
+<span class="nc" id="L83">            assertDoneActing(assertAndMerge(clientList), actingId);</span>
+        }
+
+        // ragnaros' turn: Let's burn some $%&amp;@=!
+<span class="nc" id="L87">        assertActNow(assertAndMerge(clientList), 4);</span>
+<span class="nc" id="L88">        ragnaros.sendBurn();</span>
+<span class="nc" id="L89">        assertBurned(assertAndMerge(clientList), 4);</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        for (int actingId = 0; actingId &lt; 4; actingId++) {</span>
+<span class="nc" id="L91">            assertDied(assertAndMerge(clientList), actingId);</span>
+        }
+<span class="nc" id="L93">        assertActNow(assertAndMerge(clientList), 4);</span>
+<span class="nc" id="L94">        ragnaros.sendDoneActing();</span>
+<span class="nc" id="L95">        assertDoneActing(assertAndMerge(clientList), 4);</span>
+
+        // round 34 ends
+<span class="nc" id="L98">        assertRoundEnd(assertAndMerge(clientList), 34, 0);</span>
+
+<span class="nc" id="L100">        assertWinner(assertAndMerge(clientList), &quot;Fire&quot;);</span>
+<span class="nc" id="L101">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L105">        return &quot; 1 \n&quot;</span>
+             + &quot;203\n&quot;
+             + &quot; 4 &quot;;
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L112">        return &quot;Fire, Water, Void, Wood, Earth\n&quot;</span>
+                + &quot;Fire, Ragnaros, Ifrit\n&quot;
+                + &quot;Water, Vashjir, Naga\n&quot;
+                + &quot;Void, Hakkar, Wraith\n&quot;
+                + &quot;Wood, Tyrande, Elf\n&quot;
+                + &quot;Earth, Therazane, Kobold&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

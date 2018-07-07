@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShootFromKickedElf.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">ShootFromKickedElf.java</span></div><h1>ShootFromKickedElf.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Wiebk on 23.09.2016.
+ */
+public class ShootFromKickedElf extends OurSystemTest {
+
+    public ShootFromKickedElf(){
+<span class="nc" id="L17">        super(&quot;ShootFromKickedElf&quot;);</span>
+<span class="nc" id="L18">    }</span>
+
+    @Override
+    public void executeTest(){
+<span class="nc" id="L22">        List&lt;ClientConnection&lt;Event&gt;&gt; clients = new ArrayList&lt;&gt;();</span>
+
+        //register
+<span class="nc" id="L25">        ClientConnection&lt;Event&gt; a = register(0, &quot;Andreas&quot;, CreatureType.ELF, &quot;a&quot;, 0, 0);</span>
+<span class="nc" id="L26">        ClientConnection&lt;Event&gt; b = register(1, &quot;Benni&quot;, CreatureType.ELF, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L27">        assertRegisterEvent(a.nextEvent(), 1, &quot;Benni&quot;, CreatureType.ELF, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L28">        assertRegisterEvent(b.nextEvent(), 0, &quot;Andreas&quot;, CreatureType.ELF, &quot;a&quot;, 0, 0);</span>
+<span class="nc" id="L29">        clients.add(a);</span>
+<span class="nc" id="L30">        clients.add(b);</span>
+
+<span class="nc" id="L32">        ClientConnection&lt;Event&gt; c = register(2, &quot;Chris&quot;, CreatureType.ELF, &quot;c&quot;, 2, 0);</span>
+<span class="nc" id="L33">        assertRegisterEvent(assertAndMerge(clients), 2, &quot;Chris&quot;, CreatureType.ELF, &quot;c&quot;, 2, 0);</span>
+<span class="nc" id="L34">        assertRegisterEvent(c.nextEvent(), 0, &quot;Andreas&quot;, CreatureType.ELF, &quot;a&quot;, 0, 0);</span>
+<span class="nc" id="L35">        assertRegisterEvent(c.nextEvent(), 1, &quot;Benni&quot;, CreatureType.ELF, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L36">        clients.add(c);</span>
+
+        //roundbegin
+<span class="nc" id="L39">        assertRoundBegin(assertAndMerge(a, b, c), 1);</span>
+
+        //a gets kicked for shoot at grass field 0, 1
+<span class="nc" id="L42">        assertActNow(assertAndMerge(a, b, c), 0);</span>
+<span class="nc" id="L43">        a.sendShoot(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L44">        assertKicked(assertAndMerge(a, b, c), 0);</span>
+
+        //b's turn: done acting
+<span class="nc" id="L47">        assertActNow(assertAndMerge(a, b, c), 1);</span>
+<span class="nc" id="L48">        b.sendDoneActing();</span>
+<span class="nc" id="L49">        assertDoneActing(assertAndMerge(a, b, c), 1);</span>
+
+        //c: done acting
+<span class="nc" id="L52">        assertActNow(assertAndMerge(a, b, c), 2);</span>
+<span class="nc" id="L53">        b.sendDoneActing();</span>
+<span class="nc" id="L54">        assertDoneActing(assertAndMerge(a, b, c), 2);</span>
+
+        //roundend
+<span class="nc" id="L57">        assertRoundEnd(assertAndMerge(a, b, c), 2, 1);</span>
+
+        //round2
+        //b's turn, but a sends shoot, should be ignored
+<span class="nc" id="L61">        assertActNow(assertAndMerge(a, b, c), 1);</span>
+<span class="nc" id="L62">        a.sendShoot(Direction.EAST);</span>
+<span class="nc" id="L63">        b.sendDoneActing();</span>
+<span class="nc" id="L64">        assertDoneActing(assertAndMerge(a, b, c), 1);</span>
+
+        //c: shoot at rock, gets kicked
+<span class="nc" id="L67">        assertActNow(assertAndMerge(a, b, c), 2);</span>
+<span class="nc" id="L68">        c.sendShoot(Direction.EAST);</span>
+<span class="nc" id="L69">        assertKicked(assertAndMerge(a, b, c), 2);</span>
+
+        //Roundend
+<span class="nc" id="L72">        assertRoundEnd(assertAndMerge(a, b, c), 2, 2);</span>
+
+        //Winner: b
+<span class="nc" id="L75">        assertWinner(assertAndMerge(a, b, c), &quot;b&quot;);</span>
+<span class="nc" id="L76">    }</span>
+
+    @Override
+    public String getFightFile(){
+<span class="nc" id="L80">        return &quot;a, b, c\n&quot;</span>
+              +&quot;a, Andreas, Elf\n&quot;
+              +&quot;b, Benni, ELF\n&quot;
+              +&quot;c, Chris, ELF&quot;;
+    }
+
+    @Override
+    public String getMapFile(){
+<span class="nc" id="L88">        return &quot;012\n&quot;</span>
+              +&quot;   \n&quot;
+              +&quot;   &quot;;
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

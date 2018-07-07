@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Client.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra</a> &gt; <span class="el_source">Client.java</span></div><h1>Client.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.messages.EventFactoryImpl;
+import de.unisaarland.sopra.utility.InvalidMapFileException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by DJ MacHack on 12.09.2016.
+ */
+public abstract class Client extends Master {
+    protected ClientConnection&lt;Event&gt; clientConnection;
+    protected int ownCreatureId;
+<span class="nc" id="L16">    protected List&lt;String&gt; warcrys = new ArrayList&lt;&gt;();</span>
+    /**
+     * create a new client
+     * @param ip        IP or host
+     * @param port      port number
+     * @param timeout   timeout in ms
+     */
+    public Client(String ip, int port, int timeout) {
+<span class="nc" id="L24">        super();</span>
+<span class="nc" id="L25">        this.clientConnection = new ClientConnection&lt;&gt;(ip, port, timeout, new EventFactoryImpl());</span>
+<span class="nc" id="L26">        this.ownCreatureId = -1;</span>
+<span class="nc" id="L27">    }</span>
+
+    /**
+     * get client connection
+     * @return
+     */
+    public ClientConnection getClientConnection() {
+<span class="nc" id="L34">        return this.clientConnection;</span>
+    }
+
+    /**
+     * get own creature
+     * @return
+     */
+    public int getOwnCreatureId() {
+<span class="nc" id="L42">        return this.ownCreatureId;</span>
+    }
+
+    /**
+     * set own creature
+     * @param id
+     */
+    public void setOwnCreature(int id) {
+<span class="nc" id="L50">            this.ownCreatureId = id;</span>
+<span class="nc" id="L51">    }</span>
+
+    /**
+     * act now
+     */
+    public abstract void actNow();
+
+    /**
+     * run
+     */
+    public void run() {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        while(isRunning()) {</span>
+<span class="nc" id="L63">            Event event = this.clientConnection.nextEvent();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            if (event.validateEvent(game, this)){</span>
+<span class="nc" id="L65">                event.executeEvent(game, this);</span>
+            }
+<span class="nc" id="L67">        }</span>
+<span class="nc" id="L68">        clientConnection.close();</span>
+<span class="nc" id="L69">    }</span>
+
+    /**
+     * listens to the war cry
+     * @param cry
+     */
+    public void listenWarCry(String cry) {
+<span class="nc" id="L76">        this.warcrys.add(cry);</span>
+<span class="nc" id="L77">    }</span>
+
+    public boolean isRunning(){
+<span class="nc" id="L80">        return this.running;</span>
+    }
+
+    public void setRunning(boolean run){
+<span class="nc" id="L84">        this.running = run;</span>
+<span class="nc" id="L85">    }</span>
+
+    public abstract String getName();
+
+    public abstract String getTeamName();
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

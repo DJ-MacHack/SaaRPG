@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Burn.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages.attack</a> &gt; <span class="el_source">Burn.java</span></div><h1>Burn.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages.attack;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.messages.Command;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.*;
+import de.unisaarland.sopra.utility.DirectionHelper;
+import de.unisaarland.sopra.utility.GameVector;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+import de.unisaarland.sopra.utility.LogString;
+
+import java.util.*;
+import java.util.Map;
+
+import static de.unisaarland.sopra.model.FieldEffects.getAttackCostMultiplier;
+
+/**
+ * Created by Wiebk on 12.09.2016.
+ * Edited/ implemented by Lukas on 14.09.2016.
+ */
+public class Burn implements Command, Event {
+
+    private int actorId;
+    private HashMap&lt;Integer, Boolean&gt; targetIdsDead;
+    private static final int DAMAGE = 12;
+    private static final int ENERGYCOST = 450;
+    private CommIds commIds;
+<span class="fc" id="L31">    private static final CreatureType[] VALIDCREATURES = {CreatureType.IFRIT};</span>
+
+<span class="fc" id="L33">    public Burn(CommIds commids, int actorId) {</span>
+<span class="fc" id="L34">        this.commIds = commids;</span>
+<span class="fc" id="L35">        this.actorId = actorId;</span>
+<span class="fc" id="L36">        this.targetIdsDead = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L37">    }</span>
+
+    @Override
+    public void executeCommand(Game game) {
+<span class="fc" id="L41">        attack(game);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        for (Map.Entry&lt;Integer, Boolean&gt; targetId : this.targetIdsDead.entrySet()) {</span>
+<span class="fc" id="L43">            Creature creature = game.getCreatureById(targetId.getKey());</span>
+<span class="pc bpc" id="L44" title="1 of 4 branches missed.">            if (targetId.getValue() &amp;&amp; creature.getCreatureType() != CreatureType.BOAR){</span>
+<span class="fc" id="L45">                game.removeCreature(game.getCreatureById(targetId.getKey()));</span>
+            }
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">    }</span>
+
+    @Override
+    public boolean validateCommand(Game game) {
+        // check if clientGame is in RoundState ActNow (first set by ActNow Event)
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (game.getRoundState() != RoundState.ACTNOW){</span>
+<span class="nc" id="L54">            return false;</span>
+        }
+
+        // check if it is acting monster's turn
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (game.getMonsterActing() != this.actorId){</span>
+<span class="fc" id="L59">            return false;</span>
+        }
+<span class="fc" id="L61">        return canAttack(game);</span>
+    }
+
+    @Override
+    public void sendResults(ServerConnection serverConn) {
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (int commId : commIds.commLibIds) {</span>
+<span class="nc" id="L67">            serverConn.sendBurned(commId, actorId);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            for (Map.Entry&lt;Integer, Boolean&gt; targetId : this.targetIdsDead.entrySet()) {</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">                if (targetId.getValue()) {</span>
+<span class="nc" id="L70">                    serverConn.sendDied(commId, targetId.getKey());</span>
+                }
+<span class="nc" id="L72">            }</span>
+<span class="nc" id="L73">        }</span>
+<span class="nc" id="L74">    }</span>
+
+    @Override
+    public void sendCommand(ClientConnection clientconnection) {
+<span class="nc" id="L78">        clientconnection.sendBurn();</span>
+<span class="nc" id="L79">    }</span>
+
+    @Override
+    public int getMonsterId() {
+<span class="nc" id="L83">        return actorId;</span>
+    }
+
+    @Override
+    public void executeEvent(Game game, Client client) {
+<span class="nc" id="L88">        attack(game);</span>
+<span class="nc" id="L89">    }</span>
+
+    @Override
+    public boolean validateEvent(Game game, Client client) {
+<span class="nc" id="L93">        return canAttack(game);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L98">        return String.format(&quot;%s burns!&quot;, LogString.createVictimName(cli.getGame(),this.actorId));</span>
+    }
+
+    private void attack(Game game) {
+<span class="fc" id="L102">        Pc me = game.getMonsterById(this.actorId);</span>
+
+<span class="fc" id="L104">        int attackCost = (int) (ENERGYCOST * FieldEffects.getAttackCostMultiplier(game.getFieldAt(me.getPosition()), me.getCreatureType()));</span>
+<span class="fc" id="L105">        me.drainEnergy(attackCost);  //Drain energy of me</span>
+
+<span class="fc" id="L107">        int targetNumber = 0;</span>
+
+<span class="fc" id="L109">        Direction[] directions = {Direction.NORTH_WEST, Direction.NORTH_EAST, Direction.WEST, Direction.EAST, Direction.SOUTH_WEST, Direction.SOUTH_EAST};</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (Direction d : directions) {</span>
+<span class="fc" id="L111">            GameVector targetPos = me.getPosition().add(DirectionHelper.toVector(d));</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (game.getCreatureByPosition(targetPos) != null) {</span>
+<span class="fc" id="L113">                this.targetIdsDead.put(game.getCreatureByPosition(targetPos).getId(), false);</span>
+<span class="fc" id="L114">                targetNumber++;</span>
+            }
+        }
+
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        for (int targetId : this.targetIdsDead.keySet()) {</span>
+<span class="fc" id="L119">            Creature target = game.getCreatureById(targetId);</span>
+<span class="fc" id="L120">            double baseDmg = Math.floor(DAMAGE / (double)targetNumber);</span>
+<span class="fc" id="L121">            int targetDamage = (int)(baseDmg * FieldEffects.getDefensiveMultiplier(game.getFieldAt(target.getPosition()), target.getCreatureType()));</span>
+<span class="fc" id="L122">            target.receiveDamage(targetDamage);</span>
+
+            // target died
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            if (target.isDead())</span>
+<span class="fc" id="L126">                this.targetIdsDead.put(target.getId(), true);</span>
+<span class="fc" id="L127">        }</span>
+
+<span class="fc" id="L129">    }</span>
+
+    private boolean canAttack(Game game) {
+<span class="fc" id="L132">        Pc me = game.getMonsterById(this.actorId);</span>
+
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        if(me == null){</span>
+<span class="nc" id="L135">            return false;</span>
+        }
+
+        //Check if me is a cheater
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        if (me.isDead()){</span>
+<span class="nc" id="L140">            return false;</span>
+        }
+
+<span class="fc" id="L143">        int attackCost = (int) (ENERGYCOST * getAttackCostMultiplier(game.getFieldAt(me.getPosition()), me.getCreatureType()));</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (me.getEnergy() &lt; attackCost) {</span>
+<span class="fc" id="L145">            return false; //Check if me has sufficient energy</span>
+        }
+
+<span class="fc" id="L148">        boolean allowed = false;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for (CreatureType t : VALIDCREATURES) {</span>
+<span class="pc bpc" id="L150" title="2 of 4 branches missed.">            allowed = allowed || (me.getCreatureType() == t);</span>
+        }
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        if (!allowed) {</span>
+<span class="nc" id="L153">            return false; //Check if me is a valid creature</span>
+        }
+
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (!FieldEffects.canAttack(game.getFieldAt(me.getPosition()), me.getCreatureType()))</span>
+<span class="fc" id="L157">            return false; //Check if field me is standing on allows me to attacktest</span>
+
+<span class="fc" id="L159">        Direction[] directions = {Direction.NORTH_WEST, Direction.NORTH_EAST, Direction.WEST, Direction.EAST, Direction.SOUTH_WEST, Direction.SOUTH_EAST};</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        for (Direction d : directions) {</span>
+<span class="fc" id="L161">            GameVector targetPos = me.getPosition().add(DirectionHelper.toVector(d));</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">            if (game.getCreatureByPosition(targetPos) != null)</span>
+<span class="fc" id="L163">                this.targetIdsDead.put(game.getCreatureByPosition(targetPos).getId(), false);</span>
+        }
+
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (this.targetIdsDead.keySet().isEmpty())</span>
+<span class="fc" id="L167">            return false;</span>
+
+<span class="fc" id="L169">        return true;</span>
+    }
+
+    public int getActorId() {
+<span class="nc" id="L173">        return actorId;</span>
+    }
+
+    public HashMap&lt;Integer, Boolean&gt; getTargetIdsDead() {
+<span class="nc" id="L177">        return targetIdsDead;</span>
+    }
+
+    public static int getDAMAGE() {
+<span class="nc" id="L181">        return DAMAGE;</span>
+    }
+
+    public static int getENERGYCOST() {
+<span class="nc" id="L185">        return ENERGYCOST;</span>
+    }
+
+    public CommIds getCommIds() {
+<span class="nc" id="L189">        return commIds;</span>
+    }
+
+    public static CreatureType[] getVALIDCREATURES() {
+<span class="nc" id="L193">        return VALIDCREATURES;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

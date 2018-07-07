@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CanAttackBurnTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">CanAttackBurnTest.java</span></div><h1>CanAttackBurnTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team 14 on 23.09.2016.
+ */
+public class CanAttackBurnTest extends OurSystemTest {
+
+    public CanAttackBurnTest(){
+<span class="nc" id="L13">        super(&quot;CanAttackBurnTest&quot;);</span>
+<span class="nc" id="L14">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L18">        ClientConnection&lt;Event&gt; p1 = register(0, &quot;X&quot;, CreatureType.IFRIT, &quot;A&quot;, 0, 0);</span>
+<span class="nc" id="L19">        ClientConnection&lt;Event&gt; p2 = register(1, &quot;Y&quot;, CreatureType.ELF, &quot;B&quot;, 1, 0);</span>
+
+<span class="nc" id="L21">        assertRegisterEvent(p1.nextEvent(), 1, &quot;Y&quot;, CreatureType.ELF, &quot;B&quot;, 1, 0);</span>
+<span class="nc" id="L22">        assertRegisterEvent(p2.nextEvent(), 0, &quot;X&quot;, CreatureType.IFRIT, &quot;A&quot;, 0, 0);</span>
+
+<span class="nc" id="L24">        assertRoundBegin(assertAndMerge(p1, p2), 1);</span>
+
+
+<span class="nc" id="L27">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L28">        p1.sendBurn();</span>
+<span class="nc" id="L29">        assertBurned(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L30">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L31">        p1.sendBurn();</span>
+<span class="nc" id="L32">        assertBurned(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L33">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L34">        p1.sendBurn();</span>
+<span class="nc" id="L35">        assertKicked(assertAndMerge(p1, p2), 0);</span>
+
+<span class="nc" id="L37">        assertActNow(assertAndMerge(p1, p2), 1);</span>
+<span class="nc" id="L38">        p1.sendBurn();</span>
+<span class="nc" id="L39">        p2.sendDoneActing();</span>
+<span class="nc" id="L40">        assertDoneActing(assertAndMerge(p1, p2), 1);</span>
+
+<span class="nc" id="L42">        assertRoundEnd(assertAndMerge(p1, p2), 1, 0);</span>
+<span class="nc" id="L43">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L47">        return &quot;01&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L52">        return &quot;A, B\n&quot;</span>
+                +&quot;A, X, Ifrit\n&quot;
+                +&quot;B, Y, Elf&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

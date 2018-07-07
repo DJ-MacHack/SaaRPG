@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.messagestest.RegisterTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="0.001">
+  <properties/>
+  <testcase name="testValidRegisterExecuteCommand" classname="de.unisaarland.sopra.messagestest.RegisterTest" time="0.0"/>
+  <testcase name="falseRegisterStateTest" classname="de.unisaarland.sopra.messagestest.RegisterTest" time="0.0"/>
+  <testcase name="invalidRegistration" classname="de.unisaarland.sopra.messagestest.RegisterTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

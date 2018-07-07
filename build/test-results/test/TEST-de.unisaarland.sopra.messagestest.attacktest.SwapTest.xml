@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.messagestest.attacktest.SwapTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="0.008">
+  <properties/>
+  <testcase name="testSwapSimple" classname="de.unisaarland.sopra.messagestest.attacktest.SwapTest" time="0.004"/>
+  <testcase name="testSwapSelf" classname="de.unisaarland.sopra.messagestest.attacktest.SwapTest" time="0.003"/>
+  <testcase name="testSwapInvalidEnergy" classname="de.unisaarland.sopra.messagestest.attacktest.SwapTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

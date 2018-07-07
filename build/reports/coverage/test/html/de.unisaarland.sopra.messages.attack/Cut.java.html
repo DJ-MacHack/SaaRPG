@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Cut.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages.attack</a> &gt; <span class="el_source">Cut.java</span></div><h1>Cut.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages.attack;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.model.CreatureType;
+import de.unisaarland.sopra.model.Game;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+import de.unisaarland.sopra.model.RoundState;
+import de.unisaarland.sopra.utility.LogString;
+
+
+/**
+ * Created by DJ MacHack on 12.09.2016.
+ */
+public class Cut extends SimpleAttack {
+
+    private static final int DAMAGE = 5;
+    private static final int ENERGYCOST = 200;
+<span class="fc" id="L21">    private static final CreatureType[] VALIDCREATURES = new CreatureType[] {CreatureType.NAGA} ;</span>
+
+    /**
+     * create new cut attacktest
+     * @param comm  CommID
+     * @param n     PlayerID
+     * @param dir   Direction
+     */
+    public Cut (CommIds comm, int n, Direction dir) {
+<span class="fc" id="L30">        super(comm, n, dir);</span>
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * test cut on game
+     * @param game
+     * @return
+     */
+    @Override
+    public boolean validateCommand(Game game) {
+        // check if clientGame is in RoundState ActNow (first set by ActNow Event)
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (game.getRoundState() != RoundState.ACTNOW) {</span>
+<span class="nc" id="L42">            return false;</span>
+        }
+
+        // check if it is acting monster's turn
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (game.getMonsterActing() != this.actorId) {</span>
+<span class="fc" id="L47">            return false;</span>
+        }
+
+<span class="fc" id="L50">        return canAttack(game);</span>
+    }
+
+    /**
+     * test on client
+     * @param cli
+     * @return
+     */
+    @Override
+    public boolean validateEvent(Game game, Client cli) {
+<span class="nc" id="L60">        return canAttack(game);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L65">        return String.format(&quot;%s cuts %s!&quot;, LogString.createVictimName(cli.getGame(),this.actorId),</span>
+<span class="nc" id="L66">                LogString.createVictimName(cli.getGame(),this.actorId,super.direction));</span>
+    }
+
+    /**
+     * execute on game
+     * @param game
+     */
+    @Override
+    public void executeCommand(Game game) {
+<span class="fc" id="L75">        attack(game);</span>
+<span class="pc bpc" id="L76" title="3 of 4 branches missed.">        if (super.targetDied &amp;&amp; (game.getCreatureById(super.targetId).getCreatureType() != CreatureType.BOAR))</span>
+<span class="nc" id="L77">            game.removeCreature(game.getCreatureById(super.targetId));</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * execute on client
+     * @param cli
+     */
+    @Override
+    public void executeEvent(Game game, Client cli) {
+<span class="nc" id="L86">        attack(game);</span>
+<span class="nc" id="L87">    }</span>
+
+    /**
+     * send command
+     * @param cliConn
+     */
+    @Override
+    public void sendCommand(ClientConnection cliConn) {
+<span class="nc" id="L95">        cliConn.sendCut(super.direction);</span>
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * send results
+     * @param serverConn
+     */
+    @Override
+    public void sendResults(ServerConnection serverConn) {
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for (int commId : super.commIDs.commLibIds) {</span>
+<span class="nc" id="L105">            serverConn.sendCut(commId, super.actorId, super.direction);</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            if (super.targetDied)</span>
+<span class="nc" id="L107">                serverConn.sendDied(commId, super.targetId);</span>
+<span class="nc" id="L108">        }</span>
+<span class="nc" id="L109">    }</span>
+
+    private void attack(Game game) {
+<span class="fc" id="L112">        meleeAttack(game, this.ENERGYCOST, this.VALIDCREATURES, this.DAMAGE);</span>
+<span class="fc" id="L113">    }</span>
+
+    private boolean canAttack(Game game) {
+<span class="fc" id="L116">        return meleeTestCommand(game, this.ENERGYCOST, this.VALIDCREATURES);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

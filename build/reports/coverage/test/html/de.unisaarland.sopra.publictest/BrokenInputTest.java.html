@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BrokenInputTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.publictest</a> &gt; <span class="el_source">BrokenInputTest.java</span></div><h1>BrokenInputTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.publictest;
+
+import de.unisaarland.sopra.MonsterType;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.TimeoutException;
+import de.unisaarland.sopra.systemtest.SystemTest;
+import org.junit.Assert;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+/**
+ * Dieser Test testet eine Reihe invalider Inputs.
+ * &lt;p&gt;
+ * Created by akampmann on 18/08/16.
+ */
+public class BrokenInputTest extends SystemTest {
+    private static final String DEFAULT_MAP = &quot;tx00##xx\n&quot;
+            + &quot;t  + xxx\n&quot;
+            + &quot;tt %%%tt\n&quot;
+            + &quot;~~~~~~~~\n&quot;
+            + &quot;t_%%##^^\n&quot;
+            + &quot;____^^^*\n&quot;
+            + &quot;$__   **\n&quot;
+            + &quot;$$$11 *t&quot;;
+    private static final String DEFAULT_FIGHT = &quot;A,B\n&quot;
+            + &quot;A,Dobby,Elf\n&quot;
+            + &quot;B,Flobby,Kobold&quot;;
+
+    private final String mapFile;
+    private final String fightFile;
+
+    public BrokenInputTest(String name, String mapFile, String fightFile) {
+<span class="nc" id="L34">        super(name);</span>
+<span class="nc" id="L35">        this.mapFile = mapFile;</span>
+<span class="nc" id="L36">        this.fightFile = fightFile;</span>
+<span class="nc" id="L37">    }</span>
+
+    public static Collection&lt;SystemTest&gt; getTests() {
+<span class="nc" id="L40">        return Arrays.asList(</span>
+                // broken maps
+<span class="nc" id="L42">                new BrokenInputTest(&quot;TooLittleStartPositionsTest&quot;, DEFAULT_MAP.replace('0', ' '), DEFAULT_FIGHT),</span>
+<span class="nc" id="L43">                new BrokenInputTest(&quot;WrongFieldTypeTest&quot;, DEFAULT_MAP.replace('+', 'K'), DEFAULT_FIGHT),</span>
+<span class="nc" id="L44">                new BrokenInputTest(&quot;WrongLineLengthTest&quot;, DEFAULT_MAP.substring(0, 15) + DEFAULT_MAP.substring(17, DEFAULT_MAP.length()), DEFAULT_FIGHT),</span>
+                new BrokenInputTest(&quot;EmptyMapTest&quot;, &quot;&quot;, DEFAULT_FIGHT),
+
+                // broken fights
+                new BrokenInputTest(&quot;DuplicateNameTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;B,Dobby,Kobold&quot;),
+                new BrokenInputTest(&quot;DuplicateGladiatorTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;A,Dobby,Elf&quot;),
+                new BrokenInputTest(&quot;EmptyTeamTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;A,Flobby,Kobold&quot;),
+                new BrokenInputTest(&quot;DuplicateTeamTest&quot;, DEFAULT_MAP, &quot;A,A\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;A,Flobby,Kobold&quot;),
+                new BrokenInputTest(&quot;EmptyFightTest&quot;, DEFAULT_MAP, &quot;&quot;),
+                new BrokenInputTest(&quot;EmptyTeamTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf&quot;),
+                new BrokenInputTest(&quot;TeamsOnlyTest&quot;, DEFAULT_MAP, &quot;A,B,C\n&quot;),
+                new BrokenInputTest(&quot;MissingNameTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;B,,Kobold&quot;),
+                new BrokenInputTest(&quot;LineToShortTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;B,Kobold&quot;),
+                new BrokenInputTest(&quot;IllegalMonsterTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;B,Babuh,Spaghettimonster&quot;),
+                new BrokenInputTest(&quot;LeadingCommaTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;,B,Dobby,Kobold&quot;),
+                new BrokenInputTest(&quot;OneTeamTest&quot;, DEFAULT_MAP, &quot;A\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;A,Dobby,Kobold&quot;),
+                new BrokenInputTest(&quot;LineToLongTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf,Free\n&quot;
+                        + &quot;B,Dobby,Kobold&quot;),
+                new BrokenInputTest(&quot;UnknownTeamTest&quot;, DEFAULT_MAP, &quot;A,B\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;B,Dobby,Kobold\n&quot;
+                        + &quot;C,Daniel,Ifrit&quot;),
+                new BrokenInputTest(&quot;EmptyTeamnameTest&quot;, DEFAULT_MAP, &quot;A,,B\n&quot;
+                        + &quot;A,Dobby,Elf\n&quot;
+                        + &quot;B,Dobby,Kobold&quot;),
+                new BrokenInputTest(&quot;IncompatibleFightTest&quot;, &quot;01&quot;, &quot;One,Two,Three\n\n&quot;
+                        + &quot;One,One,ELF\n&quot;
+                        + &quot;Two,Two,ELF\n&quot;
+                        + &quot;Three,Three,ELF&quot;)
+        );
+    }
+
+    @Override
+    protected void executeTest() {
+        // da irgendwas in Map oder Fight kaputt ist, muss der Server sich
+        // mit non-zero return code beenden
+<span class="nc" id="L100">        expectServerFail();</span>
+        // wenn sich jetzt jemand verbindet,
+        // muss ein Timeout kommen, weil der Server ja nicht lÃ¤uft
+<span class="nc" id="L103">        try (ClientConnection&lt;?&gt; client = openClient(new TestEventFactory())) {</span>
+<span class="nc" id="L104">            client.sendRegister(&quot;One&quot;, MonsterType.ELF, &quot;One&quot;);</span>
+<span class="nc" id="L105">            client.nextEvent();</span>
+<span class="nc" id="L106">            Assert.fail(&quot;Ich bekomme kein Timeout, obwohl der Server nicht laufen sollte.&quot;);</span>
+<span class="nc bnc" id="L107" title="All 8 branches missed.">        } catch (TimeoutException ex) {</span>
+            // das erwarte ich
+            // ich mache einen sinnlosen Check, um PMD auszutricksen
+<span class="nc" id="L110">            Assert.assertNotNull(ex);</span>
+<span class="nc" id="L111">        }</span>
+<span class="nc" id="L112">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L116">        return mapFile;</span>
+    }
+
+    @Override
+    public String getFightFile() {
+<span class="nc" id="L121">        return fightFile;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

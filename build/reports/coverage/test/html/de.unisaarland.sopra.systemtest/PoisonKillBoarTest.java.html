@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PoisonKillBoarTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">PoisonKillBoarTest.java</span></div><h1>PoisonKillBoarTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team14 on 23/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class PoisonKillBoarTest extends OurSystemTest {
+    public PoisonKillBoarTest() {
+<span class="nc" id="L14">        super(&quot;PoisonKillBoarTest&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // registration phase
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; therazane = register(0, &quot;Therazane&quot;, CreatureType.ROOK, &quot;Deepholm&quot;, 0, 0);</span>
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; vashj = register(1, &quot;Vashj&quot;, CreatureType.NAGA, &quot;Vashjir&quot;, 1, 0);</span>
+<span class="nc" id="L22">        assertRegisterEvent(therazane.nextEvent(), 1, &quot;Vashj&quot;, CreatureType.NAGA, &quot;Vashjir&quot;, 1, 0);</span>
+<span class="nc" id="L23">        assertRegisterEvent(vashj.nextEvent(), 0, &quot;Therazane&quot;, CreatureType.ROOK, &quot;Deepholm&quot;, 0, 0);</span>
+
+        // round 1 starts
+<span class="nc" id="L26">        assertRoundBegin(assertAndMerge(therazane, vashj), 1);</span>
+
+        // spawn Boar
+<span class="nc" id="L29">        assertBoarSpawned(assertAndMerge(therazane, vashj), 2, 2, 0);</span>
+
+        // boar movement
+<span class="nc" id="L32">        assertBoarAttack(assertAndMerge(therazane, vashj), 2, 1);</span>
+
+        // therazane's turn
+<span class="nc" id="L35">        assertActNow(assertAndMerge(therazane, vashj), 0);</span>
+<span class="nc" id="L36">        therazane.sendDoneActing();</span>
+<span class="nc" id="L37">        assertDoneActing(assertAndMerge(therazane, vashj), 0);</span>
+
+        // vashj's turn
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L41">            assertActNow(assertAndMerge(therazane, vashj), 1);</span>
+<span class="nc" id="L42">            vashj.sendCut(Direction.EAST);</span>
+<span class="nc" id="L43">            assertCut(assertAndMerge(therazane, vashj), 1, Direction.EAST);</span>
+        }
+<span class="nc" id="L45">        assertActNow(assertAndMerge(therazane, vashj), 1);</span>
+<span class="nc" id="L46">        vashj.sendDoneActing();</span>
+<span class="nc" id="L47">        assertDoneActing(assertAndMerge(therazane, vashj), 1);</span>
+
+        // round ends
+<span class="nc" id="L50">        assertRoundEnd(assertAndMerge(therazane, vashj), 1, 0);</span>
+
+        // round 2 starts
+<span class="nc" id="L53">        assertRoundBegin(assertAndMerge(therazane, vashj), 2);</span>
+
+        // boar movement
+<span class="nc" id="L56">        assertBoarAttack(assertAndMerge(therazane, vashj), 2, 1);</span>
+
+        // therazane's turn
+<span class="nc" id="L59">        assertActNow(assertAndMerge(therazane, vashj), 0);</span>
+<span class="nc" id="L60">        therazane.sendDoneActing();</span>
+<span class="nc" id="L61">        assertDoneActing(assertAndMerge(therazane, vashj), 0);</span>
+
+        // vashj's turn
+<span class="nc" id="L64">        assertActNow(assertAndMerge(therazane, vashj), 1);</span>
+<span class="nc" id="L65">        vashj.sendBite(Direction.EAST);</span>
+<span class="nc" id="L66">        assertBitten(assertAndMerge(therazane, vashj), 1, Direction.EAST);</span>
+<span class="nc" id="L67">        assertActNow(assertAndMerge(therazane, vashj), 1);</span>
+<span class="nc" id="L68">        vashj.sendDoneActing();</span>
+<span class="nc" id="L69">        assertDoneActing(assertAndMerge(therazane, vashj), 1);</span>
+
+        // round 2 ends
+<span class="nc" id="L72">        assertRoundEnd(assertAndMerge(therazane, vashj), 2, 0);</span>
+
+        // round 3 starts
+<span class="nc" id="L75">        assertRoundBegin(assertAndMerge(therazane, vashj), 3);</span>
+
+        // boar movement
+<span class="nc" id="L78">        assertBoarAttack(assertAndMerge(therazane, vashj), 2, 1);</span>
+
+        // therazane's turn
+<span class="nc" id="L81">        assertActNow(assertAndMerge(therazane, vashj), 0);</span>
+<span class="nc" id="L82">        therazane.sendStab(Direction.EAST);</span>
+<span class="nc" id="L83">        assertKicked(assertAndMerge(therazane, vashj), 0);</span>
+
+        // vashj's turn
+<span class="nc" id="L86">        assertActNow(assertAndMerge(therazane, vashj), 1);</span>
+<span class="nc" id="L87">        vashj.sendDoneActing();</span>
+<span class="nc" id="L88">        assertDoneActing(assertAndMerge(therazane, vashj), 1);</span>
+
+        // PoisonEffect Heavy on Boar
+<span class="nc" id="L91">        assertPoisonEffect(assertAndMerge(therazane, vashj), 2, 4);</span>
+<span class="nc" id="L92">        assertDied(assertAndMerge(therazane, vashj), 2);</span>
+
+        // round 3 ends
+<span class="nc" id="L95">        assertRoundEnd(assertAndMerge(therazane, vashj), 3, 0);</span>
+
+<span class="nc" id="L97">        assertWinner(assertAndMerge(therazane, vashj), &quot;Vashjir&quot;);</span>
+<span class="nc" id="L98">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L102">        return &quot;10.&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L107">        return &quot;Vashjir, Deepholm\n&quot;</span>
+             + &quot;Vashjir, Vashj, NAGA\n&quot;
+             + &quot;Deepholm, Therazane, rook&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

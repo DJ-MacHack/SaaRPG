@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Blink.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages.attack</a> &gt; <span class="el_source">Blink.java</span></div><h1>Blink.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages.attack;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.messages.Command;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.*;
+import de.unisaarland.sopra.utility.GameVector;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+import de.unisaarland.sopra.utility.LogString;
+
+/**
+ * Created by Team 14 on 12.09.2016.
+ */
+public class Blink implements Command, Event {
+
+    private static final int ENERGYCOST = 200;
+<span class="fc" id="L19">    private static final CreatureType[] VALIDCREATURES = new CreatureType[]{ CreatureType.WRAITH };</span>
+    private final int actorId;
+    private final int x;
+    private final int y;
+    private CommIds commIds;
+
+<span class="fc" id="L25">    public Blink(CommIds commIds, int actorId, int x, int y){</span>
+<span class="fc" id="L26">        this.commIds = commIds;</span>
+<span class="fc" id="L27">        this.actorId = actorId;</span>
+<span class="fc" id="L28">        this.x = x;</span>
+<span class="fc" id="L29">        this.y = y;</span>
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    public void executeCommand(Game game) {
+<span class="fc" id="L34">        execute(game);</span>
+<span class="fc" id="L35">    }</span>
+
+    @Override
+    public boolean validateCommand(Game game) {
+        // check if clientGame is in RoundState ActNow (first set by ActNow Event)
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        if (game.getRoundState() != RoundState.ACTNOW)</span>
+<span class="nc" id="L41">            return false;</span>
+
+        // check if it is acting monster's turn
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (game.getMonsterActing() != this.actorId) {</span>
+<span class="fc" id="L45">            return false;</span>
+        }
+<span class="fc" id="L47">        return canExecute(game);</span>
+    }
+
+    @Override
+    public void sendResults(ServerConnection sc) {
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (int commId : this.commIds.commLibIds)</span>
+<span class="nc" id="L53">            sc.sendBlinked(commId, this.actorId, this.x, this.y);</span>
+<span class="nc" id="L54">    }</span>
+
+    @Override
+    public void sendCommand(ClientConnection cc) {
+<span class="nc" id="L58">        cc.sendBlink(this.x, this.y);</span>
+<span class="nc" id="L59">    }</span>
+
+    @Override
+    public int getMonsterId() {
+<span class="nc" id="L63">        return actorId;</span>
+    }
+
+    @Override
+    public void executeEvent(Game game, Client client) {
+<span class="nc" id="L68">        execute(game);</span>
+<span class="nc" id="L69">    }</span>
+
+    @Override
+    public boolean validateEvent(Game game, Client client) {
+<span class="nc" id="L73">        return canExecute(game);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L78">        return String.format(&quot;%s blinks to %d,%d!&quot;, LogString.createVictimName(cli.getGame(),this.actorId),this.x,this.y);</span>
+    }
+
+    public void execute(Game game) {
+<span class="fc" id="L82">        Pc executer = game.getMonsterById(this.actorId);</span>
+<span class="fc" id="L83">        executer.setLastDirection(null);</span>
+<span class="fc" id="L84">        GameVector targetpos = new GameVector(this.x, this.y);</span>
+
+<span class="fc" id="L86">        int range = executer.getPosition().distanceTo(targetpos);           //enough Energy</span>
+<span class="fc" id="L87">        int energycost = this.ENERGYCOST * range;</span>
+<span class="fc" id="L88">        executer.drainEnergy(energycost);</span>
+
+<span class="fc" id="L90">        executer.setPosition(targetpos);</span>
+<span class="fc" id="L91">    }</span>
+
+    public boolean canExecute(Game game) {
+<span class="fc" id="L94">        Pc executer = game.getMonsterById(this.actorId);</span>
+
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if(executer == null){</span>
+<span class="nc" id="L97">            return false;</span>
+        }
+
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if(executer.isDead()){</span>
+<span class="nc" id="L101">            return false;</span>
+        }
+
+<span class="fc" id="L104">        boolean allowed = false;</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (CreatureType t : this.VALIDCREATURES) {</span>
+<span class="pc bpc" id="L106" title="2 of 4 branches missed.">            allowed = allowed || (executer.getCreatureType() == t);</span>
+        }
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (!allowed) return false; //Check if me is a valid creature</span>
+
+<span class="fc" id="L110">        GameVector targetpos = new GameVector(this.x, this.y);</span>
+<span class="fc" id="L111">        int range = executer.getPosition().distanceTo(targetpos);           //enough energy</span>
+<span class="fc" id="L112">        int energycost = this.ENERGYCOST * range;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (executer.getEnergy() &lt; energycost)</span>
+<span class="fc" id="L114">            return false;</span>
+
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        if (!FieldEffects.canEnter(game.getFieldAt(targetpos), executer.getCreatureType()))</span>
+<span class="nc" id="L117">            return false;</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (game.getCreatureByPosition(targetpos) != null)                     //is there already a creature</span>
+<span class="nc" id="L119">            return false;</span>
+
+<span class="fc" id="L121">        return true;</span>
+    }
+
+    public static int getENERGYCOST() {
+<span class="nc" id="L125">        return ENERGYCOST;</span>
+    }
+
+    public static CreatureType[] getVALIDCREATURES() {
+<span class="nc" id="L129">        return VALIDCREATURES;</span>
+    }
+
+    public int getActorId() {
+<span class="nc" id="L133">        return actorId;</span>
+    }
+
+    public int getX() {
+<span class="nc" id="L137">        return x;</span>
+    }
+
+    public int getY() {
+<span class="nc" id="L141">        return y;</span>
+    }
+
+    public CommIds getCommIds() {
+<span class="nc" id="L145">        return commIds;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

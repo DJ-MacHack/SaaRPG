@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingeKillBoarTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">SingeKillBoarTest.java</span></div><h1>SingeKillBoarTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team14 on 23/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class SingeKillBoarTest extends OurSystemTest {
+    public SingeKillBoarTest() {
+<span class="nc" id="L14">        super(&quot;SingeKillBoarTest&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // registration phase
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; thera = register(0, &quot;Therazane&quot;, CreatureType.ROOK, &quot;Earth&quot;, 2, 0);</span>
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; rag = register(1, &quot;Ragnaros&quot;, CreatureType.IFRIT, &quot;Fire&quot;, 0, 0);</span>
+
+<span class="nc" id="L23">        assertRegisterEvent(rag.nextEvent(), 0, &quot;Therazane&quot;, CreatureType.ROOK, &quot;Earth&quot;, 2, 0);</span>
+<span class="nc" id="L24">        assertRegisterEvent(thera.nextEvent(), 1, &quot;Ragnaros&quot;, CreatureType.IFRIT, &quot;Fire&quot;, 0, 0);</span>
+
+        // round 1 begins
+<span class="nc" id="L27">        assertRoundBegin(assertAndMerge(rag, thera), 1);</span>
+
+        // boarSpawn
+<span class="nc" id="L30">        assertBoarSpawned(assertAndMerge(rag, thera), 2, 1, 0);</span>
+
+        // boarAttack
+<span class="nc" id="L33">        assertBoarAttack(assertAndMerge(thera, rag), 2, 0);</span>
+<span class="nc" id="L34">        assertBoarAttack(assertAndMerge(thera, rag), 2, 1);</span>
+
+        // thera's turn
+<span class="nc" id="L37">        assertActNow(assertAndMerge(rag, thera), 0);</span>
+<span class="nc" id="L38">        thera.sendDoneActing();</span>
+<span class="nc" id="L39">        assertDoneActing(assertAndMerge(rag, thera), 0);</span>
+
+        // rag's turn
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        for (int i = 0; i &lt; 3; i++) {</span>
+<span class="nc" id="L43">            assertActNow(assertAndMerge(rag, thera), 1);</span>
+<span class="nc" id="L44">            rag.sendSinge(Direction.EAST);</span>
+<span class="nc" id="L45">            assertSinged(assertAndMerge(rag, thera), 1, Direction.EAST);</span>
+        }
+<span class="nc" id="L47">        assertDied(assertAndMerge(rag, thera), 2);</span>
+<span class="nc" id="L48">        assertActNow(assertAndMerge(rag, thera), 1);</span>
+<span class="nc" id="L49">        rag.sendDoneActing();</span>
+<span class="nc" id="L50">        assertDoneActing(assertAndMerge(rag, thera), 1);</span>
+
+        // round 1 ends
+<span class="nc" id="L53">        assertRoundEnd(assertAndMerge(rag, thera), 1, 0);</span>
+<span class="nc" id="L54">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L58">        return &quot;0.1&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L63">        return &quot;Fire, Earth\n&quot;</span>
+                + &quot;Fire, Ragnaros, Ifrit\n&quot;
+                + &quot;Earth, Therazane, Rook&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

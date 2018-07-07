@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.messagestest.attacktest.CrushTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="0.012">
+  <properties/>
+  <testcase name="canCreateValidCrushs" classname="de.unisaarland.sopra.messagestest.attacktest.CrushTest" time="0.002"/>
+  <testcase name="testForFieldEffects" classname="de.unisaarland.sopra.messagestest.attacktest.CrushTest" time="0.001"/>
+  <testcase name="testOutOfRange" classname="de.unisaarland.sopra.messagestest.attacktest.CrushTest" time="0.001"/>
+  <testcase name="testValidCrushBasic" classname="de.unisaarland.sopra.messagestest.attacktest.CrushTest" time="0.002"/>
+  <testcase name="testInvalidCreature" classname="de.unisaarland.sopra.messagestest.attacktest.CrushTest" time="0.0"/>
+  <testcase name="testDiagonal" classname="de.unisaarland.sopra.messagestest.attacktest.CrushTest" time="0.0"/>
+  <testcase name="testInvalidCreatureV2" classname="de.unisaarland.sopra.messagestest.attacktest.CrushTest" time="0.003"/>
+  <testcase name="testEnergy" classname="de.unisaarland.sopra.messagestest.attacktest.CrushTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

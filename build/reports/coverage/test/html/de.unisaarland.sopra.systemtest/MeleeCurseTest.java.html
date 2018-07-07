@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MeleeCurseTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">MeleeCurseTest.java</span></div><h1>MeleeCurseTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+/**
+ * Created by Lukas Kirschner on 9/20/16.
+ * This test checks first if a matching creature is allowed to attack with the corresponding attack
+ * then another fitting creature attacks an empty field and gets kicked.
+ */
+public class MeleeCurseTest extends OurSystemTest {
+    private CreatureType t;
+    private AttackType a;
+<span class="nc" id="L19">    private static String TEAMA = &quot;TeamA&quot;;</span>
+<span class="nc" id="L20">    private static String TEAMB = &quot;TeamB&quot;;</span>
+<span class="nc" id="L21">    private static String PLAYERA = &quot;A&quot;;</span>
+<span class="nc" id="L22">    private static String PLAYERB = &quot;B&quot;;</span>
+<span class="nc" id="L23">    private static String MAPFILE = &quot; 01$\n    \n    \n    &quot;;</span>
+
+
+    private MeleeCurseTest(AttackType a, CreatureType t) {
+<span class="nc" id="L27">        super(&quot;MeleeCurseTest.&quot; + a.toString() + &quot;.&quot; + t.toString());</span>
+<span class="nc" id="L28">        this.t = t;</span>
+<span class="nc" id="L29">        this.a = a;</span>
+<span class="nc" id="L30">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L34">        ClientConnection&lt;Event&gt; pa = register(0, PLAYERA, this.t, TEAMA, 1, 0);</span>
+<span class="nc" id="L35">        ClientConnection&lt;Event&gt; pb = register(1, PLAYERB, this.t, TEAMB, 2, 0);</span>
+<span class="nc" id="L36">        assertRegisterEvent(pb.nextEvent(), 0, PLAYERA, this.t, TEAMA, 1, 0);</span>
+<span class="nc" id="L37">        assertRegisterEvent(pa.nextEvent(), 1, PLAYERB, this.t, TEAMB, 2, 0);</span>
+
+<span class="nc" id="L39">        assertRoundBegin(assertAndMerge(pa, pb), 1);</span>
+<span class="nc" id="L40">        assertMeleeAttack(pa, Direction.EAST, pb, 0, a, true); //Player A attacks Player B</span>
+
+<span class="nc" id="L42">        assertActNow(assertAndMerge(pa, pb), 0);</span>
+<span class="nc" id="L43">        pa.sendDoneActing();</span>
+<span class="nc" id="L44">        assertDoneActing(assertAndMerge(pa, pb), 0);</span>
+
+<span class="nc" id="L46">        assertActNow(assertAndMerge(pa,pb),1);</span>
+<span class="nc" id="L47">        pb.sendMove(Direction.EAST);</span>
+<span class="nc" id="L48">        assertMoved(assertAndMerge(pa,pb),1,Direction.EAST);</span>
+
+<span class="nc" id="L50">        assertMeleeAttack(pb, Direction.EAST, pa, 1, a, false); //Player B tries to attacktest an empty tile and gets kicked</span>
+
+<span class="nc" id="L52">        assertRoundEnd(assertAndMerge(pa, pb), 1, 0);</span>
+<span class="nc" id="L53">        assertWinner(assertAndMerge(pa, pb), TEAMA);</span>
+
+<span class="nc" id="L55">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L59">        return MAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L64">        return TEAMA + &quot;, &quot; + TEAMB + &quot;\n&quot; + TEAMA + &quot;, &quot; + PLAYERA + &quot;, &quot; + t.toString() + &quot;\n&quot; + TEAMB + &quot;, &quot; + PLAYERB + &quot;, &quot; + t.toString();</span>
+    }
+
+    public static Collection&lt;OurSystemTest&gt; getTests() {
+<span class="nc" id="L68">        ArrayList&lt;OurSystemTest&gt; sysTests = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L69">        sysTests.add(new MeleeCurseTest(AttackType.STAB, CreatureType.KOBOLD));</span>
+<span class="nc" id="L70">        sysTests.add(new MeleeCurseTest(AttackType.STAB, CreatureType.ELF));</span>
+<span class="nc" id="L71">        sysTests.add(new MeleeCurseTest(AttackType.STAB, CreatureType.WRAITH));</span>
+<span class="nc" id="L72">        sysTests.add(new MeleeCurseTest(AttackType.CUT, CreatureType.NAGA));</span>
+<span class="nc" id="L73">        sysTests.add(new MeleeCurseTest(AttackType.BITE, CreatureType.NAGA));</span>
+<span class="nc" id="L74">        sysTests.add(new MeleeCurseTest(AttackType.SLASH, CreatureType.KOBOLD));</span>
+<span class="nc" id="L75">        sysTests.add(new MeleeCurseTest(AttackType.STARE, CreatureType.ROOK));</span>
+<span class="nc" id="L76">        sysTests.add(new MeleeCurseTest(AttackType.CLAW, CreatureType.YETI));</span>
+<span class="nc" id="L77">        sysTests.add(new MeleeCurseTest(AttackType.CRUSH, CreatureType.YETI));</span>
+<span class="nc" id="L78">        sysTests.add(new MeleeCurseTest(AttackType.SINGE, CreatureType.IFRIT));</span>
+        //sysTests.add(new MeleeTest(AttackType.BURN,CreatureType.IFRIT));
+<span class="nc" id="L80">        return sysTests;</span>
+    }
+
+    private void assertMeleeAttack(ClientConnection&lt;Event&gt; cli, Direction d, ClientConnection&lt;Event&gt; cli2, int id, AttackType t, boolean allowed) {
+<span class="nc" id="L84">        assertActNow(assertAndMerge(cli, cli2), id);</span>
+<span class="nc bnc" id="L85" title="All 10 branches missed.">        switch (t) {</span>
+            case STAB:
+<span class="nc" id="L87">                cli.sendStab(d);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                if (allowed) assertStabbed(assertAndMerge(cli, cli2), id, d);</span>
+<span class="nc" id="L89">                else assertKicked(assertAndMerge(cli, cli2), id);</span>
+<span class="nc" id="L90">                break;</span>
+            case CUT:
+<span class="nc" id="L92">                cli.sendCut(d);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                if (allowed) assertCut(assertAndMerge(cli, cli2), id, d);</span>
+<span class="nc" id="L94">                else assertKicked(assertAndMerge(cli, cli2), id);</span>
+<span class="nc" id="L95">                break;</span>
+            case BITE:
+<span class="nc" id="L97">                cli.sendBite(d);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                if (allowed) assertBitten(assertAndMerge(cli, cli2), id, d);</span>
+<span class="nc" id="L99">                else assertKicked(assertAndMerge(cli, cli2), id);</span>
+<span class="nc" id="L100">                break;</span>
+            case SLASH:
+<span class="nc" id="L102">                cli.sendSlash(d);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                if (allowed) assertSlashed(assertAndMerge(cli, cli2), id, d);</span>
+<span class="nc" id="L104">                else assertKicked(assertAndMerge(cli, cli2), id);</span>
+<span class="nc" id="L105">                break;</span>
+            case STARE:
+<span class="nc" id="L107">                cli.sendStare(d);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                if (allowed) assertStared(assertAndMerge(cli, cli2), id, d);</span>
+<span class="nc" id="L109">                else assertKicked(assertAndMerge(cli, cli2), id);</span>
+<span class="nc" id="L110">                break;</span>
+            case CLAW:
+<span class="nc" id="L112">                cli.sendClaw(d);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                if (allowed) assertClaw(assertAndMerge(cli, cli2), id, d);</span>
+<span class="nc" id="L114">                else assertKicked(assertAndMerge(cli, cli2), id);</span>
+<span class="nc" id="L115">                break;</span>
+            case CRUSH:
+<span class="nc" id="L117">                cli.sendCrush(d);</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                if (allowed) assertCrush(assertAndMerge(cli, cli2), id, d);</span>
+<span class="nc" id="L119">                else assertKicked(assertAndMerge(cli, cli2), id);</span>
+<span class="nc" id="L120">                break;</span>
+            case SINGE:
+<span class="nc" id="L122">                cli.sendSinge(d);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                if (allowed) assertSinged(assertAndMerge(cli, cli2), id, d);</span>
+<span class="nc" id="L124">                else assertKicked(assertAndMerge(cli, cli2), id);</span>
+<span class="nc" id="L125">                break;</span>
+            case BURN:
+<span class="nc" id="L127">                cli.sendBurn();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">                if (allowed) assertBurned(assertAndMerge(cli, cli2), id);</span>
+<span class="nc" id="L129">                else assertKicked(assertAndMerge(cli, cli2), id);</span>
+            default:
+                break;
+        }
+<span class="nc" id="L133">    }</span>
+
+<span class="nc" id="L135">    private enum AttackType {</span>
+<span class="nc" id="L136">        STAB, CUT, BITE, SLASH, STARE, CLAW, CRUSH, SINGE, BURN;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

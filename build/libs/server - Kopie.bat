@@ -1,0 +1,1 @@
+java -jar core-1.0-SNAPSHOT.jar -server -port 12345 -timeout -1 -map maps/Balanced.map -fight fights/fight1vs1.txt >> log.txt

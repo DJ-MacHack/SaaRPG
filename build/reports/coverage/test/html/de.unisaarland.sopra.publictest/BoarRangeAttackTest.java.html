@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoarRangeAttackTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.publictest</a> &gt; <span class="el_source">BoarRangeAttackTest.java</span></div><h1>BoarRangeAttackTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.publictest;
+
+import de.unisaarland.sopra.MonsterType;
+import de.unisaarland.sopra.comm.ClientConnection;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The BoarRangeAttackTest tests whether a boar behaves legally when
+ * he reaches his limit of 20 steps from the anchor point and 21 steps
+ * away is a monster.
+ */
+public class BoarRangeAttackTest extends PublicTest {
+
+    public BoarRangeAttackTest() {
+<span class="nc" id="L17">        super(BoarRangeAttackTest.class.getName());</span>
+<span class="nc" id="L18">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L22">        return  &quot;.                    0\n&quot; +</span>
+            &quot;1111111111111111111111&quot;;
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L28">        return  &quot;A,B\n\n&quot; +</span>
+            &quot;A,Dobby,ELF\n&quot; +
+            &quot;B,Flobby,ELF&quot;;
+    }
+
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    protected void executeTest() {
+<span class="nc" id="L36">        ClientConnection&lt;String&gt;[] ccs = new ClientConnection[2];</span>
+<span class="nc" id="L37">        ccs[0] = register(0, &quot;Dobby&quot;, MonsterType.ELF, &quot;A&quot;);</span>
+<span class="nc" id="L38">        ccs[1] = register(1, &quot;Flobby&quot;, MonsterType.ELF, &quot;B&quot;);</span>
+
+<span class="nc" id="L40">        List&lt;String&gt; actNowList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L41">        List&lt;String&gt; doneActingList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        for (int i = 0; i &lt; ccs.length; i++) {</span>
+<span class="nc" id="L43">            actNowList.add(String.format(&quot;ActNow(%d)&quot;, i));</span>
+<span class="nc" id="L44">            doneActingList.add(String.format(&quot;DoneActing(%d)&quot;, i));</span>
+        }
+
+<span class="nc" id="L47">        assertSameEventStartsWith(&quot;Registered(&quot;, ccs);</span>
+
+<span class="nc" id="L49">        assertSameEvent(&quot;RoundBegin(1)&quot;, ccs);</span>
+
+<span class="nc" id="L51">        assertSameEvent(&quot;BoarSpawned(2, 0, 0)&quot;, ccs);</span>
+
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        for (int i = 0; i &lt; 3; i++) {</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            for (int j = 0; j &lt; 6; j++) {</span>
+<span class="nc" id="L57">                assertSameEvent(&quot;Moved(2, EAST)&quot;, ccs);</span>
+            }
+
+<span class="nc" id="L60">            checkAndHandleLazyMonster(ccs, actNowList, doneActingList);</span>
+
+<span class="nc" id="L62">            assertSameEvent(String.format(&quot;RoundEnd(%d, %d)&quot;, i + 1, i + 1), ccs);</span>
+
+<span class="nc" id="L64">            assertSameEvent(String.format(&quot;RoundBegin(%d)&quot;, i + 2), ccs);</span>
+
+        }
+
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        for (int j = 0; j &lt; 2; j++) {</span>
+<span class="nc" id="L69">            assertSameEvent(&quot;Moved(2, EAST)&quot;, ccs);</span>
+        }
+        // The boar went 20 steps in the EAST direction, now one monster is reachable
+        // so he attacks it and continues on the WEST direction
+<span class="nc" id="L73">        assertSameEvent(&quot;BoarAttack(2, 0)&quot;, ccs);</span>
+
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        for (int j = 0; j &lt; 4; j++) {</span>
+<span class="nc" id="L76">            assertSameEvent(&quot;Moved(2, WEST)&quot;, ccs);</span>
+        }
+
+<span class="nc" id="L79">        assertSameEvent(&quot;ActNow(1)&quot;, ccs);</span>
+<span class="nc" id="L80">        ccs[1].sendBurn();</span>
+<span class="nc" id="L81">        assertSameEventStartsWith(&quot;Kicked(1, &quot;, ccs);</span>
+<span class="nc" id="L82">        assertSameEvent(&quot;ActNow(0)&quot;, ccs);</span>
+<span class="nc" id="L83">        ccs[0].sendBurn();</span>
+<span class="nc" id="L84">        assertSameEventStartsWith(&quot;Kicked(0, &quot;, ccs);</span>
+
+<span class="nc" id="L86">        assertSameEvent(&quot;RoundEnd(4, 0)&quot;, ccs);</span>
+
+<span class="nc" id="L88">        assertSameEventStartsWith(&quot;Winner(&quot;, ccs);</span>
+
+<span class="nc" id="L90">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

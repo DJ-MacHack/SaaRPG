@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FindBugs Report</title>
+<style type="text/css">
+		.tablerow0 {
+			background: #EEEEEE;
+		}
+
+		.tablerow1 {
+			background: white;
+		}
+
+		.detailrow0 {
+			background: #EEEEEE;
+		}
+
+		.detailrow1 {
+			background: white;
+		}
+
+		.tableheader {
+			background: #b9b9fe;
+			font-size: larger;
+		}
+
+		.tablerow0:hover, .tablerow1:hover {
+			background: #aaffaa;
+		}
+
+		.priority-1 {
+		    color: red;
+		    font-weight: bold;
+		}
+		.priority-2 {
+		    color: orange;
+		    font-weight: bold;
+		}
+		.priority-3 {
+		    color: green;
+		    font-weight: bold;
+		}
+		.priority-4 {
+		    color: blue;
+		    font-weight: bold;
+		}
+		</style>
+<script type="text/javascript">
+			function toggleRow(elid) {
+				if (document.getElementById) {
+					element = document.getElementById(elid);
+					if (element) {
+						if (element.style.display == 'none') {
+							element.style.display = 'block';
+							//window.status = 'Toggle on!';
+						} else {
+							element.style.display = 'none';
+							//window.status = 'Toggle off!';
+						}
+					}
+				}
+			}
+		</script>
+</head>
+<body>
+<h1>
+<a href="http://findbugs.sourceforge.net">FindBugs</a> Report</h1>
+<h2>Project Information</h2>
+<p>Project: 
+		</p>
+<p>FindBugs version: 3.0.1</p>
+<p>Code analyzed:</p>
+<ul>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\Client.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\CommIds.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\gui\Gui.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\gui\GuiFrame$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\gui\GuiFrame$GamePanel.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\gui\GuiFrame.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\gui\GuiHelper$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\gui\GuiHelper.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\gui\InputListener.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\gui\Music.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\Human.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\KI.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\Main.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\MapGenerator$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\MapGenerator$Algorithm.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\MapGenerator.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\Master.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\ActNow.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Bite.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Blink.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Burn.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Cast.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Claw.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Crush.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Cut.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\MagicAttack.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Move$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Move.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Shoot.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\SimpleAttack.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Singe.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Slash.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Stab.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Stare.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Swap.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\attack\Watch.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\BoarAttack.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\BoarSpawned.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\Command.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\CommandFactoryImpl.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\Died.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\DoneActing.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\Event.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\EventFactoryImpl.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\FairySpawned.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\FieldEffect.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\Fight.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\Kicked.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\MapFile.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\PoisonEffect.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\Register.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\RegistrationAborted.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\RoundBegin.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\RoundEnd.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\SpawnEvent.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\WarCry.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\messages\Winner.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Creature.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\CreatureType.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Field.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\FieldEffects.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Game.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Map$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Map.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Npc.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Pc.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Player.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Poison.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\RoundState.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\model\Team.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\Observer.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\AmokBoar2Test.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\AmokBoarTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\BlinkOnIceTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\BoarAttackOnIceSameRound.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\BoarAttackOnIceTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\BoarAttackOnWaterTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\BoarRangeAttackTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\BoarSurroundedTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\BrokenInputTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\PublicBeispielTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\PublicTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\PublicWarCryTest$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\PublicWarCryTest$DoubleWarCryTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\PublicWarCryTest$EmptyWarCryTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\PublicWarCryTest$MaxWarCryTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\PublicWarCryTest$TooLongWarCryTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\PublicWarCryTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\TestEventFactory.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\publictest\TrappedBoarTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\Server$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\Server.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\AnotherAttackOnCurseFieldTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\AttackKickedPlayerTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\AttackOnCurseFieldTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\AttackOnWaterTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\AttackOutsideOfMap.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BiteCutTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BiteIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BiteKillPoisonTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BlinkIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BlinkSwapTestSimple.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoarAndFairyTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoarAttackOnIce.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoarAttackOnIceTwo.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoarAttacksFairyTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoarKilledThenInvisibleTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoarOnLavaTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoarOnWaterTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoarRespawnInhibitedTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoarReviveTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BoringHundredRoundsTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\Burn6Test.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BurnDoubleKillTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BurnFourTargetsTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BurnIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BurnMultipleKillTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BurnOneDiedTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\BushFieldEffectTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CanAttackBurnTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CanBlinkTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CanBurnBlinkOnWater.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CastCanAttackTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CastIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CastLimitsTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CastOnTreeNoEffectTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\ClawCrushTestSimple.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\ClawIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CrushIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CrushOnBoar.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CutIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\CutOnBoar.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\FairyKilledTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\FairyOnIceTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\FairyOnWaterTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\FairyRespawnTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\FightFileTests.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\FightSimpleGrassTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\FiveKilledByBurnTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\HealAndKillFairyTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\HSystemTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\IllegalAttackHelper.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\InitOrderKilledTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\LavaFieldeffectTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\LoosingLifeOnWaterTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\MeleeCurseTest$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\MeleeCurseTest$AttackType.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\MeleeCurseTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\MeleeTest$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\MeleeTest$AttackType.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\MeleeTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\MovementTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\MoveOutOfAnchorFairyTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\NoHealTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\OurSystemTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\PoisonKillBoarTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\PoisonKillFairyTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\PoisonKillTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\RegisterPhaseAttackTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\RegistrationAbortedTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\RegistrationAbortedTestFour.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\RegistrationAbortedTestOne.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\RegistrationAbortedTestThree.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\RegistrationAbortedTestTwo.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\RegistrationPhaseMoveCommandTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\RegistrationPhaseTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\RookRangeInHillFieldTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\ShootAcrossRockfield.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\ShootFromKickedElf.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\ShootIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\ShootInWrongActNowPhase.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\ShootOnHillNoEffectTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\ShootWithoutEnergy.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\ShootWithoutHindranceTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SimpleAttackTestOne.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SimpleFightTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SingeBurnTestSimple.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SingeIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SingeKillBoarTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SingeKillPlayerTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SlashIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\StabIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\StabKillTests.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\StareCastTestSimple.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\StareIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\StareKillBoarTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\StareKillPlayerTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SwapAlreadyDeadTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SwapIllegalTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SwapKilledTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SwapNoEnergyTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SwapNotYourTurnTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\SwapOnWaterTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\TooManyMonstersInTeamTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\TreeFieldEffectTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\TurnOnIceTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\WrongDataTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\systemtest\YetiOnIceTest.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\DirectionHelper$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\DirectionHelper.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\GameVector.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\InvalidFightFileException.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\InvalidMapFileException.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\KiHelper.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\LogString$1.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\LogString.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\Pathfinder.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\RegistrationAbortedException.class</li>
+<li>C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\build\classes\main\de\unisaarland\sopra\utility\SimplePathfinder.class</li>
+</ul>
+<p>
+<br/>
+<br/>
+</p>
+<h2>Metrics</h2>
+<p>11308 lines of code analyzed,
+	in 209 classes, 
+	in 8 packages.</p>
+<table width="500" cellpadding="5" cellspacing="2">
+<tr class="tableheader">
+<th align="left">Metric</th>
+<th align="right">Total</th>
+<th align="right">Density*</th>
+</tr>
+<tr class="tablerow0">
+<td>High Priority Warnings</td>
+<td align="right"/>
+<td align="right">0.00</td>
+</tr>
+<tr class="tablerow1">
+<td>Medium Priority Warnings</td>
+<td align="right"/>
+<td align="right">0.00</td>
+</tr>
+<tr class="$totalClass">
+<td>
+<b>Total Warnings</b>
+</td>
+<td align="right">
+<b>0</b>
+</td>
+<td align="right">
+<b>0.00</b>
+</td>
+</tr>
+</table>
+<p>
+<i>(* Defects per Thousand lines of non-commenting source statements)</i>
+</p>
+<p>
+<br/>
+<br/>
+</p>
+<h2>Contents</h2>
+<ul>
+<li>
+<a href="#Details">Details</a>
+</li>
+</ul>
+<h1>Summary</h1>
+<table width="500" cellpadding="5" cellspacing="2">
+<tr class="tableheader">
+<th align="left">Warning Type</th>
+<th align="right">Number</th>
+</tr>
+<tr class="tablerow0">
+<td>
+<b>Total</b>
+</td>
+<td align="right">
+<b>0</b>
+</td>
+</tr>
+</table>
+<h1>Warnings</h1>
+<p>Click on a warning row to see full context information.</p>
+<h1>
+<a name="Details">Details</a>
+</h1>
+</body>
+</html>

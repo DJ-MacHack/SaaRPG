@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FieldEffects.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.model</a> &gt; <span class="el_source">FieldEffects.java</span></div><h1>FieldEffects.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.model;
+
+/**
+ * Created by DJ MacHack on 12.09.2016.
+ */
+public final class FieldEffects {
+
+    // Damage modifications
+    private static final int DAMAGE_LAVA = 25;
+    private static final int DAMAGE_HEAL = -20;
+    private static final int DAMAGE_WATER = 20;
+
+    // Defense modifications
+    private static final double DEFENSE_KOBOLD_BUSH = 0.5;
+    private static final double DEFENSE_TREE = 0.7;
+
+    // Range modifications
+    private static final int RANGE_ELF_TREE = 4;
+    private static final int RANGE_ROOK_HILL = 3;
+
+    // Movement cost modifications
+    private static final int MOVE_WATER = 4;
+    private static final int MOVE_SWAMP = 3;
+    private static final int MOVE_NAGA_WATER = 2;
+    private static final int MOVE_NAGA_SWAMP = 1;
+
+    // Attack cost modifications
+    private static final int ATTACK_TREE = 2;
+    private static final int ATTACK_CURSE = 3;
+
+<span class="nc" id="L31">    private FieldEffects() {</span>
+<span class="nc" id="L32">    }</span>
+
+    /**
+     * calculates damage on field
+     *
+     * @param field
+     * @param type
+     * @return
+     */
+    public static int getDamage(Field field, CreatureType type) {
+
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (field == Field.LAVA) {</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (type == CreatureType.IFRIT) {</span>
+<span class="fc" id="L45">                return 0;</span>
+            } else {
+<span class="fc" id="L47">                return DAMAGE_LAVA;</span>
+            }
+        }
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (field == Field.HEAL) {</span>
+<span class="fc" id="L51">            return DAMAGE_HEAL;</span>
+        }
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (field == Field.WATER) {</span>
+<span class="fc" id="L55">            return DAMAGE_WATER;</span>
+        }
+<span class="fc" id="L57">        return 0;</span>
+    }
+
+    /**
+     * get a multiplier on field for damage
+     *
+     * @param field
+     * @param type
+     * @return
+     */
+    public static double getDefensiveMultiplier(Field field, CreatureType type) {
+
+<span class="fc bfc" id="L69" title="All 4 branches covered.">        if (field == Field.BUSH &amp;&amp; type == CreatureType.KOBOLD) {</span>
+<span class="fc" id="L70">            return DEFENSE_KOBOLD_BUSH;</span>
+        }
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (field == Field.TREE) {</span>
+<span class="fc" id="L73">            return DEFENSE_TREE;</span>
+        } else {
+<span class="fc" id="L75">            return 1.0;</span>
+        }
+    }
+
+    /**
+     * get range factor on field
+     *
+     * @param field
+     * @param type
+     * @return
+     */
+    public static int getRangeIncrease(Field field, CreatureType type) {
+<span class="fc bfc" id="L87" title="All 4 branches covered.">        if (field == Field.TREE &amp;&amp; type == CreatureType.ELF) {</span>
+<span class="fc" id="L88">            return RANGE_ELF_TREE;</span>
+        }
+<span class="fc bfc" id="L90" title="All 4 branches covered.">        if (field == Field.HILL &amp;&amp; type == CreatureType.ROOK) {</span>
+<span class="fc" id="L91">            return RANGE_ROOK_HILL;</span>
+        }
+<span class="fc" id="L93">        return 0;</span>
+    }
+
+    /**
+     * tests if a creature can enter a field
+     *
+     * @param field
+     * @param type
+     * @return
+     */
+    public static boolean canEnter(Field field, CreatureType type) {
+<span class="fc bfc" id="L104" title="All 6 branches covered.">        if(field == Field.WATER &amp;&amp; (type == CreatureType.BOAR || type == CreatureType.FAIRY)){</span>
+<span class="fc" id="L105">            return false;</span>
+        }
+
+<span class="pc bpc" id="L108" title="1 of 4 branches missed.">        return (field != Field.ROCK) &amp;&amp; (field != null);</span>
+    }
+
+    /**
+     * tests if a creature can attacktest on a field
+     *
+     * @param field
+     * @param type
+     * @return
+     */
+    public static boolean canAttack(Field field, CreatureType type) {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        return !(field == Field.WATER);</span>
+    }
+
+    /**
+     * get movement cost multiplier on field
+     *
+     * @param field
+     * @param type
+     * @return
+     */
+    public static int getMovementCostMultiplier(Field field, CreatureType type) {
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (field == Field.WATER) {</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">            if (type == CreatureType.NAGA) {</span>
+<span class="fc" id="L132">                return MOVE_NAGA_WATER;</span>
+            } else {
+<span class="fc" id="L134">                return MOVE_WATER;</span>
+            }
+        }
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (field == Field.SWAMP) {</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            if (type == CreatureType.NAGA) {</span>
+<span class="nc" id="L139">                return MOVE_NAGA_SWAMP;</span>
+            } else {
+<span class="nc" id="L141">                return MOVE_SWAMP;</span>
+            }
+        }
+<span class="fc" id="L144">        return 1;</span>
+    }
+
+    /**
+     * test if projectiles get blocked
+     *
+     * @param field
+     * @return
+     */
+    public static boolean blockProjectile(Field field) {
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        return (field == Field.ROCK);</span>
+    }
+
+    /**
+     * get attacktest cost multiplier
+     *
+     * @param field
+     * @param type
+     * @return
+     */
+    public static int getAttackCostMultiplier(Field field, CreatureType type) {
+
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (field == Field.TREE) {</span>
+<span class="fc" id="L167">            return ATTACK_TREE;</span>
+        }
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (field == Field.CURSE) {</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">            if (type == CreatureType.WRAITH) {</span>
+<span class="fc" id="L171">                return 1;</span>
+            } else {
+<span class="fc" id="L173">                return ATTACK_CURSE;</span>
+            }
+        } else {
+<span class="fc" id="L176">            return 1;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BiteKillPoisonTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">BiteKillPoisonTest.java</span></div><h1>BiteKillPoisonTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team14 on 22/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class BiteKillPoisonTest extends OurSystemTest {
+    /**
+     */
+    public BiteKillPoisonTest() {
+<span class="nc" id="L16">        super(&quot;BiteKillPoisonTest&quot;);</span>
+<span class="nc" id="L17">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // register phase
+<span class="nc" id="L22">        ClientConnection&lt;Event&gt; rook = register(0, &quot;rook&quot;, CreatureType.ROOK, &quot;RookTeam&quot;, 0, 0);</span>
+<span class="nc" id="L23">        ClientConnection&lt;Event&gt; rook2 = register(1, &quot;rook2&quot;, CreatureType.ROOK, &quot;RookTeam&quot;, 1, 0);</span>
+<span class="nc" id="L24">        assertRegisterEvent(rook2.nextEvent(), 0, &quot;rook&quot;, CreatureType.ROOK, &quot;RookTeam&quot;, 0, 0);</span>
+<span class="nc" id="L25">        assertRegisterEvent(rook.nextEvent(), 1, &quot;rook2&quot;, CreatureType.ROOK, &quot;RookTeam&quot;, 1, 0);</span>
+
+<span class="nc" id="L27">        ClientConnection&lt;Event&gt; naga = register(2, &quot;naga&quot;, CreatureType.NAGA, &quot;NagaTeam&quot;, 2, 0);</span>
+<span class="nc" id="L28">        assertRegisterEvent(naga.nextEvent(), 0, &quot;rook&quot;, CreatureType.ROOK, &quot;RookTeam&quot;, 0, 0);</span>
+<span class="nc" id="L29">        assertRegisterEvent(naga.nextEvent(), 1, &quot;rook2&quot;, CreatureType.ROOK, &quot;RookTeam&quot;, 1, 0);</span>
+<span class="nc" id="L30">        assertRegisterEvent(assertAndMerge(rook, rook2), 2, &quot;naga&quot;, CreatureType.NAGA, &quot;NagaTeam&quot;, 2, 0);</span>
+
+        // round 1 starts
+<span class="nc" id="L33">        assertRoundBegin(assertAndMerge(naga, rook, rook2), 1);</span>
+
+        // rook's turn
+<span class="nc" id="L36">        assertActNow(assertAndMerge(naga, rook, rook2), 0);</span>
+<span class="nc" id="L37">        rook.sendDoneActing();</span>
+<span class="nc" id="L38">        assertDoneActing(assertAndMerge(naga, rook, rook2), 0);</span>
+
+        // rook2's turn
+<span class="nc" id="L41">        assertActNow(assertAndMerge(naga, rook, rook2), 1);</span>
+<span class="nc" id="L42">        rook2.sendCast(1, 0);</span>
+<span class="nc" id="L43">        assertCast(assertAndMerge(rook, rook2, naga), 1, 1, 0);</span>
+<span class="nc" id="L44">        assertActNow(assertAndMerge(naga, rook, rook2), 1);</span>
+<span class="nc" id="L45">        rook2.sendCast(1, 0);</span>
+<span class="nc" id="L46">        assertCast(assertAndMerge(rook, rook2, naga), 1, 1, 0);</span>
+<span class="nc" id="L47">        assertActNow(assertAndMerge(naga, rook, rook2), 1);</span>
+<span class="nc" id="L48">        rook2.sendDoneActing();</span>
+<span class="nc" id="L49">        assertDoneActing(assertAndMerge(naga, rook, rook2), 1);</span>
+
+        // naga's turn
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (int j = 0; j &lt; 5; j++) {</span>
+<span class="nc" id="L53">            assertActNow(assertAndMerge(naga, rook, rook2), 2);</span>
+<span class="nc" id="L54">            naga.sendCut(Direction.WEST);</span>
+<span class="nc" id="L55">            assertCut(assertAndMerge(naga, rook, rook2), 2, Direction.WEST);</span>
+        }
+<span class="nc" id="L57">        assertActNow(assertAndMerge(naga, rook, rook2), 2);</span>
+<span class="nc" id="L58">        naga.sendDoneActing();</span>
+<span class="nc" id="L59">        assertDoneActing(assertAndMerge(naga, rook, rook2), 2);</span>
+
+        // round 1 ends
+<span class="nc" id="L62">        assertRoundEnd(assertAndMerge(naga, rook, rook2), 1, 0);</span>
+
+        // round 2 starts
+<span class="nc" id="L65">        assertRoundBegin(assertAndMerge(naga, rook, rook2), 2);</span>
+
+        // rook's turn
+<span class="nc" id="L68">        assertActNow(assertAndMerge(naga, rook, rook2), 0);</span>
+<span class="nc" id="L69">        rook.sendDoneActing();</span>
+<span class="nc" id="L70">        assertDoneActing(assertAndMerge(naga, rook, rook2), 0);</span>
+
+        // rook2's turn
+<span class="nc" id="L73">        assertActNow(assertAndMerge(naga, rook, rook2), 1);</span>
+<span class="nc" id="L74">        rook2.sendCast(1, 0);</span>
+<span class="nc" id="L75">        assertCast(assertAndMerge(rook, rook2, naga), 1, 1, 0);</span>
+<span class="nc" id="L76">        assertActNow(assertAndMerge(naga, rook, rook2), 1);</span>
+<span class="nc" id="L77">        rook2.sendCast(1, 0);</span>
+<span class="nc" id="L78">        assertCast(assertAndMerge(rook, rook2, naga), 1, 1, 0);</span>
+<span class="nc" id="L79">        assertActNow(assertAndMerge(naga, rook, rook2), 1);</span>
+<span class="nc" id="L80">        rook2.sendDoneActing();</span>
+<span class="nc" id="L81">        assertDoneActing(assertAndMerge(naga, rook, rook2), 1);</span>
+
+        // naga's turn
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        for (int k = 0; k &lt; 5; k++) {</span>
+<span class="nc" id="L85">            assertActNow(assertAndMerge(naga, rook, rook2), 2);</span>
+<span class="nc" id="L86">            naga.sendCut(Direction.WEST);</span>
+<span class="nc" id="L87">            assertCut(assertAndMerge(naga, rook, rook2), 2, Direction.WEST);</span>
+        }
+<span class="nc" id="L89">        assertActNow(assertAndMerge(naga, rook, rook2), 2);</span>
+<span class="nc" id="L90">        naga.sendDoneActing();</span>
+<span class="nc" id="L91">        assertDoneActing(assertAndMerge(naga, rook, rook2), 2);</span>
+
+        // round 2 ends
+<span class="nc" id="L94">        assertRoundEnd(assertAndMerge(naga, rook, rook2), 2, 0);</span>
+
+        // round 3 starts
+<span class="nc" id="L97">        assertRoundBegin(assertAndMerge(naga, rook, rook2), 3);</span>
+
+        // rook's turn
+<span class="nc" id="L100">        assertActNow(assertAndMerge(naga, rook, rook2), 0);</span>
+<span class="nc" id="L101">        rook.sendDoneActing();</span>
+<span class="nc" id="L102">        assertDoneActing(assertAndMerge(naga, rook, rook2), 0);</span>
+
+        // rook2's turn
+<span class="nc" id="L105">        assertActNow(assertAndMerge(naga, rook, rook2), 1);</span>
+<span class="nc" id="L106">        rook2.sendDoneActing();</span>
+<span class="nc" id="L107">        assertDoneActing(assertAndMerge(naga, rook, rook2), 1);</span>
+
+        // naga's turn
+<span class="nc" id="L110">        assertActNow(assertAndMerge(naga, rook, rook2), 2);</span>
+<span class="nc" id="L111">        naga.sendBite(Direction.WEST);</span>
+<span class="nc" id="L112">        assertBitten(assertAndMerge(naga, rook, rook2), 2, Direction.WEST);</span>
+<span class="nc" id="L113">        assertActNow(assertAndMerge(naga, rook, rook2), 2);</span>
+<span class="nc" id="L114">        naga.sendBite(Direction.WEST);</span>
+<span class="nc" id="L115">        assertBitten(assertAndMerge(naga, rook, rook2), 2, Direction.WEST);</span>
+<span class="nc" id="L116">        assertDied(assertAndMerge(naga, rook, rook2), 1);</span>
+
+<span class="nc" id="L118">        assertActNow(assertAndMerge(naga, rook, rook2), 2);</span>
+<span class="nc" id="L119">        naga.sendDoneActing();</span>
+<span class="nc" id="L120">        assertDoneActing(assertAndMerge(naga, rook, rook2), 2);</span>
+
+        // round 3 ends
+<span class="nc" id="L123">        assertRoundEnd(assertAndMerge(naga, rook2, rook), 3, 0);</span>
+
+        // round 4 starts
+<span class="nc" id="L126">        assertRoundBegin(assertAndMerge(naga, rook2, rook), 4);</span>
+
+        // rook's turn
+<span class="nc" id="L129">        assertActNow(assertAndMerge(naga, rook, rook2), 0);</span>
+<span class="nc" id="L130">        rook.sendDoneActing();</span>
+<span class="nc" id="L131">        assertDoneActing(assertAndMerge(naga, rook, rook2), 0);</span>
+
+        // naga's turn
+<span class="nc" id="L134">        assertActNow(assertAndMerge(naga, rook2, rook), 2);</span>
+<span class="nc" id="L135">        naga.sendMove(Direction.WEST);</span>
+<span class="nc" id="L136">        assertMoved(assertAndMerge(naga, rook2, rook), 2, Direction.WEST);</span>
+<span class="nc" id="L137">        assertActNow(assertAndMerge(naga, rook, rook2), 2);</span>
+<span class="nc" id="L138">        naga.sendDoneActing();</span>
+<span class="nc" id="L139">        assertDoneActing(assertAndMerge(naga, rook, rook2), 2);</span>
+
+        // round 4 ends
+<span class="nc" id="L142">        assertRoundEnd(assertAndMerge(naga, rook2, rook), 4, 1);</span>
+
+        // round 5 starts
+<span class="nc" id="L145">        assertRoundBegin(assertAndMerge(naga, rook2, rook), 5);</span>
+
+        // rook's turn
+<span class="nc" id="L148">        assertActNow(assertAndMerge(naga, rook, rook2), 0);</span>
+<span class="nc" id="L149">        rook.sendCast(2, 0);</span>
+<span class="nc" id="L150">        assertKicked(assertAndMerge(naga, rook2, rook), 0);</span>
+
+        // naga's turn
+<span class="nc" id="L153">        assertActNow(assertAndMerge(naga, rook, rook2), 2);</span>
+<span class="nc" id="L154">        naga.sendDoneActing();</span>
+<span class="nc" id="L155">        assertDoneActing(assertAndMerge(naga, rook, rook2), 2);</span>
+
+        // round 5 ends
+<span class="nc" id="L158">        assertRoundEnd(assertAndMerge(naga, rook2, rook), 5, 0);</span>
+
+        // winner: naga
+<span class="nc" id="L161">        assertWinner(assertAndMerge(naga, rook2, rook), &quot;NagaTeam&quot;);</span>
+<span class="nc" id="L162">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L166">        return &quot;001&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L171">        return &quot;RookTeam, NagaTeam\n&quot;</span>
+             + &quot;RookTeam, rook, Rook\n&quot;
+             + &quot;RookTeam, rook2, ROOK\n&quot;
+             + &quot;NagaTeam, naga, Naga&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

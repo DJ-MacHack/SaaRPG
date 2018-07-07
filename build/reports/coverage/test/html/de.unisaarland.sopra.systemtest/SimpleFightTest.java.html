@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpleFightTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">SimpleFightTest.java</span></div><h1>SimpleFightTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team14 on 16/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class SimpleFightTest extends OurSystemTest {
+
+    public SimpleFightTest() {
+<span class="nc" id="L15">        super(&quot;SimpleFightTest&quot;);</span>
+<span class="nc" id="L16">    }</span>
+
+    @Override
+    protected void executeTest() {
+        //registration phase
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; harry = register(0, &quot;Harry&quot;, CreatureType.WRAITH, &quot;Gryffindor&quot;, 0, 0);</span>
+
+<span class="nc" id="L23">        ClientConnection&lt;Event&gt; statist23 = register(1, &quot;Statist23&quot;, CreatureType.KOBOLD, &quot;Hufflepuff&quot;, 1, 2);</span>
+<span class="nc" id="L24">        assertRegisterEvent(harry.nextEvent(), 1, &quot;Statist23&quot;, CreatureType.KOBOLD, &quot;Hufflepuff&quot;, 1, 2);</span>
+<span class="nc" id="L25">        assertRegisterEvent(statist23.nextEvent(), 0, &quot;Harry&quot;, CreatureType.WRAITH, &quot;Gryffindor&quot;, 0, 0);</span>
+
+<span class="nc" id="L27">        ClientConnection&lt;Event&gt; malfoy = register(2, &quot;Malfoy&quot;, CreatureType.ROOK, &quot;Slytherin&quot;, 3, 4);</span>
+<span class="nc" id="L28">        assertRegisterEvent(assertAndMerge(harry, statist23), 2, &quot;Malfoy&quot;, CreatureType.ROOK, &quot;Slytherin&quot;, 3, 4);</span>
+<span class="nc" id="L29">        assertRegisterEvent(malfoy.nextEvent(), 0, &quot;Harry&quot;, CreatureType.WRAITH, &quot;Gryffindor&quot;, 0, 0);</span>
+<span class="nc" id="L30">        assertRegisterEvent(malfoy.nextEvent(), 1, &quot;Statist23&quot;, CreatureType.KOBOLD, &quot;Hufflepuff&quot;, 1, 2);</span>
+
+        //registration completed -&gt; RoundBegin Round 1
+<span class="nc" id="L33">        assertRoundBegin(assertAndMerge(harry, malfoy, statist23), 1);</span>
+
+        //harry blinks to (5, 0) -&gt; malfoy too far and poor statist23 should not be hurt
+<span class="nc" id="L36">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L37">        harry.sendBlink(5, 0);</span>
+<span class="nc" id="L38">        assertBlinked(assertAndMerge(harry, malfoy, statist23), 0, 5, 0);</span>
+<span class="nc" id="L39">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L40">        harry.sendDoneActing();</span>
+<span class="nc" id="L41">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 0);</span>
+
+        //statist23 can't bare the pressure and just jumps into the water at (1, 1) (Move(NW)) shouting &quot;Go away ;(&quot;
+<span class="nc" id="L44">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L45">        statist23.sendMove(Direction.NORTH_WEST);</span>
+<span class="nc" id="L46">        assertMoved(assertAndMerge(harry, malfoy, statist23), 1, Direction.NORTH_WEST);</span>
+<span class="nc" id="L47">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L48">        statist23.sendWarCry(&quot;Go away ;(&quot;);</span>
+<span class="nc" id="L49">        assertWarCry(assertAndMerge(harry, malfoy, statist23), 1, &quot;Go away ;(&quot;);</span>
+<span class="nc" id="L50">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L51">        statist23.sendDoneActing();</span>
+<span class="nc" id="L52">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 1);</span>
+
+        //malfoy uses 2 cast on statist23 (20 dmg)
+<span class="nc" id="L55">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L56">        malfoy.sendCast(1, 1);</span>
+<span class="nc" id="L57">        assertCast(assertAndMerge(harry, malfoy, statist23), 2, 1, 1);</span>
+<span class="nc" id="L58">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L59">        malfoy.sendCast(1, 1);</span>
+<span class="nc" id="L60">        assertCast(assertAndMerge(harry, malfoy, statist23), 2, 1, 1);</span>
+<span class="nc" id="L61">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L62">        malfoy.sendDoneActing();</span>
+<span class="nc" id="L63">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 2);</span>
+
+        //fieldeffect on statist23 (20 dmg)
+<span class="nc" id="L66">        assertFieldEffect(assertAndMerge(harry, malfoy, statist23), 1, 1, 20);</span>
+
+        //round 1 ends -&gt; statist23: 60hp, harry: 100hp, malfoy: 100hp
+<span class="nc" id="L69">        assertRoundEnd(assertAndMerge(harry, malfoy, statist23), 1, 0);</span>
+
+        //round 2 begins -&gt; initOrder: statist23 -&gt; malfoy -&gt; harry
+<span class="nc" id="L72">        assertRoundBegin(assertAndMerge(harry, malfoy, statist23), 2);</span>
+
+        //statist23 just shouts &quot;water is sooooo refreshing :)&quot;
+<span class="nc" id="L75">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L76">        statist23.sendWarCry(&quot;water is soooooo refreshing :)&quot;);</span>
+<span class="nc" id="L77">        assertWarCry(assertAndMerge(harry, malfoy, statist23), 1, &quot;water is soooooo refreshing :)&quot;);</span>
+<span class="nc" id="L78">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L79">        statist23.sendDoneActing();</span>
+<span class="nc" id="L80">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 1);</span>
+
+        //malfoy casts again 2 casts on statist23 (20 dmg)
+<span class="nc" id="L83">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L84">        malfoy.sendCast(1, 1);</span>
+<span class="nc" id="L85">        assertCast(assertAndMerge(harry, malfoy, statist23), 2, 1, 1);</span>
+<span class="nc" id="L86">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L87">        malfoy.sendCast(1, 1);</span>
+<span class="nc" id="L88">        assertCast(assertAndMerge(harry, malfoy, statist23), 2, 1, 1);</span>
+<span class="nc" id="L89">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L90">        malfoy.sendDoneActing();</span>
+<span class="nc" id="L91">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 2);</span>
+
+        //harry moves on lava at (4, 1) (Move(SW)) and swaps with statist23 (6 dmg) shouting &quot;I want to bath as well! &lt;.&lt;&quot; and moves(E) out to (2,1)
+<span class="nc" id="L94">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L95">        harry.sendMove(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L96">        assertMoved(assertAndMerge(harry, malfoy, statist23), 0, Direction.SOUTH_WEST);</span>
+<span class="nc" id="L97">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L98">        harry.sendSwap(1, 1);</span>
+<span class="nc" id="L99">        assertSwapped(assertAndMerge(harry, malfoy, statist23), 0, 1, 1);</span>
+<span class="nc" id="L100">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L101">        harry.sendWarCry(&quot;I want to bath as well! &lt;.&lt;&quot;);</span>
+<span class="nc" id="L102">        assertWarCry(assertAndMerge(harry, malfoy, statist23), 0, &quot;I want to bath as well! &lt;.&lt;&quot;);</span>
+<span class="nc" id="L103">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L104">        harry.sendMove(Direction.EAST);</span>
+<span class="nc" id="L105">        assertMoved(assertAndMerge(harry, malfoy, statist23), 0, Direction.EAST);</span>
+<span class="nc" id="L106">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L107">        harry.sendDoneActing();</span>
+<span class="nc" id="L108">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 0);</span>
+
+        //fieldeffect on statist23 (25 dmg)
+<span class="nc" id="L111">        assertFieldEffect(assertAndMerge(harry, malfoy, statist23), 4, 1, 25);</span>
+
+        //roundend 2 -&gt; statist23: 9hp, harry: 100hp, malfoy: 100hp
+<span class="nc" id="L114">        assertRoundEnd(assertAndMerge(harry, malfoy, statist23), 2, 0);</span>
+
+        //round 3 begins -&gt; initOrder: statist23 -&gt; malfoy -&gt; harry
+<span class="nc" id="L117">        assertRoundBegin(assertAndMerge(harry, malfoy, statist23), 3);</span>
+
+        //statist23 shouts &quot;Enough of this %#@*!?/$&quot; moves to (2,4) (Move(SW), Move(SE), Move(SW)) and attacks Malfoy with slash(E) and stab(E) (19 dmg)
+<span class="nc" id="L120">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L121">        statist23.sendWarCry(&quot;Enough of this %#@*!?/$&quot;);</span>
+<span class="nc" id="L122">        assertWarCry(assertAndMerge(harry, malfoy, statist23), 1, &quot;Enough of this %#@*!?/$&quot;);</span>
+<span class="nc" id="L123">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L124">        statist23.sendMove(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L125">        assertMoved(assertAndMerge(harry, malfoy, statist23), 1, Direction.SOUTH_WEST);</span>
+<span class="nc" id="L126">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L127">        statist23.sendMove(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L128">        assertMoved(assertAndMerge(harry, malfoy, statist23), 1, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L129">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L130">        statist23.sendMove(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L131">        assertMoved(assertAndMerge(harry, malfoy, statist23), 1, Direction.SOUTH_WEST);</span>
+<span class="nc" id="L132">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L133">        statist23.sendSlash(Direction.EAST);</span>
+<span class="nc" id="L134">        assertSlashed(assertAndMerge(harry, malfoy, statist23), 1, Direction.EAST);</span>
+<span class="nc" id="L135">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L136">        statist23.sendStab(Direction.EAST);</span>
+<span class="nc" id="L137">        assertStabbed(assertAndMerge(harry, malfoy, statist23), 1, Direction.EAST);</span>
+<span class="nc" id="L138">        assertActNow(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L139">        statist23.sendDoneActing();</span>
+<span class="nc" id="L140">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 1);</span>
+
+        //malfoy ends statist23 off with cast (10 dmg -&gt; died) and uses cast on harry
+<span class="nc" id="L143">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L144">        malfoy.sendCast(2, 4);</span>
+<span class="nc" id="L145">        assertCast(assertAndMerge(harry, malfoy, statist23), 2, 2, 4);</span>
+<span class="nc" id="L146">        assertDied(assertAndMerge(harry, malfoy, statist23), 1);</span>
+<span class="nc" id="L147">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L148">        malfoy.sendCast(2, 1);</span>
+<span class="nc" id="L149">        assertCast(assertAndMerge(harry, malfoy, statist23), 2, 2, 1);</span>
+<span class="nc" id="L150">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L151">        malfoy.sendDoneActing();</span>
+<span class="nc" id="L152">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 2);</span>
+
+        //harry moves to (4,1) (E, E) and swaps with malfoy (6 dmg)
+<span class="nc" id="L155">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L156">        harry.sendMove(Direction.EAST);</span>
+<span class="nc" id="L157">        assertMoved(assertAndMerge(harry, malfoy, statist23), 0, Direction.EAST);</span>
+<span class="nc" id="L158">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L159">        harry.sendMove(Direction.EAST);</span>
+<span class="nc" id="L160">        assertMoved(assertAndMerge(harry, malfoy, statist23), 0, Direction.EAST);</span>
+<span class="nc" id="L161">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L162">        harry.sendSwap(3, 4);</span>
+<span class="nc" id="L163">        assertSwapped(assertAndMerge(harry, malfoy, statist23), 0, 3, 4);</span>
+<span class="nc" id="L164">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L165">        harry.sendDoneActing();</span>
+<span class="nc" id="L166">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 0);</span>
+
+        //fieldeffect on malfoy (25 dmg)
+<span class="nc" id="L169">        assertFieldEffect(assertAndMerge(harry, malfoy, statist23), 4, 1, 25);</span>
+
+        //roundend 3 -&gt; statist23: /, harry: 90hp, malfoy: 50hp
+<span class="nc" id="L172">        assertRoundEnd(assertAndMerge(harry, malfoy, statist23), 3, 0);</span>
+
+        //round 4 begins -&gt; initOrder: malfoy -&gt; harry
+<span class="nc" id="L175">        assertRoundBegin(assertAndMerge(harry, malfoy, statist23), 4);</span>
+
+        //malfoy casts at (-1,4) -&gt; kicked
+<span class="nc" id="L178">        assertActNow(assertAndMerge(harry, malfoy, statist23), 2);</span>
+<span class="nc" id="L179">        malfoy.sendCast(-1, 4);</span>
+<span class="nc" id="L180">        assertKicked(assertAndMerge(harry, malfoy, statist23), 2);</span>
+
+        //harry blinks to (-2,4)
+<span class="nc" id="L183">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L184">        harry.sendBlink(-2, 4);</span>
+<span class="nc" id="L185">        assertBlinked(assertAndMerge(harry, malfoy, statist23), 0, -2, 4);</span>
+<span class="nc" id="L186">        assertActNow(assertAndMerge(harry, malfoy, statist23), 0);</span>
+<span class="nc" id="L187">        harry.sendDoneActing();</span>
+<span class="nc" id="L188">        assertDoneActing(assertAndMerge(harry, malfoy, statist23), 0);</span>
+
+        //roundend 4 -&gt; statist23: /, harry: 100hp, malfoy: /
+<span class="nc" id="L191">        assertRoundEnd(assertAndMerge(harry, malfoy, statist23), 4, 0);</span>
+
+        //winner(Gryffindor)
+<span class="nc" id="L194">        assertWinner(assertAndMerge(harry, malfoy, statist23), &quot;Gryffindor&quot;);</span>
+<span class="nc" id="L195">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L199">        return &quot;0     \n&quot;</span>
+                + &quot;~~^^**\n&quot;
+                + &quot;~~2^**\n&quot;
+                + &quot;~~^^**\n&quot;
+                + &quot;     1&quot;;
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L208">        return &quot;Gryffindor, Slytherin, Hufflepuff\n&quot;</span>
+                + &quot;Gryffindor, Harry, Wraith\n&quot;
+                + &quot;Slytherin, Malfoy, Rook\n&quot;
+                + &quot;Hufflepuff, Statist23, Kobold&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

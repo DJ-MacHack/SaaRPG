@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SwapNoEnergyTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">SwapNoEnergyTest.java</span></div><h1>SwapNoEnergyTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team14 on 23/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class SwapNoEnergyTest extends OurSystemTest {
+    public SwapNoEnergyTest() {
+<span class="nc" id="L14">        super(&quot;SwapNoEnergyTest&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // register phase
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; noc = register(0, &quot;Nocturne&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 0);</span>
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; garen = register(1, &quot;Garen&quot;, CreatureType.YETI, &quot;Demacia&quot;, 8, 0);</span>
+
+<span class="nc" id="L23">        assertRegisterEvent(noc.nextEvent(), 1, &quot;Garen&quot;, CreatureType.YETI, &quot;Demacia&quot;, 8, 0);</span>
+<span class="nc" id="L24">        assertRegisterEvent(garen.nextEvent(), 0, &quot;Nocturne&quot;, CreatureType.WRAITH, &quot;Void&quot;, 0, 0);</span>
+
+        // round 1 begins
+<span class="nc" id="L27">        assertRoundBegin(assertAndMerge(noc, garen), 1);</span>
+
+        // noc's turn
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        for (int steps = 0; steps &lt; 5; steps++) {</span>
+<span class="nc" id="L31">            assertActNow(assertAndMerge(noc, garen), 0);</span>
+<span class="nc" id="L32">            noc.sendMove(Direction.EAST);</span>
+<span class="nc" id="L33">            assertMoved(assertAndMerge(noc, garen), 0, Direction.EAST);</span>
+        }
+<span class="nc" id="L35">        assertActNow(assertAndMerge(noc, garen), 0);</span>
+<span class="nc" id="L36">        noc.sendSwap(8, 0);</span>
+<span class="nc" id="L37">        assertKicked(assertAndMerge(noc, garen), 0);</span>
+
+        // garen's turn
+<span class="nc" id="L40">        assertActNow(assertAndMerge(noc, garen), 1);</span>
+<span class="nc" id="L41">        garen.sendDoneActing();</span>
+<span class="nc" id="L42">        assertDoneActing(assertAndMerge(noc, garen), 1);</span>
+
+        // round 1 ends
+<span class="nc" id="L45">        assertRoundEnd(assertAndMerge(noc, garen), 1, 0);</span>
+
+<span class="nc" id="L47">        assertWinner(assertAndMerge(noc, garen), &quot;Demacia&quot;);</span>
+<span class="nc" id="L48">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L52">        return &quot;0       1&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L57">        return &quot;Void, Demacia\n&quot;</span>
+             + &quot;Void, Nocturne, Wraith\n&quot;
+             + &quot;Demacia, Garen, Yeti&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

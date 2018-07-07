@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestEventFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.publictest</a> &gt; <span class="el_source">TestEventFactory.java</span></div><h1>TestEventFactory.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.publictest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.EventFactory;
+import de.unisaarland.sopra.MonsterType;
+
+/**
+ * Diese EventFactory verwenden wir in unseren Public-Tests.
+ * &lt;p&gt;
+ * Wir halten es fÃ¼r eine sehr schlechte Idee, die EventFactory Strings returnen zu lassen und machen es
+ * hier nur, weil es fÃ¼r die Tests die Variante ist, mit der wir Ihnen am wenigsten Code, und damit am besten
+ * verstÃ¤ndliche Tests vorlegen kÃ¶nnen. Wir empfehlen Ihnen, fÃ¼r Ihre eigenen Tests, und erst Recht
+ * fÃ¼r Ihre Implementierung, etwas eigenes zu schreiben.
+ * &lt;p&gt;
+ * Created by akampmann on 19/08/16.
+ */
+<span class="nc" id="L17">public class TestEventFactory implements EventFactory&lt;String&gt; {</span>
+
+
+    @Override
+    public String createRegistered(int playerId, String name, MonsterType monsterType, String teamName, int startNumber, int x, int y) {
+
+<span class="nc" id="L23">        return &quot;Registered(&quot; + playerId + &quot;, &quot; + name + &quot;, &quot; + monsterType + &quot;, &quot; + teamName + &quot;, &quot; + startNumber + &quot;, &quot; + x + &quot;, &quot; + y + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createRegistrationAborted() {
+
+<span class="nc" id="L30">        return &quot;RegistrationAborted()&quot;;</span>
+
+    }
+
+    @Override
+    public String createMoved(int actorId, Direction direction) {
+
+<span class="nc" id="L37">        return &quot;Moved(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createStabbed(int actorId, Direction direction) {
+
+<span class="nc" id="L44">        return &quot;Stabbed(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createSlashed(int actorId, Direction direction) {
+
+<span class="nc" id="L51">        return &quot;Slashed(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createCut(int actorId, Direction direction) {
+
+<span class="nc" id="L58">        return &quot;Cut(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createBitten(int actorId, Direction direction) {
+
+<span class="nc" id="L65">        return &quot;Bitten(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createStared(int actorId, Direction direction) {
+
+<span class="nc" id="L72">        return &quot;Stared(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createClawed(int actorId, Direction direction) {
+
+<span class="nc" id="L79">        return &quot;Clawed(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createCrushed(int actorId, Direction direction) {
+
+<span class="nc" id="L86">        return &quot;Crushed(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createSinged(int actorId, Direction direction) {
+
+<span class="nc" id="L93">        return &quot;Singed(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createShot(int actorId, Direction direction) {
+
+<span class="nc" id="L100">        return &quot;Shoot(&quot; + actorId + &quot;, &quot; + direction + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createBurned(int actorId) {
+
+<span class="nc" id="L107">        return &quot;Burned(&quot; + actorId + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createCast(int actorId, int x, int y) {
+
+<span class="nc" id="L114">        return &quot;Cast(&quot; + actorId + &quot;, &quot; + x + &quot;, &quot; + y + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createBlinked(int actorId, int x, int y) {
+
+<span class="nc" id="L121">        return &quot;Blinked(&quot; + actorId + &quot;, &quot; + x + &quot;, &quot; + y + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createSwapped(int actorId, int x, int y) {
+
+<span class="nc" id="L128">        return &quot;Swapped(&quot; + actorId + &quot;, &quot; + x + &quot;, &quot; + y + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createWarCry(int actorId, String cry) {
+
+<span class="nc" id="L135">        return &quot;WarCry(&quot; + actorId + &quot;, &quot; + cry + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createDied(int entityId) {
+
+<span class="nc" id="L142">        return &quot;Died(&quot; + entityId + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createKicked(int monsterId, String message) {
+
+<span class="nc" id="L149">        return &quot;Kicked(&quot; + monsterId + &quot;, &quot; + message + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createBoarSpawned(int creatureId, int x, int y) {
+
+<span class="nc" id="L156">        return &quot;BoarSpawned(&quot; + creatureId + &quot;, &quot; + x + &quot;, &quot; + y + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createFairySpawned(int creatureId, int x, int y) {
+
+<span class="nc" id="L163">        return &quot;FairySpawned(&quot; + creatureId + &quot;, &quot; + x + &quot;, &quot; + y + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createActNow(int monsterId) {
+
+<span class="nc" id="L170">        return &quot;ActNow(&quot; + monsterId + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createFieldEffect(int x, int y, int value) {
+
+<span class="nc" id="L177">        return &quot;FieldEffect(&quot; + x + &quot;, &quot; + y + &quot;, &quot; + value + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createPoisonEffect(int entityId, int value) {
+
+<span class="nc" id="L184">        return &quot;PoisonEffect(&quot; + entityId + &quot;, &quot; + value + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createDoneActing(int actorId) {
+
+<span class="nc" id="L191">        return &quot;DoneActing(&quot; + actorId + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createMap(String value) {
+
+<span class="nc" id="L198">        return &quot;Map(&quot; + value + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createFight(String value) {
+
+<span class="nc" id="L205">        return &quot;Fight(&quot; + value + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createRoundBegin(int value) {
+
+<span class="nc" id="L212">        return &quot;RoundBegin(&quot; + value + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createRoundEnd(int value, int boredom) {
+
+<span class="nc" id="L219">        return &quot;RoundEnd(&quot; + value + &quot;, &quot; + boredom + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createWinner(String teamName) {
+
+<span class="nc" id="L226">        return &quot;Winner(&quot; + teamName + &quot;)&quot;;</span>
+
+    }
+
+    @Override
+    public String createBoarAttack(int boarId, int victimId) {
+
+<span class="nc" id="L233">        return &quot;BoarAttack(&quot; + boarId + &quot;, &quot; + victimId + &quot;)&quot;;</span>
+
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

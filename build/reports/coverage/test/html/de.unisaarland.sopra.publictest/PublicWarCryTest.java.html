@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PublicWarCryTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.publictest</a> &gt; <span class="el_source">PublicWarCryTest.java</span></div><h1>PublicWarCryTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.publictest;
+
+import de.unisaarland.sopra.MonsterType;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.systemtest.SystemTest;
+import org.junit.Assert;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public abstract class PublicWarCryTest extends PublicTest {
+
+    private final String cry;
+
+    private PublicWarCryTest(String name, int length) {
+<span class="nc" id="L18">        super(name);</span>
+<span class="nc bnc" id="L19" title="All 2 branches missed.">        if (length &lt; 0) {</span>
+<span class="nc" id="L20">            throw new IllegalArgumentException(&quot;LÃ¤nge darf nicht negativ sein!&quot;);</span>
+        }
+<span class="nc" id="L22">        cry = Stream.generate(() -&gt; &quot;#&quot;)</span>
+<span class="nc" id="L23">                .limit(length)</span>
+<span class="nc" id="L24">                .collect(Collectors.joining());</span>
+<span class="nc" id="L25">    }</span>
+
+    public String getCry() {
+<span class="nc" id="L28">        return cry;</span>
+    }
+
+    public static Collection&lt;SystemTest&gt; getTests() {
+<span class="nc" id="L32">        return Arrays.asList(new MaxWarCryTest(),</span>
+                new EmptyWarCryTest(),
+                new TooLongWarCryTest(),
+                new DoubleWarCryTest());
+    }
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L40">        ClientConnection&lt;String&gt; dobby = openClient(new TestEventFactory());</span>
+<span class="nc" id="L41">        dobby.sendRegister(&quot;Dobby&quot;, MonsterType.ELF, &quot;A&quot;);</span>
+<span class="nc" id="L42">        Assert.assertEquals(&quot;Map(&quot; + getMapFile() + ')', dobby.nextEvent());</span>
+<span class="nc" id="L43">        assertSameEventStartsWith(&quot;Fight(&quot;, dobby);</span>
+<span class="nc" id="L44">        Assert.assertEquals(&quot;Registered(0, Dobby, ELF, A, 0, 0, 0)&quot;, dobby.nextEvent());</span>
+
+        // Ã¶ffne eine Verbindung und registriere Robby
+<span class="nc" id="L47">        ClientConnection&lt;String&gt; robby = openClient(new TestEventFactory());</span>
+<span class="nc" id="L48">        robby.sendRegister(&quot;Robby&quot;, MonsterType.ROOK, &quot;B&quot;);</span>
+<span class="nc" id="L49">        Assert.assertEquals(&quot;Map(&quot; + getMapFile() + ')', robby.nextEvent());</span>
+        // String equality is not enough to compare fight files
+<span class="nc" id="L51">        Assert.assertTrue(robby.nextEvent().startsWith(&quot;Fight&quot;));</span>
+<span class="nc" id="L52">        Assert.assertEquals(&quot;Registered(1, Robby, ROOK, B, 1, 1, 0)&quot;, robby.nextEvent());</span>
+
+        // beide erhalten die Registrierung des anderen
+<span class="nc" id="L55">        Assert.assertEquals(&quot;Registered(0, Dobby, ELF, A, 0, 0, 0)&quot;, robby.nextEvent());</span>
+<span class="nc" id="L56">        Assert.assertEquals(&quot;Registered(1, Robby, ROOK, B, 1, 1, 0)&quot;, dobby.nextEvent());</span>
+
+        // jetzt fÃ¤ngt das Spiel an
+        // auf der Karte gibt es keine Fee, also kommt ein RoundBegin
+<span class="nc" id="L60">        Assert.assertEquals(&quot;RoundBegin(1)&quot;, robby.nextEvent());</span>
+<span class="nc" id="L61">        Assert.assertEquals(&quot;RoundBegin(1)&quot;, dobby.nextEvent());</span>
+
+        // Dobby wird zum Handeln aufgefordert
+<span class="nc" id="L64">        Assert.assertEquals(&quot;ActNow(0)&quot;, robby.nextEvent());</span>
+<span class="nc" id="L65">        Assert.assertEquals(&quot;ActNow(0)&quot;, dobby.nextEvent());</span>
+
+<span class="nc" id="L67">        dobby.sendWarCry(getCry());</span>
+
+<span class="nc" id="L69">        expectation(dobby, robby);</span>
+<span class="nc" id="L70">    }</span>
+
+    protected abstract void expectation(ClientConnection&lt;String&gt; dobby, ClientConnection&lt;String&gt; robby);
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L76">        return &quot;01&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L81">        return &quot;A,B\nA,Dobby,Elf\nB,Robby,Rook&quot;;</span>
+    }
+
+    private static class MaxWarCryTest extends PublicWarCryTest {
+
+        private MaxWarCryTest() {
+<span class="nc" id="L87">            super(&quot;MaxWarCryTest&quot;, 140);</span>
+<span class="nc" id="L88">        }</span>
+
+        protected MaxWarCryTest(String name, int length) {
+<span class="nc" id="L91">            super(name, length);</span>
+<span class="nc" id="L92">        }</span>
+
+        @Override
+        protected void expectation(ClientConnection&lt;String&gt; dobby, ClientConnection&lt;String&gt; robby) {
+<span class="nc" id="L96">            String expected = String.format(&quot;WarCry(0, %s)&quot;, getCry());</span>
+<span class="nc" id="L97">            Assert.assertEquals(expected, dobby.nextEvent());</span>
+<span class="nc" id="L98">            Assert.assertEquals(expected, robby.nextEvent());</span>
+<span class="nc" id="L99">            Assert.assertEquals(&quot;ActNow(0)&quot;, dobby.nextEvent());</span>
+<span class="nc" id="L100">            Assert.assertEquals(&quot;ActNow(0)&quot;, robby.nextEvent());</span>
+<span class="nc" id="L101">        }</span>
+    }
+
+    private static final class EmptyWarCryTest extends PublicWarCryTest {
+
+        private EmptyWarCryTest() {
+<span class="nc" id="L107">            super(&quot;EmptyWarCryTest&quot;, 0);</span>
+<span class="nc" id="L108">        }</span>
+
+        @Override
+        protected void expectation(ClientConnection&lt;String&gt; dobby, ClientConnection&lt;String&gt; robby) {
+<span class="nc" id="L112">            Assert.assertEquals(&quot;WarCry(0, )&quot;, dobby.nextEvent());</span>
+<span class="nc" id="L113">            Assert.assertEquals(&quot;WarCry(0, )&quot;, robby.nextEvent());</span>
+<span class="nc" id="L114">        }</span>
+    }
+
+    private static final class TooLongWarCryTest extends PublicWarCryTest {
+
+        private TooLongWarCryTest() {
+<span class="nc" id="L120">            super(&quot;TooLongWarCryTest&quot;, 141);</span>
+<span class="nc" id="L121">        }</span>
+
+        @Override
+        protected void expectation(ClientConnection&lt;String&gt; dobby, ClientConnection&lt;String&gt; robby) {
+<span class="nc" id="L125">            Assert.assertTrue(dobby.nextEvent().startsWith(&quot;Kicked(0, &quot;));</span>
+<span class="nc" id="L126">            Assert.assertTrue(robby.nextEvent().startsWith(&quot;Kicked(0, &quot;));</span>
+
+<span class="nc" id="L128">            Assert.assertEquals(&quot;ActNow(1)&quot;, dobby.nextEvent());</span>
+<span class="nc" id="L129">            Assert.assertEquals(&quot;ActNow(1)&quot;, robby.nextEvent());</span>
+
+<span class="nc" id="L131">            robby.sendDoneActing();</span>
+<span class="nc" id="L132">            Assert.assertEquals(&quot;DoneActing(1)&quot;, dobby.nextEvent());</span>
+<span class="nc" id="L133">            Assert.assertEquals(&quot;DoneActing(1)&quot;, robby.nextEvent());</span>
+
+<span class="nc" id="L135">            Assert.assertEquals(&quot;RoundEnd(1, 0)&quot;, dobby.nextEvent());</span>
+<span class="nc" id="L136">            Assert.assertEquals(&quot;RoundEnd(1, 0)&quot;, robby.nextEvent());</span>
+
+<span class="nc" id="L138">            Assert.assertEquals(&quot;Winner(B)&quot;, dobby.nextEvent());</span>
+<span class="nc" id="L139">            Assert.assertEquals(&quot;Winner(B)&quot;, robby.nextEvent());</span>
+<span class="nc" id="L140">        }</span>
+    }
+
+    private static final class DoubleWarCryTest extends MaxWarCryTest {
+
+        private DoubleWarCryTest() {
+<span class="nc" id="L146">            super(&quot;DoubleWarCryTest&quot;, 10);</span>
+<span class="nc" id="L147">        }</span>
+
+        @Override
+        protected void expectation(ClientConnection&lt;String&gt; dobby, ClientConnection&lt;String&gt; robby) {
+<span class="nc" id="L151">            super.expectation(dobby, robby);</span>
+<span class="nc" id="L152">            dobby.sendWarCry(getCry());</span>
+<span class="nc" id="L153">            Assert.assertTrue(dobby.nextEvent().startsWith(&quot;Kicked(0, &quot;));</span>
+<span class="nc" id="L154">            Assert.assertTrue(robby.nextEvent().startsWith(&quot;Kicked(0, &quot;));</span>
+<span class="nc" id="L155">        }</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

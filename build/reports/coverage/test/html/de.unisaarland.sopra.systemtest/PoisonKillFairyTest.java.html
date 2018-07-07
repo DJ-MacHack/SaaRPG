@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PoisonKillFairyTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">PoisonKillFairyTest.java</span></div><h1>PoisonKillFairyTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team14 on 23/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class PoisonKillFairyTest extends OurSystemTest {
+    public PoisonKillFairyTest() {
+<span class="nc" id="L14">        super(&quot;PoisonKillFairyTest&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // registration phase
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; therazane = register(0, &quot;Therazane&quot;, CreatureType.ROOK, &quot;Deepholm&quot;, 0, 0);</span>
+
+<span class="nc" id="L22">        ClientConnection&lt;Event&gt; vashj = register(1, &quot;Vashj&quot;, CreatureType.NAGA, &quot;Vashjir&quot;, 1, 0);</span>
+<span class="nc" id="L23">        assertRegisterEvent(therazane.nextEvent(), 1, &quot;Vashj&quot;, CreatureType.NAGA, &quot;Vashjir&quot;, 1, 0);</span>
+<span class="nc" id="L24">        assertRegisterEvent(vashj.nextEvent(), 0, &quot;Therazane&quot;, CreatureType.ROOK, &quot;Deepholm&quot;, 0, 0);</span>
+
+<span class="nc" id="L26">        ClientConnection&lt;Event&gt; karathress = register(2, &quot;Karathress&quot;, CreatureType.NAGA, &quot;Vashjir&quot;, 3, 0);</span>
+<span class="nc" id="L27">        assertRegisterEvent(karathress.nextEvent(), 1, &quot;Vashj&quot;, CreatureType.NAGA, &quot;Vashjir&quot;, 1, 0);</span>
+<span class="nc" id="L28">        assertRegisterEvent(karathress.nextEvent(), 0, &quot;Therazane&quot;, CreatureType.ROOK, &quot;Deepholm&quot;, 0, 0);</span>
+<span class="nc" id="L29">        assertRegisterEvent(assertAndMerge(therazane, vashj), 2, &quot;Karathress&quot;, CreatureType.NAGA, &quot;Vashjir&quot;, 3, 0);</span>
+
+        // spawn Fairy
+<span class="nc" id="L32">        assertFairySpawned(assertAndMerge(therazane, vashj, karathress), 3, 2, 0);</span>
+
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        for (int round = 1; round &lt; 8; round++) {</span>
+            // round starts
+<span class="nc" id="L36">            assertRoundBegin(assertAndMerge(therazane, vashj, karathress), round);</span>
+
+            // therazane's turn
+<span class="nc" id="L39">            assertActNow(assertAndMerge(therazane, vashj, karathress), 0);</span>
+<span class="nc" id="L40">            therazane.sendDoneActing();</span>
+<span class="nc" id="L41">            assertDoneActing(assertAndMerge(therazane, vashj, karathress), 0);</span>
+
+            // vashj's turn
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L45">                assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L46">                vashj.sendCut(Direction.EAST);</span>
+<span class="nc" id="L47">                assertCut(assertAndMerge(therazane, vashj, karathress), 1, Direction.EAST);</span>
+            }
+<span class="nc" id="L49">            assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L50">            vashj.sendDoneActing();</span>
+<span class="nc" id="L51">            assertDoneActing(assertAndMerge(therazane, vashj, karathress), 1);</span>
+
+            // karathress' turn
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            for (int i = 0; i &lt; 4; i++) {</span>
+<span class="nc" id="L55">                assertActNow(assertAndMerge(therazane, vashj, karathress), 2);</span>
+<span class="nc" id="L56">                karathress.sendCut(Direction.WEST);</span>
+<span class="nc" id="L57">                assertCut(assertAndMerge(therazane, vashj, karathress), 2, Direction.WEST);</span>
+            }
+<span class="nc" id="L59">            assertActNow(assertAndMerge(therazane, vashj, karathress), 2);</span>
+<span class="nc" id="L60">            karathress.sendDoneActing();</span>
+<span class="nc" id="L61">            assertDoneActing(assertAndMerge(therazane, vashj, karathress), 2);</span>
+
+            // fairy is healed
+<span class="nc" id="L64">            assertFieldEffect(assertAndMerge(therazane, vashj, karathress), 2, 0, -20);</span>
+
+            // round ends
+<span class="nc" id="L67">            assertRoundEnd(assertAndMerge(therazane, vashj, karathress), round, 0);</span>
+        }
+
+        // round 8 starts
+<span class="nc" id="L71">        assertRoundBegin(assertAndMerge(therazane, vashj, karathress), 8);</span>
+
+        // therazane's turn
+<span class="nc" id="L74">        assertActNow(assertAndMerge(therazane, vashj, karathress), 0);</span>
+<span class="nc" id="L75">        therazane.sendDoneActing();</span>
+<span class="nc" id="L76">        assertDoneActing(assertAndMerge(therazane, vashj, karathress), 0);</span>
+
+        // vashj's turn
+<span class="nc" id="L79">        assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L80">        vashj.sendBite(Direction.EAST);</span>
+<span class="nc" id="L81">        assertBitten(assertAndMerge(therazane, vashj, karathress), 1, Direction.EAST);</span>
+<span class="nc" id="L82">        assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L83">        vashj.sendBite(Direction.EAST);</span>
+<span class="nc" id="L84">        assertBitten(assertAndMerge(therazane, vashj, karathress), 1, Direction.EAST);</span>
+<span class="nc" id="L85">        assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L86">        vashj.sendDoneActing();</span>
+<span class="nc" id="L87">        assertDoneActing(assertAndMerge(therazane, vashj, karathress), 1);</span>
+
+        // karathress' turn
+<span class="nc" id="L90">        assertActNow(assertAndMerge(therazane, vashj, karathress), 2);</span>
+<span class="nc" id="L91">        karathress.sendBite(Direction.WEST);</span>
+<span class="nc" id="L92">        assertBitten(assertAndMerge(therazane, vashj, karathress), 2, Direction.WEST);</span>
+<span class="nc" id="L93">        assertActNow(assertAndMerge(therazane, vashj, karathress), 2);</span>
+<span class="nc" id="L94">        karathress.sendBite(Direction.WEST);</span>
+<span class="nc" id="L95">        assertBitten(assertAndMerge(therazane, vashj, karathress), 2, Direction.WEST);</span>
+<span class="nc" id="L96">        assertActNow(assertAndMerge(therazane, vashj, karathress), 2);</span>
+<span class="nc" id="L97">        karathress.sendDoneActing();</span>
+<span class="nc" id="L98">        assertDoneActing(assertAndMerge(therazane, vashj, karathress), 2);</span>
+
+        // fairy is healed
+<span class="nc" id="L101">        assertFieldEffect(assertAndMerge(therazane, vashj, karathress), 2, 0, -20);</span>
+
+        // round 8 ends
+<span class="nc" id="L104">        assertRoundEnd(assertAndMerge(therazane, vashj, karathress), 8, 0);</span>
+
+        // round 9 starts
+<span class="nc" id="L107">        assertRoundBegin(assertAndMerge(therazane, vashj, karathress), 9);</span>
+
+        // therazane's turn
+<span class="nc" id="L110">        assertActNow(assertAndMerge(therazane, vashj, karathress), 0);</span>
+<span class="nc" id="L111">        therazane.sendDoneActing();</span>
+<span class="nc" id="L112">        assertDoneActing(assertAndMerge(therazane, vashj, karathress), 0);</span>
+
+        // karathress' turn
+<span class="nc" id="L115">        assertActNow(assertAndMerge(therazane, vashj, karathress), 2);</span>
+<span class="nc" id="L116">        karathress.sendBite(Direction.WEST);</span>
+<span class="nc" id="L117">        assertBitten(assertAndMerge(therazane, vashj, karathress), 2, Direction.WEST);</span>
+<span class="nc" id="L118">        assertActNow(assertAndMerge(therazane, vashj, karathress), 2);</span>
+<span class="nc" id="L119">        karathress.sendBite(Direction.WEST);</span>
+<span class="nc" id="L120">        assertBitten(assertAndMerge(therazane, vashj, karathress), 2, Direction.WEST);</span>
+<span class="nc" id="L121">        assertActNow(assertAndMerge(therazane, vashj, karathress), 2);</span>
+<span class="nc" id="L122">        karathress.sendDoneActing();</span>
+<span class="nc" id="L123">        assertDoneActing(assertAndMerge(therazane, vashj, karathress), 2);</span>
+
+        // vashj's turn
+<span class="nc" id="L126">        assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L127">        vashj.sendBite(Direction.EAST);</span>
+<span class="nc" id="L128">        assertBitten(assertAndMerge(therazane, vashj, karathress), 1, Direction.EAST);</span>
+<span class="nc" id="L129">        assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L130">        vashj.sendBite(Direction.EAST);</span>
+<span class="nc" id="L131">        assertBitten(assertAndMerge(therazane, vashj, karathress), 1, Direction.EAST);</span>
+<span class="nc" id="L132">        assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L133">        vashj.sendDoneActing();</span>
+<span class="nc" id="L134">        assertDoneActing(assertAndMerge(therazane, vashj, karathress), 1);</span>
+
+        // fairy is healed
+<span class="nc" id="L137">        assertFieldEffect(assertAndMerge(therazane, vashj, karathress), 2, 0, -20);</span>
+<span class="nc" id="L138">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 4);</span>
+<span class="nc" id="L139">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 4);</span>
+<span class="nc" id="L140">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 4);</span>
+<span class="nc" id="L141">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 4);</span>
+
+        // round 9 ends
+<span class="nc" id="L144">        assertRoundEnd(assertAndMerge(therazane, vashj, karathress), 9, 0);</span>
+
+        // round 10 starts
+<span class="nc" id="L147">        assertRoundBegin(assertAndMerge(therazane, vashj, karathress), 10);</span>
+
+        // therazane's turn
+<span class="nc" id="L150">        assertActNow(assertAndMerge(therazane, vashj, karathress), 0);</span>
+<span class="nc" id="L151">        therazane.sendCast(0, 1);</span>
+<span class="nc" id="L152">        assertKicked(assertAndMerge(therazane, vashj, karathress), 0);</span>
+
+        // vashj's turn
+<span class="nc" id="L155">        assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L156">        vashj.sendCut(Direction.EAST);</span>
+<span class="nc" id="L157">        assertCut(assertAndMerge(therazane, vashj, karathress), 1, Direction.EAST);</span>
+<span class="nc" id="L158">        assertActNow(assertAndMerge(therazane, vashj, karathress), 1);</span>
+<span class="nc" id="L159">        vashj.sendDoneActing();</span>
+<span class="nc" id="L160">        assertDoneActing(assertAndMerge(therazane, vashj, karathress), 1);</span>
+
+        // karathress' turn
+<span class="nc" id="L163">        assertActNow(assertAndMerge(therazane, vashj, karathress), 2);</span>
+<span class="nc" id="L164">        karathress.sendDoneActing();</span>
+<span class="nc" id="L165">        assertDoneActing(assertAndMerge(therazane, vashj, karathress), 2);</span>
+
+        // HealEffect on Fairy
+<span class="nc" id="L168">        assertFieldEffect(assertAndMerge(therazane, vashj, karathress), 2, 0, -20);</span>
+<span class="nc" id="L169">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 2);</span>
+<span class="nc" id="L170">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 2);</span>
+<span class="nc" id="L171">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 2);</span>
+<span class="nc" id="L172">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 2);</span>
+<span class="nc" id="L173">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 4);</span>
+<span class="nc" id="L174">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 4);</span>
+<span class="nc" id="L175">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 4);</span>
+<span class="nc" id="L176">        assertPoisonEffect(assertAndMerge(therazane, vashj, karathress), 3, 4);</span>
+<span class="nc" id="L177">        assertDied(assertAndMerge(therazane, vashj, karathress), 3);</span>
+
+        // round 10 ends
+<span class="nc" id="L180">        assertRoundEnd(assertAndMerge(therazane, vashj, karathress), 10, 0);</span>
+
+<span class="nc" id="L182">        assertWinner(assertAndMerge(therazane, vashj, karathress), &quot;Vashjir&quot;);</span>
+<span class="nc" id="L183">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L187">        return &quot;10+0&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L192">        return &quot;Vashjir, Deepholm\n&quot;</span>
+             + &quot;Vashjir, Vashj, NAGA\n&quot;
+             + &quot;Vashjir, Karathress, NAgA\n&quot;
+             + &quot;Deepholm, Therazane, rook&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

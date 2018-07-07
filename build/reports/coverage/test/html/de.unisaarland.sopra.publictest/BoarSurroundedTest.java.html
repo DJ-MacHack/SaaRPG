@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoarSurroundedTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.publictest</a> &gt; <span class="el_source">BoarSurroundedTest.java</span></div><h1>BoarSurroundedTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.publictest;
+
+import de.unisaarland.sopra.MonsterType;
+import de.unisaarland.sopra.comm.ClientConnection;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Der BoarSurroundedTest prÃ¼ft ob ein, von Spielern umzingeltes, Schwein sich 
+ * im Kreis dreht und dabei jeden Gegner einmal angreift.
+ */
+public class BoarSurroundedTest extends PublicTest {
+
+    public BoarSurroundedTest() {
+<span class="nc" id="L16">        super(&quot;BoarSurroundedTest&quot;);</span>
+<span class="nc" id="L17">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L21">        return  &quot; 00\n&quot; +</span>
+                 &quot;1.0\n&quot; +
+                &quot; 10&quot;;
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L28">        return  &quot;A,B\n\n&quot; +</span>
+            &quot;A,Player1,ELF\n&quot; +
+            &quot;A,Player2,ELF\n&quot; +
+            &quot;A,Player3,ELF\n&quot; +
+            &quot;A,Player4,ELF\n&quot; +
+            &quot;B,Player5,ELF\n&quot; +
+            &quot;B,Player6,ELF\n&quot;;
+    }
+
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    protected void executeTest() {
+<span class="nc" id="L40">        ClientConnection&lt;String&gt;[] ccs = new ClientConnection[6];</span>
+<span class="nc" id="L41">        ccs[0] = register(0, &quot;Player1&quot;, MonsterType.ELF, &quot;A&quot;);</span>
+<span class="nc" id="L42">        ccs[1] = register(1, &quot;Player2&quot;, MonsterType.ELF, &quot;A&quot;);</span>
+<span class="nc" id="L43">        ccs[2] = register(2, &quot;Player3&quot;, MonsterType.ELF, &quot;A&quot;);</span>
+<span class="nc" id="L44">        ccs[3] = register(3, &quot;Player4&quot;, MonsterType.ELF, &quot;A&quot;);</span>
+<span class="nc" id="L45">        ccs[4] = register(4, &quot;Player5&quot;, MonsterType.ELF, &quot;B&quot;);</span>
+<span class="nc" id="L46">        ccs[5] = register(5, &quot;Player6&quot;, MonsterType.ELF, &quot;B&quot;);</span>
+
+<span class="nc" id="L48">        List&lt;String&gt; actNowList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L49">        List&lt;String&gt; doneActingList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for (int i = 0; i &lt; ccs.length; i++) {</span>
+<span class="nc" id="L51">            actNowList.add(String.format(&quot;ActNow(%d)&quot;, i));</span>
+<span class="nc" id="L52">            doneActingList.add(String.format(&quot;DoneActing(%d)&quot;, i));</span>
+        }
+
+<span class="nc" id="L55">        assertSameEventStartsWith(&quot;Registered(&quot;, ccs);</span>
+<span class="nc" id="L56">        assertSameEventStartsWith(&quot;Registered(&quot;, ccs);</span>
+<span class="nc" id="L57">        assertSameEventStartsWith(&quot;Registered(&quot;, ccs);</span>
+<span class="nc" id="L58">        assertSameEventStartsWith(&quot;Registered(&quot;, ccs);</span>
+<span class="nc" id="L59">        assertSameEventStartsWith(&quot;Registered(&quot;, ccs);</span>
+
+<span class="nc" id="L61">        assertSameEvent(&quot;RoundBegin(1)&quot;, ccs);</span>
+
+<span class="nc" id="L63">        assertSameEvent(&quot;BoarSpawned(6, 1, 1)&quot;, ccs);</span>
+
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (int i = 0; i &lt; (100 / 5) - 1; i++) {</span>
+<span class="nc" id="L67">            assertSameEvent(&quot;BoarAttack(6, 2)&quot;, ccs);</span>
+<span class="nc" id="L68">            assertSameEvent(&quot;BoarAttack(6, 1)&quot;, ccs);</span>
+<span class="nc" id="L69">            assertSameEvent(&quot;BoarAttack(6, 0)&quot;, ccs);</span>
+<span class="nc" id="L70">            assertSameEvent(&quot;BoarAttack(6, 4)&quot;, ccs);</span>
+<span class="nc" id="L71">            assertSameEvent(&quot;BoarAttack(6, 5)&quot;, ccs);</span>
+<span class="nc" id="L72">            assertSameEvent(&quot;BoarAttack(6, 3)&quot;, ccs);</span>
+
+<span class="nc" id="L74">            checkAndHandleLazyMonster(ccs, actNowList, doneActingList);</span>
+
+<span class="nc" id="L76">            assertSameEvent(String.format(&quot;RoundEnd(%d, %d)&quot;, i + 1, 0), ccs);</span>
+<span class="nc" id="L77">            assertSameEvent(String.format(&quot;RoundBegin(%d)&quot;, i + 2), ccs);</span>
+        }
+
+<span class="nc" id="L80">        assertSameEvent(&quot;BoarAttack(6, 2)&quot;, ccs);</span>
+<span class="nc" id="L81">        assertSameEvent(&quot;Died(2)&quot;, ccs);</span>
+<span class="nc" id="L82">        assertSameEvent(&quot;BoarAttack(6, 1)&quot;, ccs);</span>
+<span class="nc" id="L83">        assertSameEvent(&quot;Died(1)&quot;, ccs);</span>
+<span class="nc" id="L84">        assertSameEvent(&quot;BoarAttack(6, 0)&quot;, ccs);</span>
+<span class="nc" id="L85">        assertSameEvent(&quot;Died(0)&quot;, ccs);</span>
+<span class="nc" id="L86">        assertSameEvent(&quot;BoarAttack(6, 4)&quot;, ccs);</span>
+<span class="nc" id="L87">        assertSameEvent(&quot;Died(4)&quot;, ccs);</span>
+<span class="nc" id="L88">        assertSameEvent(&quot;BoarAttack(6, 5)&quot;, ccs);</span>
+<span class="nc" id="L89">        assertSameEvent(&quot;Died(5)&quot;, ccs);</span>
+<span class="nc" id="L90">        assertSameEvent(&quot;BoarAttack(6, 3)&quot;, ccs);</span>
+<span class="nc" id="L91">        assertSameEvent(&quot;Died(3)&quot;, ccs);</span>
+
+<span class="nc" id="L93">        assertSameEvent(&quot;RoundEnd(20, 0)&quot;, ccs);</span>
+
+<span class="nc" id="L95">        assertSameEventStartsWith(&quot;Winner(&quot;, ccs);</span>
+<span class="nc" id="L96">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

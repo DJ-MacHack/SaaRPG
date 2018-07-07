@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Burn6Test.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">Burn6Test.java</span></div><h1>Burn6Test.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Died;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Created on 23.09.16.
+ *
+ * @author Henrik Paul Koehn
+ */
+public class Burn6Test extends OurSystemTest {
+
+    public Burn6Test() {
+<span class="nc" id="L20">        super(&quot;Burn6Test&quot;);</span>
+<span class="nc" id="L21">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L25">        List&lt;Integer&gt; idList = new LinkedList&lt;&gt;();</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        for (int k = 0; k &lt; 6; k++) {</span>
+<span class="nc" id="L27">            idList.add(k);</span>
+        }
+
+<span class="nc" id="L30">        List&lt;ClientConnection&lt;Event&gt;&gt; ccs = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L32">        ClientConnection&lt;Event&gt; rooko = register(0, &quot;rooko&quot;, CreatureType.ROOK, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L33">        ccs.add(rooko);</span>
+<span class="nc" id="L34">        ClientConnection&lt;Event&gt; kobolto = register(1, &quot;kobolto&quot;, CreatureType.KOBOLD, &quot;b&quot;, 2, 0);</span>
+<span class="nc" id="L35">        ccs.add(kobolto);</span>
+
+<span class="nc" id="L37">        assertRegisterEvent(rooko.nextEvent(), 1, &quot;kobolto&quot;, CreatureType.KOBOLD, &quot;b&quot;, 2, 0);</span>
+<span class="nc" id="L38">        assertRegisterEvent(kobolto.nextEvent(), 0, &quot;rooko&quot;, CreatureType.ROOK, &quot;b&quot;, 1, 0);</span>
+
+<span class="nc" id="L40">        ClientConnection&lt;Event&gt; yetio = register(2, &quot;yetio&quot;, CreatureType.YETI, &quot;b&quot;, 0, 1);</span>
+<span class="nc" id="L41">        assertRegisterEvent(yetio.nextEvent(), 0, &quot;rooko&quot;, CreatureType.ROOK, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L42">        assertRegisterEvent(yetio.nextEvent(), 1, &quot;kobolto&quot;, CreatureType.KOBOLD, &quot;b&quot;, 2, 0);</span>
+<span class="nc" id="L43">        assertRegisterEvent(assertAndMerge(ccs), 2, &quot;yetio&quot;, CreatureType.YETI, &quot;b&quot;, 0, 1);</span>
+<span class="nc" id="L44">        ccs.add(yetio);</span>
+
+
+<span class="nc" id="L47">        ClientConnection&lt;Event&gt; nagao = register(3, &quot;nagao&quot;, CreatureType.NAGA, &quot;b&quot;, 2, 1);</span>
+<span class="nc" id="L48">        assertRegisterEvent(assertAndMerge(ccs), 3, &quot;nagao&quot;, CreatureType.NAGA, &quot;b&quot;, 2, 1);</span>
+<span class="nc" id="L49">        assertRegisterEvent(nagao.nextEvent(), 0, &quot;rooko&quot;, CreatureType.ROOK, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L50">        assertRegisterEvent(nagao.nextEvent(), 1, &quot;kobolto&quot;, CreatureType.KOBOLD, &quot;b&quot;, 2, 0);</span>
+<span class="nc" id="L51">        assertRegisterEvent(nagao.nextEvent(), 2, &quot;yetio&quot;, CreatureType.YETI, &quot;b&quot;, 0, 1);</span>
+<span class="nc" id="L52">        ccs.add(nagao);</span>
+
+<span class="nc" id="L54">        ClientConnection&lt;Event&gt; elfo = register(4, &quot;elfo&quot;, CreatureType.ELF, &quot;b&quot;, 0, 2);</span>
+<span class="nc" id="L55">        assertRegisterEvent(assertAndMerge(ccs), 4, &quot;elfo&quot;, CreatureType.ELF, &quot;b&quot;, 0, 2);</span>
+<span class="nc" id="L56">        assertRegisterEvent(elfo.nextEvent(), 0, &quot;rooko&quot;, CreatureType.ROOK, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L57">        assertRegisterEvent(elfo.nextEvent(), 1, &quot;kobolto&quot;, CreatureType.KOBOLD, &quot;b&quot;, 2, 0);</span>
+<span class="nc" id="L58">        assertRegisterEvent(elfo.nextEvent(), 2, &quot;yetio&quot;, CreatureType.YETI, &quot;b&quot;, 0, 1);</span>
+<span class="nc" id="L59">        assertRegisterEvent(elfo.nextEvent(), 3, &quot;nagao&quot;, CreatureType.NAGA, &quot;b&quot;, 2, 1);</span>
+<span class="nc" id="L60">        ccs.add(elfo);</span>
+
+<span class="nc" id="L62">        ClientConnection&lt;Event&gt; wraitho = register(5, &quot;wraitho&quot;, CreatureType.WRAITH, &quot;b&quot;, 1, 2);</span>
+<span class="nc" id="L63">        assertRegisterEvent(assertAndMerge(ccs), 5, &quot;wraitho&quot;, CreatureType.WRAITH, &quot;b&quot;, 1, 2);</span>
+<span class="nc" id="L64">        assertRegisterEvent(wraitho.nextEvent(), 0, &quot;rooko&quot;, CreatureType.ROOK, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L65">        assertRegisterEvent(wraitho.nextEvent(), 1, &quot;kobolto&quot;, CreatureType.KOBOLD, &quot;b&quot;, 2, 0);</span>
+<span class="nc" id="L66">        assertRegisterEvent(wraitho.nextEvent(), 2, &quot;yetio&quot;, CreatureType.YETI, &quot;b&quot;, 0, 1);</span>
+<span class="nc" id="L67">        assertRegisterEvent(wraitho.nextEvent(), 3, &quot;nagao&quot;, CreatureType.NAGA, &quot;b&quot;, 2, 1);</span>
+<span class="nc" id="L68">        assertRegisterEvent(wraitho.nextEvent(), 4, &quot;elfo&quot;, CreatureType.ELF, &quot;b&quot;, 0, 2);</span>
+<span class="nc" id="L69">        ccs.add(wraitho);</span>
+
+<span class="nc" id="L71">        ClientConnection&lt;Event&gt; burna = register(6, &quot;burna&quot;, CreatureType.IFRIT, &quot;a&quot;, 1, 1);</span>
+<span class="nc" id="L72">        assertRegisterEvent(assertAndMerge(ccs), 6, &quot;burna&quot;, CreatureType.IFRIT, &quot;a&quot;, 1, 1);</span>
+<span class="nc" id="L73">        assertRegisterEvent(burna.nextEvent(), 0, &quot;rooko&quot;, CreatureType.ROOK, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L74">        assertRegisterEvent(burna.nextEvent(), 1, &quot;kobolto&quot;, CreatureType.KOBOLD, &quot;b&quot;, 2, 0);</span>
+<span class="nc" id="L75">        assertRegisterEvent(burna.nextEvent(), 2, &quot;yetio&quot;, CreatureType.YETI, &quot;b&quot;, 0, 1);</span>
+<span class="nc" id="L76">        assertRegisterEvent(burna.nextEvent(), 3, &quot;nagao&quot;, CreatureType.NAGA, &quot;b&quot;, 2, 1);</span>
+<span class="nc" id="L77">        assertRegisterEvent(burna.nextEvent(), 4, &quot;elfo&quot;, CreatureType.ELF, &quot;b&quot;, 0, 2);</span>
+<span class="nc" id="L78">        assertRegisterEvent(burna.nextEvent(), 5, &quot;wraitho&quot;, CreatureType.WRAITH, &quot;b&quot;, 1, 2);</span>
+<span class="nc" id="L79">        ccs.add(burna);</span>
+
+        int round;
+<span class="nc" id="L82">        final int  targetround = 50;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        for (round = 1; round &lt;= targetround; round++){</span>
+<span class="nc" id="L84">            assertRoundBegin(assertAndMerge(ccs), round);</span>
+
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            for (int id = 0; id &lt; 7; id++) {</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                if (id == 6){</span>
+<span class="nc" id="L88">                    assertActNow(assertAndMerge(ccs), id);</span>
+<span class="nc" id="L89">                    ccs.get(id).sendBurn();</span>
+<span class="nc" id="L90">                    assertBurned(assertAndMerge(ccs), id);</span>
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                    if (round == targetround){</span>
+                        // Now everony but yeti dies, so gonna check this
+<span class="nc bnc" id="L94" title="All 2 branches missed.">                        for (int i = 0; i &lt; 5; i++) {</span>
+<span class="nc" id="L95">                            Event newone = assertAndMerge(ccs);</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                            if (newone instanceof Died) {</span>
+<span class="nc" id="L97">                                Died died = (Died) newone;</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                                if (idList.contains(died.getEntityId())){</span>
+<span class="nc" id="L99">                                    idList.remove(Integer.valueOf(died.getEntityId()));</span>
+                                }
+                                else{
+<span class="nc" id="L102">                                    failed(&quot;wrong id&quot;);</span>
+<span class="nc" id="L103">                                    break;</span>
+                                }
+<span class="nc" id="L105">                            }</span>
+                            else{
+<span class="nc" id="L107">                                failed(&quot;Wrong Event&quot;);</span>
+<span class="nc" id="L108">                                break;</span>
+                            }
+                        }
+                        // Now check if Yeti is the sole survivor
+<span class="nc bnc" id="L112" title="All 4 branches missed.">                        if (!(idList.size() == 1 &amp;&amp; idList.get(0).equals(2))){</span>
+<span class="nc" id="L113">                            failed(&quot;Killed wrong monster&quot;);</span>
+                        }
+                    }
+                }
+<span class="nc" id="L117">                assertActNow(assertAndMerge(ccs), id);</span>
+<span class="nc" id="L118">                ccs.get(id).sendDoneActing();</span>
+<span class="nc" id="L119">                assertDoneActing(assertAndMerge(ccs), id);</span>
+            }
+<span class="nc" id="L121">            assertRoundEnd(assertAndMerge(ccs), round, 0);</span>
+        }
+
+<span class="nc" id="L124">        int newtargetround = targetround + 9;</span>
+
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        for(; round &lt;= newtargetround; round++) {</span>
+<span class="nc" id="L127">            assertRoundBegin(assertAndMerge(ccs), round);</span>
+            //act phase
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            for (int i = 0; i &lt; 2 ; i++){</span>
+<span class="nc" id="L130">                int chosen = 2 + 4 * i;</span>
+<span class="nc" id="L131">                assertActNow(assertAndMerge(ccs), chosen);</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">                if (i == 1){</span>
+<span class="nc" id="L133">                    burna.sendBurn();</span>
+<span class="nc" id="L134">                    assertBurned(assertAndMerge(ccs), chosen);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">                    if (round == newtargetround) {</span>
+<span class="nc" id="L136">                        assertDied(assertAndMerge(ccs), 2);</span>
+                    }
+<span class="nc" id="L138">                    assertActNow(assertAndMerge(ccs), chosen);</span>
+                }
+<span class="nc" id="L140">                ccs.get(chosen).sendDoneActing();</span>
+<span class="nc" id="L141">                assertDoneActing(assertAndMerge(ccs), chosen);</span>
+            }
+<span class="nc" id="L143">            assertRoundEnd(assertAndMerge(ccs), round, 0);</span>
+        }
+<span class="nc" id="L145">        assertWinner(assertAndMerge(ccs),&quot;a&quot;);</span>
+<span class="nc" id="L146">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L150">        return &quot;#11#\n&quot; +</span>
+                &quot;101#\n&quot; +
+               &quot;#11#&quot;;
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L157">        return &quot;a, b\n&quot; +</span>
+               &quot;a, burna, Ifrit\n&quot; +
+               &quot;b, rooko, Rook\n&quot; +
+               &quot;b, kobolto, Kobold\n&quot; +
+               &quot;b, yetio, Yeti\n&quot; +
+               &quot;b, nagao, Naga\n&quot; +
+               &quot;b, elfo, Elf\n&quot; +
+               &quot;b, wraitho, Wraith&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

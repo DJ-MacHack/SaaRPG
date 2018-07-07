@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BlinkSwapTestSimple.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">BlinkSwapTestSimple.java</span></div><h1>BlinkSwapTestSimple.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+import org.junit.Assert;
+
+/**
+ * Created by Wiebk on 16.09.2016.
+ */
+public class BlinkSwapTestSimple extends OurSystemTest {
+
+    public BlinkSwapTestSimple() {
+<span class="nc" id="L15">        super(&quot;BlinkSwapTestSimple&quot;);</span>
+<span class="nc" id="L16">    }</span>
+
+    @Override
+    public void executeTest() {
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; nero = register(0, &quot;Nero&quot;, CreatureType.ELF, &quot;Klingonen&quot;, 1, 2);</span>
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; spock = register(1, &quot;Spock&quot;, CreatureType.WRAITH, &quot;Enterprise&quot;, 2, 2);</span>
+<span class="nc" id="L22">        assertRegisterEvent(nero.nextEvent(), 1, &quot;Spock&quot;, CreatureType.WRAITH, &quot;Enterprise&quot;, 2, 2);</span>
+<span class="nc" id="L23">        assertRegisterEvent(spock.nextEvent(), 0, &quot;Nero&quot;, CreatureType.ELF, &quot;Klingonen&quot;, 1, 2);</span>
+
+        //Spielbeginn, weder Feen noch Schweine im Mapfile
+<span class="nc" id="L26">        assertRoundBegin(assertAndMerge(nero, spock), 1);</span>
+
+        //Monster agieren: Nero ist an der Reihe, stab auf Spock
+<span class="nc" id="L29">        assertActNow(assertAndMerge(nero, spock), 0);</span>
+<span class="nc" id="L30">        nero.sendStab(Direction.EAST);</span>
+<span class="nc" id="L31">        assertStabbed(assertAndMerge(nero, spock), 0, Direction.EAST);</span>
+<span class="nc" id="L32">        assertActNow(assertAndMerge(nero, spock), 0);</span>
+<span class="nc" id="L33">        nero.sendDoneActing();</span>
+<span class="nc" id="L34">        assertDoneActing(assertAndMerge(nero, spock), 0);</span>
+
+        //Spock ist an der Reihe, swap mit Nero, anschlieÃŸend blink mit Nero, dann cut auf Nero, wird gekicked
+<span class="nc" id="L37">        assertActNow(assertAndMerge(nero, spock), 1);</span>
+<span class="nc" id="L38">        spock.sendSwap(1, 2);</span>
+<span class="nc" id="L39">        assertSwapped(assertAndMerge(nero, spock), 1, 1, 2);</span>
+
+<span class="nc" id="L41">        assertActNow(assertAndMerge(nero, spock), 1);</span>
+<span class="nc" id="L42">        spock.sendBlink(2, 0);</span>
+<span class="nc" id="L43">        assertBlinked(assertAndMerge(nero, spock), 1, 2, 0);</span>
+
+<span class="nc" id="L45">        assertActNow(assertAndMerge(nero, spock), 1);</span>
+<span class="nc" id="L46">        spock.sendCut(Direction.WEST);</span>
+<span class="nc" id="L47">        assertKicked(assertAndMerge(nero, spock), 1);</span>
+
+        //Spock wurde gekickt, Nero gewinnt
+<span class="nc" id="L50">        assertRoundEnd(assertAndMerge(nero, spock), 1, 0);</span>
+<span class="nc" id="L51">        assertWinner(assertAndMerge(nero, spock), &quot;Klingonen&quot;);</span>
+<span class="nc" id="L52">    }</span>
+
+    @Override
+    public String getMapFile() {
+<span class="nc" id="L56">        return &quot;## # ##\n&quot;</span>
+                + &quot;## # ##\n&quot;
+                + &quot;  01   \n&quot;
+                + &quot;       \n&quot;
+                + &quot;       \n&quot;
+                + &quot;ttttttt\n&quot;
+                + &quot;$_~%x^^&quot;;
+    }
+
+    @Override
+    public String getFightFile() {
+<span class="nc" id="L67">        return &quot;Klingonen, Enterprise\n&quot;</span>
+                + &quot;Klingonen, Nero, Elf\n&quot;
+                + &quot;Enterprise, Spock, Wraith&quot;;
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

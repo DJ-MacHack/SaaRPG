@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra</a> &gt; <span class="el_source">KI.java</span></div><h1>KI.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra;
+
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Wiebk on 12.09.2016.
+ */
+public abstract class KI extends Client {
+
+    private String name;
+    private String teamName;
+
+    public KI(String name, int port, int timeout, String teamname, String host, CreatureType creaturetype){
+<span class="nc" id="L14">        super(host, port, timeout);</span>
+<span class="nc" id="L15">        super.clientConnection.sendRegister(name, MonsterType.valueOf(creaturetype.name()), teamname);</span>
+<span class="nc" id="L16">        this.name = name;</span>
+<span class="nc" id="L17">        this.teamName = teamname;</span>
+<span class="nc" id="L18">    }</span>
+
+    public abstract void actNow();
+
+    public String getName() {
+<span class="nc" id="L23">        return this.name;</span>
+    }
+
+    public String getTeamName() {
+<span class="nc" id="L27">        return this.teamName;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventFactoryImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages</a> &gt; <span class="el_source">EventFactoryImpl.java</span></div><h1>EventFactoryImpl.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.EventFactory;
+import de.unisaarland.sopra.messages.attack.*;
+import de.unisaarland.sopra.model.CreatureType;
+import de.unisaarland.sopra.MonsterType;
+
+/**
+ * Created by DJ MacHack on 12.09.2016.
+ */
+public class EventFactoryImpl implements EventFactory&lt;Event&gt; {
+
+    public EventFactoryImpl()
+<span class="nc" id="L15">    {}</span>
+
+
+    /**
+     *
+     * @param i
+     * @return
+     */
+    @Override
+    public Event createActNow(int i) {
+<span class="nc" id="L25">        return new ActNow(i);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createBitten(int i, Direction direction) {
+<span class="nc" id="L36">        return new Bite(null, i, direction);</span>
+    }
+
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createStared(int i, Direction direction) {
+<span class="nc" id="L48">        return new Stare(null, i, direction);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param i1
+     * @param i2
+     * @return
+     */
+    @Override
+    public Event createBlinked(int i, int i1, int i2) {
+<span class="nc" id="L60">        return new Blink(null, i, i1, i2);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param i1
+     * @param i2
+     * @return
+     */
+    @Override
+    public Event createSwapped(int i, int i1, int i2) {
+<span class="nc" id="L72">        return new Swap(null, i, i1, i2);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param s
+     * @return
+     */
+    @Override
+    public Event createWarCry(int i, String s) {
+<span class="nc" id="L83">        return new WarCry(null, i, s);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param i1
+     * @return
+     */
+    @Override
+    public Event createBoarAttack(int i, int i1) {
+<span class="nc" id="L94">        return new BoarAttack(i, i1);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param i1
+     * @param i2
+     * @return
+     */
+    @Override
+    public Event createBoarSpawned(int i, int i1, int i2) {
+<span class="nc" id="L106">        return new BoarSpawned(i, i1, i2);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @return
+     */
+    @Override
+    public Event createBurned(int i) {
+<span class="nc" id="L116">        return new Burn(null, i);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param i1
+     * @param i2
+     * @return
+     */
+    @Override
+    public Event createCast(int i, int i1, int i2) {
+<span class="nc" id="L128">        return new Cast(null, i, i1, i2);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createClawed(int i, Direction direction) {
+<span class="nc" id="L139">        return new Claw(null, i, direction);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createCrushed(int i, Direction direction) {
+<span class="nc" id="L150">        return new Crush(null, i, direction);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createSinged(int i, Direction direction) {
+<span class="nc" id="L161">        return new Singe(null, i, direction);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createShot(int i, Direction direction) {
+<span class="nc" id="L172">        return new Shoot(null, i, direction);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createCut(int i, Direction direction) {
+<span class="nc" id="L183">        return new Cut(null, i, direction);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @return
+     */
+    @Override
+    public Event createDied(int i) {
+<span class="nc" id="L193">        return new Died(i);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @return
+     */
+    @Override
+    public Event createDoneActing(int i) {
+<span class="nc" id="L203">        return new DoneActing(null, i);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param i1
+     * @param i2
+     * @return
+     */
+    @Override
+    public Event createFairySpawned(int i, int i1, int i2) {
+<span class="nc" id="L215">        return new FairySpawned(i, i1, i2);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param i1
+     * @param i2
+     * @return
+     */
+    @Override
+    public Event createFieldEffect(int i, int i1, int i2) {
+<span class="nc" id="L227">        return new FieldEffect(i,i1, i2);</span>
+    }
+
+    /**
+     *
+     * @param s
+     * @return
+     */
+    @Override
+    public Event createFight(String s) {
+<span class="nc" id="L237">        return new Fight(s);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @return
+     */
+    @Override
+    public Event createRoundBegin(int i) {
+<span class="nc" id="L247">        return new RoundBegin(i);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param i1
+     * @return
+     */
+    @Override
+    public Event createRoundEnd(int i, int i1) {
+<span class="nc" id="L258">        return new RoundEnd(i, i1);</span>
+    }
+
+    /**
+     *
+     * @param s
+     * @return
+     */
+    @Override
+    public Event createWinner(String s) {
+<span class="nc" id="L268">        return new Winner(s);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param s
+     * @return
+     */
+    @Override
+    public Event createKicked(int i, String s) {
+<span class="nc" id="L279">        return new Kicked(i, s);</span>
+    }
+
+    /**
+     *
+     * @param s
+     * @return
+     */
+    @Override
+    public Event createMap(String s) {
+<span class="nc" id="L289">        return new MapFile(s);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createMoved(int i, Direction direction) {
+<span class="nc" id="L300">        return new Move(null, i, direction);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createStabbed(int i, Direction direction) {
+<span class="nc" id="L311">        return new Stab(null, i, direction);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param direction
+     * @return
+     */
+    @Override
+    public Event createSlashed(int i, Direction direction) {
+<span class="nc" id="L322">        return new Slash(null, i, direction);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param i1
+     * @return
+     */
+    @Override
+    public Event createPoisonEffect(int i, int i1) {
+<span class="nc" id="L333">        return new PoisonEffect(i, i1);</span>
+    }
+
+    /**
+     *
+     * @param i
+     * @param s
+     * @param monsterType
+     * @param s1
+     * @param i1
+     * @param i2
+     * @param i3
+     * @return
+     */
+    @Override
+    public Event createRegistered(int i, String s, MonsterType monsterType, String s1, int i1, int i2, int i3) {
+<span class="nc" id="L349">        CreatureType c = CreatureType.valueOf(monsterType.name());</span>
+<span class="nc" id="L350">        return new Register(null, i, s, c, s1, i1, i2, i3);</span>
+    }
+
+    /**
+     * 
+     * @return
+     */
+    @Override
+    public Event createRegistrationAborted() {
+<span class="nc" id="L359">        return new RegistrationAborted();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

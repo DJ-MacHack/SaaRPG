@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.modeltest.MapTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="0.013">
+  <properties/>
+  <testcase name="setFieldTest" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.001"/>
+  <testcase name="fieldTypeTest1" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.001"/>
+  <testcase name="fieldTypeTest2" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.002"/>
+  <testcase name="fairySpawnTest1" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.001"/>
+  <testcase name="fairySpawnTest2" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.002"/>
+  <testcase name="boarSpawnTest1" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.001"/>
+  <testcase name="boarSpawnTest2" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.0"/>
+  <testcase name="addBoarValidTest1" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.001"/>
+  <testcase name="addBoarValidTest2" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.0"/>
+  <testcase name="addBoarValidTest3" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.001"/>
+  <testcase name="addBoarValidTest4" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.0"/>
+  <testcase name="addBoarValidTest5" classname="de.unisaarland.sopra.modeltest.MapTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StabKillTests.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">StabKillTests.java</span></div><h1>StabKillTests.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+/**
+ * Created by Team 14 on 22.09.2016.
+ */
+public class StabKillTests extends OurSystemTest {
+
+    private CreatureType creatureType;
+
+    private StabKillTests(CreatureType creatureType){
+<span class="nc" id="L19">        super(&quot;StabKillTests.&quot; + creatureType);</span>
+<span class="nc" id="L20">        this.creatureType = creatureType;</span>
+<span class="nc" id="L21">    }</span>
+
+    public static Collection&lt;OurSystemTest&gt; getTests() {
+<span class="nc" id="L24">        ArrayList&lt;OurSystemTest&gt; sysTests = new ArrayList&lt;OurSystemTest&gt;();</span>
+
+<span class="nc" id="L26">        sysTests.add(new StabKillTests(CreatureType.KOBOLD));</span>
+<span class="nc" id="L27">        sysTests.add(new StabKillTests(CreatureType.ELF));</span>
+<span class="nc" id="L28">        sysTests.add(new StabKillTests(CreatureType.WRAITH));</span>
+
+<span class="nc" id="L30">        return sysTests;</span>
+    }
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L35">        ClientConnection&lt;Event&gt; p1 = register(0, &quot;Red&quot;, creatureType, &quot;A&quot;, 0, 0);</span>
+<span class="nc" id="L36">        ClientConnection&lt;Event&gt; p2 = register(1, &quot;Blue&quot;, CreatureType.ELF, &quot;B&quot;, 1, 0);</span>
+
+<span class="nc" id="L38">        assertRegisterEvent(p1.nextEvent(), 1, &quot;Blue&quot;, CreatureType.ELF, &quot;B&quot;, 1, 0);</span>
+<span class="nc" id="L39">        assertRegisterEvent(p2.nextEvent(), 0, &quot;Red&quot;, creatureType, &quot;A&quot;, 0, 0);</span>
+
+<span class="nc" id="L41">        assertRoundBegin(assertAndMerge(p1, p2), 1);</span>
+
+<span class="nc" id="L43">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L44">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L45">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L46">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L47">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L48">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L49">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L50">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L51">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L52">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L53">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L54">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+
+<span class="nc" id="L56">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L57">        p1.sendDoneActing();</span>
+<span class="nc" id="L58">        assertDoneActing(assertAndMerge(p1, p2), 0);</span>
+
+<span class="nc" id="L60">        assertActNow(assertAndMerge(p1, p2), 1);</span>
+<span class="nc" id="L61">        p2.sendDoneActing();</span>
+<span class="nc" id="L62">        assertDoneActing(assertAndMerge(p1, p2), 1);</span>
+
+<span class="nc" id="L64">        assertRoundEnd(assertAndMerge(p1, p2), 1, 0);</span>
+<span class="nc" id="L65">        assertRoundBegin(assertAndMerge(p1, p2), 2);</span>
+
+<span class="nc" id="L67">        assertActNow(assertAndMerge(p1, p2), 1);</span>
+<span class="nc" id="L68">        p2.sendDoneActing();</span>
+<span class="nc" id="L69">        assertDoneActing(assertAndMerge(p1, p2), 1);</span>
+
+
+<span class="nc" id="L72">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L73">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L74">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L75">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L76">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L77">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L78">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L79">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L80">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L81">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L82">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L83">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+
+<span class="nc" id="L85">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L86">        p1.sendDoneActing();</span>
+<span class="nc" id="L87">        assertDoneActing(assertAndMerge(p1, p2), 0);</span>
+
+<span class="nc" id="L89">        assertRoundEnd(assertAndMerge(p1, p2), 2, 0);</span>
+<span class="nc" id="L90">        assertRoundBegin(assertAndMerge(p1, p2), 3);</span>
+
+<span class="nc" id="L92">        assertActNow(assertAndMerge(p1, p2), 1);</span>
+<span class="nc" id="L93">        p2.sendDoneActing();</span>
+<span class="nc" id="L94">        assertDoneActing(assertAndMerge(p1, p2), 1);</span>
+
+
+<span class="nc" id="L97">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L98">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L99">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L100">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L101">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L102">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L103">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L104">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L105">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L106">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L107">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L108">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+
+<span class="nc" id="L110">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L111">        p1.sendDoneActing();</span>
+<span class="nc" id="L112">        assertDoneActing(assertAndMerge(p1, p2), 0);</span>
+
+<span class="nc" id="L114">        assertRoundEnd(assertAndMerge(p1, p2), 3, 0);</span>
+<span class="nc" id="L115">        assertRoundBegin(assertAndMerge(p1, p2), 4);</span>
+
+<span class="nc" id="L117">        assertActNow(assertAndMerge(p1, p2), 1);</span>
+<span class="nc" id="L118">        p2.sendDoneActing();</span>
+<span class="nc" id="L119">        assertDoneActing(assertAndMerge(p1, p2), 1);</span>
+
+
+<span class="nc" id="L122">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L123">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L124">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L125">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L126">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L127">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L128">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L129">        p1.sendStab(Direction.EAST);</span>
+<span class="nc" id="L130">        assertStabbed(assertAndMerge(p1, p2), 0, Direction.EAST);</span>
+<span class="nc" id="L131">        assertDied(assertAndMerge(p1, p2), 1);</span>
+
+<span class="nc" id="L133">        assertActNow(assertAndMerge(p1, p2), 0);</span>
+<span class="nc" id="L134">        p1.sendDoneActing();</span>
+<span class="nc" id="L135">        assertDoneActing(assertAndMerge(p1, p2), 0);</span>
+
+<span class="nc" id="L137">        assertRoundEnd(assertAndMerge(p1, p2), 4, 0);</span>
+<span class="nc" id="L138">        assertWinner(assertAndMerge(p1, p2), &quot;A&quot;);</span>
+<span class="nc" id="L139">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L143">        return &quot;01&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L148">        return &quot;A, B\n&quot;+</span>
+<span class="nc" id="L149">                String.format(&quot;A, Red, %s %n&quot;, creatureType)+</span>
+                &quot;B, Blue, Elf&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DirectionHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.utility</a> &gt; <span class="el_source">DirectionHelper.java</span></div><h1>DirectionHelper.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.utility;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.utility.GameVector;
+
+/**
+ * Created by Team 14 on 12.09.2016.
+ */
+public class DirectionHelper {
+
+<span class="nc" id="L11">    private DirectionHelper() {</span>
+<span class="nc" id="L12">    }</span>
+
+    public static GameVector toVector(Direction direction) {
+<span class="pc bfc" id="L15" title="All 6 branches covered.">        switch (direction) {</span>
+            case EAST:
+<span class="fc" id="L17">                return new GameVector(1, 0);</span>
+            case NORTH_EAST:
+<span class="fc" id="L19">                return new GameVector(1, -1);</span>
+            case NORTH_WEST:
+<span class="fc" id="L21">                return new GameVector(0, -1);</span>
+            case WEST:
+<span class="fc" id="L23">                return new GameVector(-1, 0);</span>
+            case SOUTH_WEST:
+<span class="fc" id="L25">                return new GameVector(-1, 1);</span>
+            default:
+<span class="fc" id="L27">                return new GameVector(0, 1);</span>
+        }
+    }
+
+    public static Direction getCounterClockwise(Direction direction) {
+<span class="pc bpc" id="L32" title="5 of 6 branches missed.">        switch (direction) {</span>
+            case EAST:
+<span class="fc" id="L34">                return Direction.NORTH_EAST;</span>
+            case NORTH_EAST:
+<span class="nc" id="L36">                return Direction.NORTH_WEST;</span>
+            case NORTH_WEST:
+<span class="nc" id="L38">                return Direction.WEST;</span>
+            case WEST:
+<span class="nc" id="L40">                return Direction.SOUTH_WEST;</span>
+            case SOUTH_WEST:
+<span class="nc" id="L42">                return Direction.SOUTH_EAST;</span>
+            default:
+<span class="nc" id="L44">                return Direction.EAST;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

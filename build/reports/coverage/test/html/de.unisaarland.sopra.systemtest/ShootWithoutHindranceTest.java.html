@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShootWithoutHindranceTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">ShootWithoutHindranceTest.java</span></div><h1>ShootWithoutHindranceTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Wiebk on 21.09.2016.
+ */
+public class ShootWithoutHindranceTest extends OurSystemTest {
+
+    public ShootWithoutHindranceTest(){
+<span class="nc" id="L14">        super(&quot;ShootWithoutHindranceTest&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    public void executeTest(){
+<span class="nc" id="L19">        ClientConnection&lt;Event&gt; edamer = register(0, &quot;Edamer&quot;, CreatureType.ELF, &quot;Kaese&quot;, 0, 0);</span>
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; zartbitter = register(1, &quot;Zartbitter&quot;, CreatureType.ELF, &quot;Schokolade&quot;, 2, 0);</span>
+<span class="nc" id="L21">        assertRegisterEvent(edamer.nextEvent(), 1, &quot;Zartbitter&quot;, CreatureType.ELF, &quot;Schokolade&quot;, 2, 0);</span>
+<span class="nc" id="L22">        assertRegisterEvent(zartbitter.nextEvent(), 0, &quot;Edamer&quot;, CreatureType.ELF, &quot;Kaese&quot;, 0, 0);</span>
+
+        //Roundbegin, no elves or boars
+<span class="nc" id="L25">        assertRoundBegin(assertAndMerge(edamer, zartbitter), 1);</span>
+
+        //edamer: shoot at zartbitter
+<span class="nc" id="L28">        assertActNow(assertAndMerge(edamer, zartbitter), 0);</span>
+<span class="nc" id="L29">        edamer.sendShoot(Direction.EAST);</span>
+<span class="nc" id="L30">        assertShot(assertAndMerge(edamer, zartbitter), 0, Direction.EAST);</span>
+<span class="nc" id="L31">        assertActNow(assertAndMerge(edamer, zartbitter), 0);</span>
+<span class="nc" id="L32">        edamer.sendDoneActing();</span>
+<span class="nc" id="L33">        assertDoneActing(assertAndMerge(edamer, zartbitter), 0);</span>
+
+        //zartbitter:
+<span class="nc" id="L36">        assertActNow(assertAndMerge(edamer, zartbitter), 1);</span>
+<span class="nc" id="L37">        zartbitter.sendCrush(Direction.NORTH_EAST);</span>
+<span class="nc" id="L38">        assertKicked(assertAndMerge(edamer, zartbitter), 1);</span>
+
+<span class="nc" id="L40">        assertRoundEnd(assertAndMerge(edamer, zartbitter), 1, 0);</span>
+        //winner: kaese
+<span class="nc" id="L42">        assertWinner(assertAndMerge(edamer, zartbitter), &quot;Kaese&quot;);</span>
+<span class="nc" id="L43">    }</span>
+
+    @Override
+    public String getMapFile(){
+<span class="nc" id="L47">        return&quot;0 1\n&quot;</span>
+             +&quot;   \n&quot;
+             +&quot;   &quot;;
+    }
+
+    @Override
+    public String getFightFile(){
+<span class="nc" id="L54">        return &quot;Kaese, Schokolade\n&quot;</span>
+              +&quot;Kaese, Edamer, Elf\n&quot;
+              +&quot;Schokolade, Zartbitter, Elf&quot;;
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="de.unisaarland.sopra.ServerTests" tests="13" skipped="0" failures="0" errors="0" timestamp="2016-10-07T13:30:35" hostname="Guantanamo-Bay" time="5.257">
+  <properties/>
+  <testcase name="testInvalidFightfile3DoublePlayerName" classname="de.unisaarland.sopra.ServerTests" time="2.843"/>
+  <testcase name="testValidMapfile2AllPossibleLetters" classname="de.unisaarland.sopra.ServerTests" time="0.032"/>
+  <testcase name="testServerClosed" classname="de.unisaarland.sopra.ServerTests" time="0.493"/>
+  <testcase name="testValidMapfile1NonSquare" classname="de.unisaarland.sopra.ServerTests" time="0.033"/>
+  <testcase name="testInvalidFightfile4TooFewPlayers" classname="de.unisaarland.sopra.ServerTests" time="0.134"/>
+  <testcase name="testInvalidFightfile1TooFewTeams" classname="de.unisaarland.sopra.ServerTests" time="0.59"/>
+  <testcase name="testInvalidFightfile2DoubleTeamName" classname="de.unisaarland.sopra.ServerTests" time="0.084"/>
+  <testcase name="testValidServer1CapitalizedLetters" classname="de.unisaarland.sopra.ServerTests" time="0.039"/>
+  <testcase name="testInvalidMapfile2TooFewSpawnAreas" classname="de.unisaarland.sopra.ServerTests" time="0.249"/>
+  <testcase name="testInitValidServer" classname="de.unisaarland.sopra.ServerTests" time="0.033"/>
+  <testcase name="testInvalidMapfile3IllegalCharacter" classname="de.unisaarland.sopra.ServerTests" time="0.134"/>
+  <testcase name="testInvalidMapfile4NonRectangularMap" classname="de.unisaarland.sopra.ServerTests" time="0.302"/>
+  <testcase name="testServerCloseAfterException" classname="de.unisaarland.sopra.ServerTests" time="0.289"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

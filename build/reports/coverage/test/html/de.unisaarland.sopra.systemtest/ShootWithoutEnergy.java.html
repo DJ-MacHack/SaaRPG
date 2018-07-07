@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShootWithoutEnergy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">ShootWithoutEnergy.java</span></div><h1>ShootWithoutEnergy.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Wiebk on 23.09.2016.
+ */
+public class ShootWithoutEnergy extends OurSystemTest {
+
+    public ShootWithoutEnergy(){
+<span class="nc" id="L14">        super (&quot;ShootWithoutEnergy&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    public void executeTest(){
+        //register
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; a = register(0, &quot;Alex&quot;, CreatureType.ELF, &quot;a&quot;, 0, 0);</span>
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; b = register(1, &quot;Bertha&quot;, CreatureType.IFRIT, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L22">        assertRegisterEvent(a.nextEvent(), 1, &quot;Bertha&quot;, CreatureType.IFRIT, &quot;b&quot;, 1, 0);</span>
+<span class="nc" id="L23">        assertRegisterEvent(b.nextEvent(), 0, &quot;Alex&quot;, CreatureType.ELF, &quot;a&quot;, 0, 0);</span>
+
+        //Roundbegin (no fairies or boars)
+<span class="nc" id="L26">        assertRoundBegin(assertAndMerge(a, b), 1);</span>
+        //a: moves around, until no energy's left
+        //1
+<span class="nc" id="L29">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L30">        a.sendMove(Direction.SOUTH_EAST);</span>
+        //2
+<span class="nc" id="L32">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L33">        a.sendMove(Direction.SOUTH_WEST);</span>
+        //3
+<span class="nc" id="L35">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L36">        a.sendMove(Direction.EAST);</span>
+        //4
+<span class="nc" id="L38">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L39">        a.sendMove(Direction.EAST);</span>
+        //5
+<span class="nc" id="L41">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L42">        a.sendMove(Direction.NORTH_WEST);</span>
+        //6
+<span class="nc" id="L44">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L45">        a.sendMove(Direction.EAST);</span>
+        //7
+<span class="nc" id="L47">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L48">        a.sendMove(Direction.NORTH_WEST);</span>
+        //8
+<span class="nc" id="L50">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L51">        a.sendMove(Direction.SOUTH_EAST);</span>
+        //9
+<span class="nc" id="L53">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L54">        a.sendMove(Direction.WEST);</span>
+        //10
+<span class="nc" id="L56">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L57">        a.sendMove(Direction.SOUTH_WEST);</span>
+        //No energy left, next move is invalid, gets kicked
+<span class="nc" id="L59">        assertActNow(assertAndMerge(a, b), 0);</span>
+<span class="nc" id="L60">        a.sendMove(Direction.EAST);</span>
+<span class="nc" id="L61">        assertKicked(assertAndMerge(a, b), 0);</span>
+
+        //b: does nothing
+<span class="nc" id="L64">        assertActNow(assertAndMerge(a, b), 1);</span>
+<span class="nc" id="L65">        b.sendDoneActing();</span>
+<span class="nc" id="L66">        assertDoneActing(assertAndMerge(a, b), 1);</span>
+
+        //Roundend
+<span class="nc" id="L69">        assertRoundEnd(assertAndMerge(a, b), 1, 1);</span>
+        //Winner: b
+<span class="nc" id="L71">        assertWinner(assertAndMerge(a, b), &quot;b&quot;);</span>
+<span class="nc" id="L72">    }</span>
+
+    @Override
+    public String getFightFile(){
+<span class="nc" id="L76">        return &quot;a, b\n&quot;</span>
+              +&quot;a, Alex, Elf\n&quot;
+              +&quot;b, Bertha, Ifrit&quot;;
+    }
+
+    @Override
+    public String getMapFile(){
+<span class="nc" id="L83">        return &quot;01 \n&quot;</span>
+              +&quot;   \n&quot;
+              +&quot;   &quot;;
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

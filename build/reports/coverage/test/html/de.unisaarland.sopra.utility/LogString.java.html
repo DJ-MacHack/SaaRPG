@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LogString.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.utility</a> &gt; <span class="el_source">LogString.java</span></div><h1>LogString.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.utility;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.Creature;
+import de.unisaarland.sopra.model.Game;
+import de.unisaarland.sopra.model.Pc;
+
+import static de.unisaarland.sopra.model.CreatureType.BOAR;
+
+/**
+ * Created by Lukas Kirschner on 9/23/16.
+ */
+public class LogString {
+
+    private final static String PCFORMATSTRING = &quot;%s(%d) (Team: %s)&quot;;
+    private final static String SERVERPREFIX = &quot;[Server]&quot;;
+    public static final String DEBUGPREFIX = &quot;[Debugger]&quot;;
+    public final static String INFOPREFIX = &quot;[Info]&quot;;
+
+<span class="nc" id="L22">    private LogString() {</span>
+<span class="nc" id="L23">    }</span>
+
+    public static String createVictimName(Game myGame, int victimId) {
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (myGame.getMonsterById(victimId) != null) {</span>
+<span class="nc" id="L27">            return createVictimName(</span>
+<span class="nc" id="L28">                    myGame.getPlayerByMonsterId(victimId).getName(),</span>
+                    victimId,
+<span class="nc" id="L30">                    myGame.getPlayerByMonsterId(victimId).getTeamName());</span>
+        } else {
+<span class="nc" id="L32">            Creature c = myGame.getCreatureById(victimId);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (c == null){</span>
+<span class="nc" id="L34">                return String.format(&quot;ERROR1|%d&quot;, victimId);</span>
+            }
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if (c.getCreatureType() == BOAR) {</span>
+<span class="nc" id="L37">                return String.format(&quot;Boar(%d)&quot;, victimId);</span>
+            } else {
+<span class="nc" id="L39">                return String.format(&quot;Fairy(%d)&quot;, victimId);</span>
+            }
+        }
+    }
+
+    public static String createVictimName(String monsterName, int monsterId, String teamName) {
+<span class="nc" id="L45">        return String.format(PCFORMATSTRING, monsterName, monsterId, teamName); //Playername Output for PC Characters</span>
+    }
+
+    public static String createVictimName(Game myGame, int self, Direction dir) {
+<span class="nc" id="L49">        GameVector target = myGame.getMonsterById(self).getPosition().add(DirectionHelper.toVector(dir));</span>
+<span class="nc" id="L50">        Creature c = myGame.getCreatureByPosition(target);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (c == null){</span>
+<span class="nc" id="L52">            return String.format(&quot;ERROR1|%s&quot;, dir.toString());</span>
+        }
+<span class="nc" id="L54">        return createVictimName(myGame, c.getId());</span>
+    }
+
+    public static String createVictimName(Game myGame, int x, int y) {
+<span class="nc" id="L58">        Creature c = myGame.getCreatureByPosition(new GameVector(x,y));</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (c == null){</span>
+<span class="nc" id="L60">            return String.format(&quot;ERROR1|%d|%d&quot;,x,y); //Error1 - Invalid Coordinates</span>
+        }
+<span class="nc" id="L62">        return createVictimName(myGame,c.getId());</span>
+    }
+
+
+    public static String getReadableDirectionString(Direction dir) {
+<span class="nc bnc" id="L67" title="All 6 branches missed.">        switch (dir) {</span>
+
+            case NORTH_WEST:
+<span class="nc" id="L70">                return &quot;northwest&quot;;</span>
+            case WEST:
+<span class="nc" id="L72">                return &quot;west&quot;;</span>
+            case SOUTH_WEST:
+<span class="nc" id="L74">                return &quot;southwest&quot;;</span>
+            case SOUTH_EAST:
+<span class="nc" id="L76">                return &quot;southeast&quot;;</span>
+            case EAST:
+<span class="nc" id="L78">                return &quot;east&quot;;</span>
+            case NORTH_EAST:
+            default:
+<span class="nc" id="L81">                return &quot;northeast&quot;;</span>
+        }
+    }
+
+    public static void printEventLog(Event e, Client cli){
+<span class="nc" id="L86">        System.out.printf(&quot;%s %s%n&quot;, SERVERPREFIX, e.getText(cli)); //PRINT OUT LOG</span>
+<span class="nc" id="L87">    }</span>
+
+    public static void printInvalidEnterDebugLog(String input){
+<span class="nc" id="L90">        printDebug(String.format(&quot;Did not send: %s%n&quot;,input));</span>
+<span class="nc" id="L91">    }</span>
+
+    public static void printDebug(String input){
+<span class="nc" id="L94">        System.out.printf(&quot;%s %s%n&quot;, DEBUGPREFIX, input);</span>
+<span class="nc" id="L95">    }</span>
+
+    public static void printInfo(String input){
+<span class="nc" id="L98">        System.out.printf(&quot;%s %s%n&quot;, INFOPREFIX, input);</span>
+<span class="nc" id="L99">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

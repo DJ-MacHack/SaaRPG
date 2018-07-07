@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Server.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra</a> &gt; <span class="el_source">Server.java</span></div><h1>Server.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra;
+
+import de.unisaarland.sopra.comm.CommException;
+import de.unisaarland.sopra.comm.TimeoutException;
+import de.unisaarland.sopra.messages.Command;
+import de.unisaarland.sopra.messages.CommandFactoryImpl;
+import de.unisaarland.sopra.messages.RegistrationAborted;
+import de.unisaarland.sopra.model.*;
+import de.unisaarland.sopra.utility.*;
+import de.unisaarland.sopra.comm.ServerConnection;
+
+import java.util.*;
+import java.util.Map;
+
+/**
+ * Created by Team 14 on 12.09.2016.
+ */
+public class Server extends Master {
+
+    private ServerConnection&lt;Command&gt; serverConnection;
+    private CommIds commIds;
+
+    /**
+     * Creates a new instance of {@link Server} with given parameters.
+     *
+     * @param port      The port for the {@link ServerConnection}
+     * @param timeout   The timeout for the {@link ServerConnection}
+     * @param fightFile The read fightFile as {@link String}.
+     * @param mapFile   The read mapFile as {@link String}.
+     */
+    public Server(int port, int timeout, String fightFile, String mapFile) throws InvalidFightFileException, InvalidMapFileException {
+<span class="fc" id="L32">        super();</span>
+<span class="fc" id="L33">        commIds = new CommIds();</span>
+<span class="fc" id="L34">        CommandFactoryImpl cmdFactory = new CommandFactoryImpl(commIds);</span>
+<span class="fc" id="L35">        serverConnection = new ServerConnection&lt;&gt;(port, timeout, cmdFactory);</span>
+
+        try {
+<span class="fc" id="L38">            game.handleFightfile(fightFile);</span>
+<span class="fc" id="L39">            game.handleMapfile(mapFile);</span>
+<span class="fc" id="L40">        } catch (InvalidFightFileException | InvalidMapFileException exception) {</span>
+<span class="fc" id="L41">            serverConnection.close();</span>
+<span class="fc" id="L42">            running = false;</span>
+<span class="fc" id="L43">            throw exception;</span>
+<span class="fc" id="L44">        }</span>
+<span class="fc" id="L45">    }</span>
+
+    /**
+     * Starts the {@link Server}.
+     */
+    public void run() throws RegistrationAbortedException{
+<span class="nc" id="L51">        registerState();</span>
+<span class="nc" id="L52">        spawnFairies();</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        while (running) {</span>
+<span class="nc" id="L55">            int hpRoundBegin = hpSumOfCreatures();</span>
+<span class="nc" id="L56">            roundBeginState();</span>
+<span class="nc" id="L57">            spawnBoars();</span>
+<span class="nc" id="L58">            moveFairies();</span>
+<span class="nc" id="L59">            moveBoars();</span>
+<span class="nc" id="L60">            actState();</span>
+<span class="nc" id="L61">            fieldEffectState();</span>
+<span class="nc" id="L62">            poisonState();</span>
+
+<span class="nc" id="L64">            int hpRoundEnd = hpSumOfCreatures();</span>
+<span class="nc" id="L65">            roundEndState(hpRoundBegin - hpRoundEnd);</span>
+<span class="nc" id="L66">        }</span>
+<span class="nc" id="L67">        serverConnection.close();</span>
+<span class="nc" id="L68">    }</span>
+
+    public void close() {
+<span class="fc" id="L71">        running = false;</span>
+<span class="fc" id="L72">        serverConnection.close();</span>
+<span class="fc" id="L73">    }</span>
+
+    private void registerState() throws RegistrationAbortedException{
+<span class="nc" id="L76">        game.setRoundState(RoundState.REGISTER);</span>
+<span class="nc" id="L77">        boolean allRegistered = false;</span>
+<span class="nc" id="L78">        List&lt;Player&gt; players = game.getPlayers();</span>
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        while (!allRegistered) {</span>
+<span class="nc" id="L81">            Command cmd = null;</span>
+            try {
+<span class="nc" id="L83">                cmd = serverConnection.nextCommand();</span>
+<span class="nc" id="L84">            } catch (TimeoutException e) {</span>
+<span class="nc" id="L85">                System.out.println(&quot;Not all players have registrated!&quot;);</span>
+<span class="nc" id="L86">            }</span>
+
+<span class="nc bnc" id="L88" title="All 4 branches missed.">            if (cmd != null &amp;&amp; cmd.validateCommand(game)) {</span>
+<span class="nc" id="L89">                cmd.executeCommand(game);</span>
+<span class="nc" id="L90">                cmd.sendResults(serverConnection);</span>
+            } else {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                for (int id : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L93">                    serverConnection.sendRegistrationAborted(id);</span>
+<span class="nc" id="L94">                }</span>
+
+<span class="nc" id="L96">                serverConnection.close();</span>
+<span class="nc" id="L97">                running = false;</span>
+
+<span class="nc" id="L99">                throw new RegistrationAbortedException(&quot;Invalid Command!&quot;);</span>
+            }
+
+<span class="nc" id="L102">            allRegistered = true;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            for (Player p : players) {</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                if (!p.getRegistered()) {</span>
+<span class="nc" id="L105">                    allRegistered = false;</span>
+<span class="nc" id="L106">                    break;</span>
+                }
+<span class="nc" id="L108">            }</span>
+<span class="nc" id="L109">        }</span>
+<span class="nc" id="L110">    }</span>
+
+    private void spawnFairies() {
+<span class="nc" id="L113">        game.setRoundState(RoundState.SPAWNFAIRIES);</span>
+<span class="nc" id="L114">        List&lt;GameVector&gt; fairySpawns = game.getFairySpawns();</span>
+<span class="nc" id="L115">        int playerCount = game.getPlayers().size();</span>
+
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        for (GameVector spawn : fairySpawns) {</span>
+<span class="nc" id="L118">            int id = playerCount + game.getNpcs().size();</span>
+<span class="nc" id="L119">            Npc fairy = new Npc(id, spawn, 100, CreatureType.FAIRY, 4, 10);</span>
+<span class="nc" id="L120">            game.addNpc(fairy);</span>
+
+<span class="nc bnc" id="L122" title="All 2 branches missed.">            for (int commId : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L123">                serverConnection.sendFairySpawned(commId, id, spawn.getX(), spawn.getY());</span>
+<span class="nc" id="L124">            }</span>
+<span class="nc" id="L125">        }</span>
+<span class="nc" id="L126">    }</span>
+
+    private void roundBeginState() {
+<span class="nc" id="L129">        game.setRoundState(RoundState.ROUNDBEGIN);</span>
+<span class="nc" id="L130">        game.increaseRoundCounter();</span>
+<span class="nc" id="L131">        calculateInitOrder();</span>
+<span class="nc" id="L132">        game.setCurrentMonsterIndex(0);</span>
+
+<span class="nc" id="L134">        super.resetCreatureStats(game);</span>
+
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        for (int commId : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L137">            serverConnection.sendRoundBegin(commId, game.getRoundCounter());</span>
+<span class="nc" id="L138">        }</span>
+<span class="nc" id="L139">    }</span>
+
+    private void calculateInitOrder() {
+<span class="nc" id="L142">        List&lt;Pc&gt; monsterOrder = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L143">        monsterOrder.addAll(game.getMonsters());</span>
+
+<span class="nc" id="L145">        Collections.sort(monsterOrder, (monster1, monster2) -&gt; {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">            if (monster1.getEnergy() &gt; monster2.getEnergy()) {</span>
+<span class="nc" id="L147">                return -1;</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            } else if (monster1.getEnergy() == monster2.getEnergy()) {</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                if (monster1.getFairness() &lt; monster2.getFairness()) {</span>
+<span class="nc" id="L150">                    return -1;</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                } else if (monster1.getFairness() == monster2.getFairness()) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                    if (monster1.getId() &lt; monster2.getId()) {</span>
+<span class="nc" id="L153">                        return -1;</span>
+                    } else {
+<span class="nc" id="L155">                        return 1;</span>
+                    }
+                } else {
+<span class="nc" id="L158">                    return 1;</span>
+                }
+            } else {
+<span class="nc" id="L161">                return 1;</span>
+            }
+        });
+
+<span class="nc" id="L165">        List&lt;Integer&gt; initOrder = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        for (Pc monster : monsterOrder) {</span>
+<span class="nc" id="L168">            initOrder.add(monster.getId());</span>
+<span class="nc" id="L169">        }</span>
+
+<span class="nc" id="L171">        game.setInitOrder(initOrder);</span>
+<span class="nc" id="L172">    }</span>
+
+    private void spawnBoars() {
+<span class="nc" id="L175">        game.setRoundState(RoundState.SPAWNBOARS);</span>
+<span class="nc" id="L176">        int playerCount = game.getPlayers().size();</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        for (GameVector spawn : game.getBoarSpawns()) {</span>
+<span class="nc" id="L178">            Npc boar = null;</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">            for(Npc npc : game.getNpcs()){</span>
+<span class="nc bnc" id="L180" title="All 4 branches missed.">                if(npc.getCreatureType() == CreatureType.BOAR &amp;&amp; npc.getAnchorPoint().equals(spawn)){</span>
+<span class="nc" id="L181">                    boar = npc;</span>
+<span class="nc" id="L182">                    break;</span>
+                }
+<span class="nc" id="L184">            }</span>
+
+<span class="nc" id="L186">            boolean spawnBoar = false;</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            if (boar != null) {</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">                if (boar.isDead()) {</span>
+<span class="nc bnc" id="L189" title="All 4 branches missed.">                    if (boar.getRoundsDead() &gt;= 6 &amp;&amp; game.getCreatureByPosition(spawn) == null) {</span>
+<span class="nc" id="L190">                        boar.receiveDamage(-boar.getMaxHp());</span>
+<span class="nc" id="L191">                        boar.setPosition(spawn);</span>
+<span class="nc" id="L192">                        boar.setPoisons(new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L193">                        boar.setCurrentDirection(Direction.EAST);</span>
+<span class="nc" id="L194">                        boar.setRoundsDead(0);</span>
+<span class="nc" id="L195">                        spawnBoar = true;</span>
+                    } else {
+<span class="nc" id="L197">                        boar.increaseRoundsDead();</span>
+                    }
+                }
+            } else {
+<span class="nc" id="L201">                int id = playerCount + game.getNpcs().size();</span>
+<span class="nc" id="L202">                boar = new Npc(id, spawn, 20, CreatureType.BOAR, 6, 20);</span>
+<span class="nc" id="L203">                game.addNpc(boar);</span>
+
+<span class="nc" id="L205">                spawnBoar = true;</span>
+            }
+
+<span class="nc bnc" id="L208" title="All 2 branches missed.">            if (spawnBoar) {</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">                for (int commId : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L210">                    serverConnection.sendBoarSpawned(commId, boar.getId(), spawn.getX(), spawn.getY());</span>
+<span class="nc" id="L211">                }</span>
+            }
+<span class="nc" id="L213">        }</span>
+<span class="nc" id="L214">    }</span>
+
+    private void moveFairies() {
+<span class="nc" id="L217">        game.setRoundState(RoundState.MOVEFAIRIES);</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">        for (Npc npc : game.getNpcs()) {</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">            if (npc.getCreatureType() == CreatureType.FAIRY) {</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">                if (npc.getPosition().distanceTo(npc.getAnchorPoint()) &gt; npc.getMaxAnchorPointDistance()) {</span>
+<span class="nc" id="L221">                    game.removeNpc(npc);</span>
+
+<span class="nc bnc" id="L223" title="All 2 branches missed.">                    for (int commId : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L224">                        serverConnection.sendDied(commId, npc.getId());</span>
+<span class="nc" id="L225">                    }</span>
+
+<span class="nc" id="L227">                    continue;</span>
+                }
+
+<span class="nc" id="L230">                int moves = npc.getMaxSteps();</span>
+<span class="nc" id="L231">                int dirChanged = 6;</span>
+
+<span class="nc bnc" id="L233" title="All 4 branches missed.">                while (moves &gt; 0 &amp;&amp; dirChanged &gt; 0) {</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">                    if (canMoveNpc(npc)) {</span>
+<span class="nc" id="L235">                        moveNpc(npc);</span>
+<span class="nc" id="L236">                        dirChanged = 6;</span>
+<span class="nc" id="L237">                        moves--;</span>
+                    } else {
+<span class="nc" id="L239">                        Direction newDir = DirectionHelper.getCounterClockwise(npc.getCurrentDirection());</span>
+<span class="nc" id="L240">                        npc.setCurrentDirection(newDir);</span>
+<span class="nc" id="L241">                        dirChanged--;</span>
+
+<span class="nc bnc" id="L243" title="All 4 branches missed.">                        if (game.getFieldAt(npc.getPosition()) == Field.ICE &amp;&amp; npc.getLastDirection() != null) {</span>
+<span class="nc" id="L244">                            break;</span>
+                        }
+<span class="nc" id="L246">                    }</span>
+                }
+
+            }
+<span class="nc" id="L250">        }</span>
+<span class="nc" id="L251">    }</span>
+
+    private void moveBoars() {
+<span class="nc" id="L254">        game.setRoundState(RoundState.MOVEBOARS);</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">        for (Npc npc : game.getNpcs()) {</span>
+<span class="nc bnc" id="L256" title="All 4 branches missed.">            if (!npc.isDead() &amp;&amp; npc.getCreatureType() == CreatureType.BOAR) {</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">                if (npc.getPosition().distanceTo(npc.getAnchorPoint()) &gt; npc.getMaxAnchorPointDistance()) {</span>
+<span class="nc" id="L258">                    npc.receiveDamage(npc.getHp());</span>
+
+<span class="nc bnc" id="L260" title="All 2 branches missed.">                    for (int commId : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L261">                        serverConnection.sendDied(commId, npc.getId());</span>
+<span class="nc" id="L262">                    }</span>
+
+<span class="nc" id="L264">                    continue;</span>
+                }
+
+<span class="nc" id="L267">                int moves = npc.getMaxSteps();</span>
+<span class="nc" id="L268">                int dirChanged = 6;</span>
+
+<span class="nc bnc" id="L270" title="All 4 branches missed.">                while (moves &gt; 0 &amp;&amp; dirChanged &gt; 0) {</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">                    if (canMoveNpc(npc)) {</span>
+<span class="nc" id="L272">                        moveNpc(npc);</span>
+<span class="nc" id="L273">                        dirChanged = 6;</span>
+<span class="nc" id="L274">                        moves--;</span>
+                    } else {
+<span class="nc" id="L276">                        GameVector newPos = DirectionHelper.toVector(npc.getCurrentDirection());</span>
+<span class="nc" id="L277">                        newPos = newPos.add(npc.getPosition());</span>
+<span class="nc" id="L278">                        Creature victim = game.getCreatureByPosition(newPos);</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">                        if (victim != null) {</span>
+<span class="nc" id="L280">                            int dmg = (int)(5 * FieldEffects.getDefensiveMultiplier(game.getFieldAt(newPos), victim.getCreatureType()));</span>
+<span class="nc" id="L281">                            int hpCalc = victim.getHp() - dmg;</span>
+<span class="nc" id="L282">                            boolean died = false;</span>
+
+<span class="nc bnc" id="L284" title="All 2 branches missed.">                            if (hpCalc &lt;= 0) {</span>
+<span class="nc" id="L285">                                died = true;</span>
+                            }
+
+<span class="nc" id="L288">                            victim.receiveDamage(dmg);</span>
+
+<span class="nc bnc" id="L290" title="All 2 branches missed.">                            for (int id : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L291">                                serverConnection.sendBoarAttack(id, npc.getId(), victim.getId());</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">                                if (died) {</span>
+<span class="nc" id="L293">                                    serverConnection.sendDied(id, victim.getId());</span>
+                                }
+<span class="nc" id="L295">                            }</span>
+
+<span class="nc bnc" id="L297" title="All 4 branches missed.">                            if (died &amp;&amp; victim.getCreatureType() != CreatureType.BOAR) {</span>
+<span class="nc" id="L298">                                game.removeCreature(victim);</span>
+                            }
+                        }
+
+<span class="nc" id="L302">                        Direction newDir = DirectionHelper.getCounterClockwise(npc.getCurrentDirection());</span>
+<span class="nc" id="L303">                        npc.setCurrentDirection(newDir);</span>
+<span class="nc" id="L304">                        dirChanged--;</span>
+<span class="nc" id="L305">                    }</span>
+                }
+
+            }
+<span class="nc" id="L309">        }</span>
+<span class="nc" id="L310">    }</span>
+
+    private boolean canMoveNpc(Npc npc) {
+<span class="nc" id="L313">        Direction dir = npc.getCurrentDirection();</span>
+<span class="nc" id="L314">        GameVector newPosition = DirectionHelper.toVector(dir);</span>
+<span class="nc" id="L315">        newPosition = newPosition.add(npc.getPosition());</span>
+
+<span class="nc bnc" id="L317" title="All 2 branches missed.">        if (newPosition.distanceTo(npc.getAnchorPoint()) &gt; npc.getMaxAnchorPointDistance()) {</span>
+<span class="nc" id="L318">            return false;</span>
+        }
+
+<span class="nc bnc" id="L321" title="All 6 branches missed.">        if(game.getFieldAt(npc.getPosition()) == Field.ICE &amp;&amp; npc.getLastDirection() != null &amp;&amp; npc.getLastDirection() != dir){</span>
+<span class="nc" id="L322">            return false;</span>
+        }
+
+<span class="nc bnc" id="L325" title="All 2 branches missed.">        if (game.getCreatureByPosition(newPosition) != null) {</span>
+<span class="nc" id="L326">            return false;</span>
+        }
+
+<span class="nc" id="L329">        Field field = game.getFieldAt(newPosition);</span>
+
+<span class="nc" id="L331">        return FieldEffects.canEnter(field, npc.getCreatureType());</span>
+    }
+
+    private void moveNpc(Npc npc) {
+<span class="nc" id="L335">        Direction dir = npc.getCurrentDirection();</span>
+<span class="nc" id="L336">        npc.setLastDirection(dir);</span>
+<span class="nc" id="L337">        GameVector newPosition = DirectionHelper.toVector(dir);</span>
+<span class="nc" id="L338">        newPosition = newPosition.add(npc.getPosition());</span>
+
+<span class="nc" id="L340">        npc.setPosition(newPosition);</span>
+
+<span class="nc bnc" id="L342" title="All 2 branches missed.">        for (int commId : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L343">            serverConnection.sendMoved(commId, npc.getId(), npc.getCurrentDirection());</span>
+<span class="nc" id="L344">        }</span>
+<span class="nc" id="L345">    }</span>
+
+    private void actState() {
+<span class="nc" id="L348">        game.setRoundState(RoundState.ACTNOW);</span>
+<span class="nc" id="L349">        game.setCurrentMonsterIndex(0);</span>
+<span class="nc" id="L350">        boolean sendActNow = true;</span>
+<span class="nc bnc" id="L351" title="All 2 branches missed.">        while (game.getCurrentMonsterIndex() &lt; game.getInitOrder().size()) {</span>
+<span class="nc bnc" id="L352" title="All 2 branches missed.">            if(sendActNow){</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">                for (int commId : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L354">                    serverConnection.sendActNow(commId, game.getMonsterActing());</span>
+<span class="nc" id="L355">                }</span>
+            }
+
+<span class="nc" id="L358">            sendActNow = true;</span>
+<span class="nc" id="L359">            Command cmd = null;</span>
+<span class="nc" id="L360">            String message = &quot;Kicked because of invalid move!&quot;;</span>
+            try {
+<span class="nc" id="L362">                cmd = serverConnection.nextCommand();</span>
+<span class="nc" id="L363">            } catch (TimeoutException e) {</span>
+<span class="nc" id="L364">                System.out.println(&quot;Player with id: &quot; + game.getMonsterActing() + &quot; had timeout!&quot;);</span>
+<span class="nc" id="L365">                message = &quot;Kicked because of timeout!&quot;;</span>
+<span class="nc" id="L366">            }</span>
+
+<span class="nc bnc" id="L368" title="All 4 branches missed.">            if (cmd != null &amp;&amp; cmd.validateCommand(game)) {</span>
+<span class="nc" id="L369">                cmd.executeCommand(game);</span>
+<span class="nc" id="L370">                cmd.sendResults(serverConnection);</span>
+            } else {
+<span class="nc" id="L372">                int id = game.getMonsterActing();</span>
+<span class="nc bnc" id="L373" title="All 4 branches missed.">                if(cmd != null &amp;&amp; cmd.getMonsterId() != game.getMonsterActing()) {</span>
+<span class="nc" id="L374">                    id = cmd.getMonsterId();</span>
+
+<span class="nc" id="L376">                    sendActNow = false;</span>
+                }
+
+<span class="nc bnc" id="L379" title="All 2 branches missed.">                if(id &gt;= 0){</span>
+<span class="nc" id="L380">                    Pc pc = game.getMonsterById(id);</span>
+<span class="nc bnc" id="L381" title="All 2 branches missed.">                    if(pc != null){</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">                        for (int commId : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L383">                            serverConnection.sendKicked(commId, id, message);</span>
+<span class="nc" id="L384">                        }</span>
+<span class="nc" id="L385">                        game.removeMonster(pc);</span>
+                    }
+                }
+            }
+<span class="nc" id="L389">        }</span>
+<span class="nc" id="L390">    }</span>
+
+    private void fieldEffectState() {
+<span class="nc" id="L393">        game.setRoundState(RoundState.FIELDEFFECTS);</span>
+<span class="nc bnc" id="L394" title="All 2 branches missed.">        for (Creature creature : game.getCreatures()) {</span>
+<span class="nc bnc" id="L395" title="All 2 branches missed.">            if(creature.isDead()){</span>
+<span class="nc" id="L396">                continue;</span>
+            }
+
+<span class="nc" id="L399">            GameVector position = creature.getPosition();</span>
+<span class="nc" id="L400">            Field field = game.getFieldAt(position);</span>
+
+<span class="nc" id="L402">            int dmg = FieldEffects.getDamage(field, creature.getCreatureType());</span>
+<span class="nc bnc" id="L403" title="All 2 branches missed.">            if (dmg == 0)</span>
+<span class="nc" id="L404">                continue;</span>
+
+<span class="nc" id="L406">            int hpCalc = creature.getHp() - dmg;</span>
+<span class="nc" id="L407">            boolean died = false;</span>
+
+<span class="nc bnc" id="L409" title="All 2 branches missed.">            if (hpCalc &lt;= 0) {</span>
+<span class="nc" id="L410">                died = true;</span>
+<span class="nc bnc" id="L411" title="All 2 branches missed.">            } else if (hpCalc &gt; creature.getMaxHp())</span>
+<span class="nc" id="L412">                dmg += (hpCalc - creature.getMaxHp());</span>
+
+<span class="nc bnc" id="L414" title="All 2 branches missed.">            if (dmg != 0) {</span>
+<span class="nc" id="L415">                creature.receiveDamage(dmg);</span>
+
+<span class="nc bnc" id="L417" title="All 2 branches missed.">                for (int id : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L418">                    serverConnection.sendFieldEffect(id, creature.getPosition().getX(), creature.getPosition().getY(), dmg);</span>
+<span class="nc bnc" id="L419" title="All 2 branches missed.">                    if (died) {</span>
+<span class="nc" id="L420">                        serverConnection.sendDied(id, creature.getId());</span>
+                    }
+<span class="nc" id="L422">                }</span>
+
+<span class="nc bnc" id="L424" title="All 4 branches missed.">                if (died &amp;&amp; creature.getCreatureType() != CreatureType.BOAR) {</span>
+<span class="nc" id="L425">                    game.removeCreature(creature);</span>
+                }
+            }
+<span class="nc" id="L428">        }</span>
+<span class="nc" id="L429">    }</span>
+
+    private void poisonState() {
+<span class="nc" id="L432">        game.setRoundState(RoundState.POISONS);</span>
+<span class="nc bnc" id="L433" title="All 2 branches missed.">        for (Creature creature : game.getCreatures()) {</span>
+<span class="nc bnc" id="L434" title="All 2 branches missed.">            if(creature.isDead()){</span>
+<span class="nc" id="L435">                continue;</span>
+            }
+
+<span class="nc" id="L438">            List&lt;Poison&gt; poisons = creature.getPoisons();</span>
+
+<span class="nc bnc" id="L440" title="All 2 branches missed.">            for (Poison p : poisons) {</span>
+<span class="nc bnc" id="L441" title="All 2 branches missed.">                if(creature.isDead()){</span>
+<span class="nc" id="L442">                    break;</span>
+                }
+
+<span class="nc bnc" id="L445" title="All 4 branches missed.">                switch (p) {</span>
+                    case FIRSTROUND:
+<span class="nc" id="L447">                        break;</span>
+                    case HEAVY:
+<span class="nc" id="L449">                        DoPoisonDmg(creature, 4);</span>
+<span class="nc" id="L450">                        break;</span>
+                    case MINOR:
+<span class="nc" id="L452">                        DoPoisonDmg(creature, 2);</span>
+<span class="nc" id="L453">                        break;</span>
+                    default:
+                        break;
+                }
+<span class="nc" id="L457">            }</span>
+<span class="nc" id="L458">        }</span>
+<span class="nc" id="L459">    }</span>
+
+    private void DoPoisonDmg(Creature creature, int dmg) {
+<span class="nc" id="L462">        int hpCalc = creature.getHp() - dmg;</span>
+<span class="nc" id="L463">        boolean died = false;</span>
+
+<span class="nc bnc" id="L465" title="All 2 branches missed.">        if (hpCalc &lt;= 0) {</span>
+<span class="nc" id="L466">            died = true;</span>
+        }
+
+<span class="nc bnc" id="L469" title="All 2 branches missed.">        if (dmg != 0) {</span>
+<span class="nc" id="L470">            creature.receiveDamage(dmg);</span>
+
+<span class="nc bnc" id="L472" title="All 2 branches missed.">            for (int id : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L473">                serverConnection.sendPoisonEffect(id, creature.getId(), dmg);</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">                if (died) {</span>
+<span class="nc" id="L475">                    serverConnection.sendDied(id, creature.getId());</span>
+                }
+<span class="nc" id="L477">            }</span>
+
+<span class="nc bnc" id="L479" title="All 4 branches missed.">            if (died &amp;&amp; creature.getCreatureType() != CreatureType.BOAR) {</span>
+<span class="nc" id="L480">                game.removeCreature(creature);</span>
+            }
+        }
+<span class="nc" id="L483">    }</span>
+
+    private void roundEndState(int hpDifference) {
+<span class="nc" id="L486">        game.setRoundState(RoundState.ROUNDEND);</span>
+<span class="nc bnc" id="L487" title="All 2 branches missed.">        if (hpDifference &lt;= 0) {</span>
+<span class="nc" id="L488">            game.increaseBoringRounds();</span>
+        } else {
+<span class="nc" id="L490">            game.setBoringRounds(0);</span>
+        }
+
+<span class="nc bnc" id="L493" title="All 2 branches missed.">        for (Creature creature : game.getCreatures()) {</span>
+<span class="nc bnc" id="L494" title="All 2 branches missed.">            if(creature.isDead()){</span>
+<span class="nc" id="L495">                continue;</span>
+            }
+
+<span class="nc" id="L498">            List&lt;Poison&gt; poisons = creature.getPoisons();</span>
+<span class="nc" id="L499">            List&lt;Poison&gt; newPoisons = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L501" title="All 2 branches missed.">            for (Poison p : poisons) {</span>
+<span class="nc bnc" id="L502" title="All 4 branches missed.">                switch (p) {</span>
+                    case FIRSTROUND:
+<span class="nc" id="L504">                        newPoisons.add(Poison.HEAVY);</span>
+<span class="nc" id="L505">                        break;</span>
+                    case HEAVY:
+<span class="nc" id="L507">                        newPoisons.add(Poison.MINOR);</span>
+<span class="nc" id="L508">                        break;</span>
+                    case MINOR:
+<span class="nc" id="L510">                        break;</span>
+                    default:
+                        break;
+                }
+<span class="nc" id="L514">            }</span>
+
+<span class="nc" id="L516">            creature.setPoisons(newPoisons);</span>
+<span class="nc" id="L517">        }</span>
+
+<span class="nc" id="L519">        List&lt;Pc&gt; monsters = game.getMonsters();</span>
+<span class="nc bnc" id="L520" title="All 2 branches missed.">        for (Pc monster : monsters) {</span>
+<span class="nc" id="L521">            int pos = game.getInitOrder().indexOf(monster.getId());</span>
+<span class="nc" id="L522">            int fairness = (pos + 1) % monsters.size();</span>
+<span class="nc" id="L523">            monster.setFairness(fairness);</span>
+<span class="nc" id="L524">            monster.setCriedInRound(false);</span>
+<span class="nc" id="L525">        }</span>
+
+<span class="nc bnc" id="L527" title="All 2 branches missed.">        for (int id : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L528">            serverConnection.sendRoundEnd(id, game.getRoundCounter(), game.getBoringRounds());</span>
+<span class="nc" id="L529">        }</span>
+
+<span class="nc" id="L531">        HashMap&lt;String, Integer&gt; teamMap = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L532" title="All 2 branches missed.">        for (Player player : game.getPlayers()) {</span>
+<span class="nc" id="L533">            String teamName = player.getTeamName();</span>
+<span class="nc" id="L534">            int players = 0;</span>
+<span class="nc bnc" id="L535" title="All 2 branches missed.">            if (teamMap.containsKey(teamName)) {</span>
+<span class="nc" id="L536">                players = teamMap.get(teamName);</span>
+            }
+<span class="nc" id="L538">            players++;</span>
+<span class="nc" id="L539">            teamMap.put(teamName, players);</span>
+<span class="nc" id="L540">        }</span>
+
+<span class="nc bnc" id="L542" title="All 4 branches missed.">        if (teamMap.isEmpty() || game.getBoringRounds() == 100) {</span>
+<span class="nc bnc" id="L543" title="All 2 branches missed.">            if (game.getBoringRounds() == 100) {</span>
+<span class="nc" id="L544">                List&lt;Pc&gt; pcs = game.getMonsters();</span>
+<span class="nc bnc" id="L545" title="All 2 branches missed.">                for (Pc pc : pcs) {</span>
+<span class="nc bnc" id="L546" title="All 2 branches missed.">                    for (int id : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L547">                        serverConnection.sendKicked(id, pc.getId(), &quot;Too much boring rounds!&quot;);</span>
+<span class="nc" id="L548">                    }</span>
+<span class="nc" id="L549">                    game.removeMonster(pc);</span>
+<span class="nc" id="L550">                }</span>
+            }
+
+<span class="nc bnc" id="L553" title="All 2 branches missed.">            for (int id : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L554">                serverConnection.sendWinner(id, &quot;&quot;);</span>
+<span class="nc" id="L555">            }</span>
+<span class="nc" id="L556">            running = false;</span>
+<span class="nc bnc" id="L557" title="All 2 branches missed.">        } else if (teamMap.size() == 1) {</span>
+<span class="nc" id="L558">            Map.Entry&lt;String, Integer&gt; winnerTeam = teamMap.entrySet().iterator().next();</span>
+<span class="nc bnc" id="L559" title="All 2 branches missed.">            for (int id : commIds.getCommLibIds()) {</span>
+<span class="nc" id="L560">                serverConnection.sendWinner(id, winnerTeam.getKey());</span>
+<span class="nc" id="L561">            }</span>
+<span class="nc" id="L562">            running = false;</span>
+        }
+<span class="nc" id="L564">    }</span>
+
+    private int hpSumOfCreatures() {
+<span class="nc" id="L567">        int hpSum = 0;</span>
+
+<span class="nc bnc" id="L569" title="All 2 branches missed.">        for (Npc npc : game.getNpcs()) {</span>
+<span class="nc bnc" id="L570" title="All 2 branches missed.">            if(npc.getCreatureType() == CreatureType.FAIRY){</span>
+<span class="nc" id="L571">                hpSum += npc.getHp();</span>
+            }
+<span class="nc" id="L573">        }</span>
+
+<span class="nc bnc" id="L575" title="All 2 branches missed.">        for (Pc monster : game.getMonsters()) {</span>
+<span class="nc" id="L576">            hpSum += monster.getHp();</span>
+<span class="nc" id="L577">        }</span>
+
+<span class="nc" id="L579">        return hpSum;</span>
+    }
+
+    public CommIds getCommIds() {
+<span class="nc" id="L583">        return commIds;</span>
+    }
+
+    public ServerConnection getServerConnection() {
+<span class="nc" id="L587">        return serverConnection;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

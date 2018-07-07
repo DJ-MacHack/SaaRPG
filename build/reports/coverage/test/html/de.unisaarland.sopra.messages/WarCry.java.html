@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WarCry.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages</a> &gt; <span class="el_source">WarCry.java</span></div><h1>WarCry.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.model.Game;
+import de.unisaarland.sopra.model.Pc;
+import de.unisaarland.sopra.model.RoundState;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+import de.unisaarland.sopra.utility.LogString;
+
+/**
+ * WarCry {@link Command}/{@link Event}
+ * Created on 12.09.16.
+ * @author Henrik Paul Koehn
+ * implemented by Lukas Schaefer
+ */
+public class WarCry implements Command, Event {
+
+    //Fields
+    private int actorId;      // Actor Id of the monster who cried
+    private String cry;       // The cry itself
+    private CommIds commIds;  // Class with all Commlib Ids
+
+    /**
+     * @param commIds {@link CommIds}
+     * @param actorId Id of actor who cried
+     * @param cry     The String of the {@link WarCry} itself
+     */
+<span class="fc" id="L30">    public WarCry(CommIds commIds, int actorId, String cry) {</span>
+<span class="fc" id="L31">        this.commIds = commIds;</span>
+<span class="fc" id="L32">        this.actorId = actorId;</span>
+<span class="fc" id="L33">        this.cry = cry;</span>
+<span class="fc" id="L34">    }</span>
+
+    /**
+     * Executes as {@link Command} on a given {@link Game}
+     *
+     * @param game {@link Game} to manipulate
+     */
+    @Override
+    public void executeCommand(Game game) {
+<span class="fc" id="L43">        game.getMonsterById(this.actorId).setCriedInRound(true);</span>
+<span class="fc" id="L44">    }</span>
+
+    /**
+     * Tests if this {@link Event}/{@link Command} is valid as {@link Command} for a given {@link Game}
+     *
+     * @param game {@link Game} to test
+     * @return Returns true if valid else false
+     */
+    @Override
+    public boolean validateCommand(Game game) {
+<span class="pc bpc" id="L54" title="1 of 4 branches missed.">        if(game.getRoundState() != RoundState.ACTNOW || game.getMonsterActing() != actorId){</span>
+<span class="fc" id="L55">            return false;</span>
+        }
+
+<span class="fc" id="L58">        return canCry(game);</span>
+    }
+
+    /**
+     * Handles aftermath of execution and sends corresponding {@link Event}
+     *
+     * @param sc {@link ServerConnection} which shall send the {@link Event}
+     */
+    @Override
+    public void sendResults(ServerConnection sc) {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        for (int commId: this.commIds.commLibIds)</span>
+<span class="nc" id="L69">            sc.sendWarCry(commId, this.actorId, this.cry);</span>
+<span class="nc" id="L70">    }</span>
+
+    /**
+     * Sends this as {@link Command} via the given {@link ClientConnection}
+     *
+     * @param cc {@link ClientConnection} which shall send the {@link Command}
+     */
+    @Override
+    public void sendCommand(ClientConnection cc) {
+<span class="nc" id="L79">        cc.sendWarCry(this.cry);</span>
+<span class="nc" id="L80">    }</span>
+
+    @Override
+    public int getMonsterId() {
+<span class="nc" id="L84">        return actorId;</span>
+    }
+
+    /**
+     * Execute as {@link Event} for a given {@link Client}
+     *
+     * @param client {@link Client} to manipulate
+     */
+    @Override
+    public void executeEvent(Game game, Client client) {
+<span class="nc" id="L94">        client.listenWarCry(this.cry);</span>
+<span class="nc" id="L95">        game.getMonsterById(this.actorId).setCriedInRound(true);</span>
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * Tests if this {@link Event}/{@link Command} is valid as {@link Event} for a given {@link Client}
+     *
+     * @param client {@link Client} to test
+     * @return returns true if valid else false
+     */
+    @Override
+    public boolean validateEvent(Game game, Client client) {
+<span class="nc" id="L106">        return canCry(game);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L111">        return String.format(&quot;%s has sent a WarCry!%n   Message: \033[37;1m%s\033[0;00m&quot;, LogString.createVictimName(cli.getGame(),this.actorId),this.cry);</span>
+        //return String.format(&quot;%s has sent a WarCry!%n   Message: %s&quot;, LogString.createVictimName(cli.getGame(),this.actorId),this.cry);
+    }
+
+    /**
+     * Tests if the {@link de.unisaarland.sopra.model.Pc} with the selected id is allowed to cry. T_T
+     *
+     * @param game {@link Game} to be checked
+     * @return Returns true if {@link WarCry} is valid, else false
+     */
+    private boolean canCry(Game game) {
+<span class="fc" id="L122">        Pc pc = game.getMonsterById(actorId);</span>
+
+<span class="pc bpc" id="L124" title="2 of 4 branches missed.">        if(pc == null || pc.isDead()){</span>
+<span class="nc" id="L125">            return false;</span>
+        }
+
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        if (this.cry.length() &gt; 140)</span>
+<span class="nc" id="L129">            return false;</span>
+
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (game.getMonsterById(this.actorId).getCriedInRound()) {</span>
+<span class="fc" id="L132">            return false;</span>
+        }
+        
+<span class="fc" id="L135">        return true;</span>
+    }
+
+
+    public int getActorId() {
+<span class="nc" id="L140">        return this.actorId;</span>
+    }
+
+    public String getCry() {
+<span class="nc" id="L144">        return this.cry;</span>
+    }
+
+    public CommIds getCommIds() {
+<span class="nc" id="L148">        return this.commIds;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

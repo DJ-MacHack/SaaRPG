@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StareCastTestSimple.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">StareCastTestSimple.java</span></div><h1>StareCastTestSimple.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+import org.junit.Assert;
+
+/**
+ * Created by Wiebk on 16.09.2016.
+ */
+public class StareCastTestSimple extends OurSystemTest {
+
+    public StareCastTestSimple() {
+<span class="nc" id="L15">        super(&quot;StareCastTestSimple&quot;);</span>
+<span class="nc" id="L16">    }</span>
+
+    @Override
+    public void executeTest() {
+
+        //throw new UnsupportedOperationException();
+
+        //Registrierungsphase
+<span class="nc" id="L24">        ClientConnection&lt;Event&gt; harry = register(0, &quot;Harry&quot;, CreatureType.ROOK, &quot;Gryffindor&quot;, 1, 1);</span>
+<span class="nc" id="L25">        ClientConnection&lt;Event&gt; malfoy = register(1, &quot;Malfoy&quot;, CreatureType.ROOK, &quot;Slytherin&quot;, 2, 1);</span>
+<span class="nc" id="L26">        assertRegisterEvent(harry.nextEvent(), 1, &quot;Malfoy&quot;, CreatureType.ROOK, &quot;Slytherin&quot;, 2, 1);</span>
+<span class="nc" id="L27">        assertRegisterEvent(malfoy.nextEvent(), 0, &quot;Harry&quot;, CreatureType.ROOK, &quot;Gryffindor&quot;, 1, 1);</span>
+
+        //keine Feen/Wildschweine --&gt; RoundBegin
+<span class="nc" id="L30">        assertRoundBegin(assertAndMerge(harry, malfoy), 1);</span>
+
+        //Monster agieren: Harry ist am Zug, Stare auf Malfoy
+<span class="nc" id="L33">        assertActNow(assertAndMerge(harry, malfoy), 0);</span>
+<span class="nc" id="L34">        harry.sendStare(Direction.EAST);</span>
+<span class="nc" id="L35">        assertStared(assertAndMerge(harry, malfoy), 0, Direction.EAST);</span>
+<span class="nc" id="L36">        assertActNow(assertAndMerge(harry, malfoy), 0);</span>
+<span class="nc" id="L37">        harry.sendDoneActing();</span>
+<span class="nc" id="L38">        assertDoneActing(assertAndMerge(harry, malfoy), 0);</span>
+
+        //Malfoy ist am Zug, Cast auf Harry
+<span class="nc" id="L41">        assertActNow(assertAndMerge(harry, malfoy), 1);</span>
+<span class="nc" id="L42">        malfoy.sendCast(1, 1);</span>
+<span class="nc" id="L43">        assertCast(assertAndMerge(harry, malfoy), 1, 1, 1);</span>
+<span class="nc" id="L44">        assertActNow(assertAndMerge(harry, malfoy), 1);</span>
+<span class="nc" id="L45">        malfoy.sendDoneActing();</span>
+<span class="nc" id="L46">        assertDoneActing(assertAndMerge(harry, malfoy), 1);</span>
+
+<span class="nc" id="L48">        assertRoundEnd(assertAndMerge(harry, malfoy), 1, 0);</span>
+<span class="nc" id="L49">        assertRoundBegin(assertAndMerge(harry, malfoy), 2);</span>
+
+        //Harry ist am Zug, er schickt Cast auf ein Grasfeld, wird gekickt
+<span class="nc" id="L52">        assertActNow(assertAndMerge(harry, malfoy), 0);</span>
+<span class="nc" id="L53">        harry.sendCast(2, 0);</span>
+<span class="nc" id="L54">        assertKicked(assertAndMerge(harry, malfoy), 0);</span>
+
+        //Malfoy ist am Zug, er schickt Stare auf ein Grasfeld und wird ebenfalls gekickt
+<span class="nc" id="L57">        assertActNow(assertAndMerge(harry, malfoy), 1);</span>
+<span class="nc" id="L58">        malfoy.sendStare(Direction.NORTH_WEST);</span>
+<span class="nc" id="L59">        assertKicked(assertAndMerge(harry, malfoy), 1);</span>
+
+<span class="nc" id="L61">        assertRoundEnd(assertAndMerge(harry, malfoy), 2, 0);</span>
+
+        //Am Ende der Runde gibt es keine Spieler mehr und somit keinen Gewinner
+<span class="nc" id="L64">        assertWinner(assertAndMerge(harry, malfoy), &quot;&quot;);</span>
+<span class="nc" id="L65">    }</span>
+
+    @Override
+    public String getFightFile() {
+<span class="nc" id="L69">        return &quot;Gryffindor, Slytherin\n&quot;</span>
+                + &quot;Gryffindor, Harry, Rook\n&quot;
+                + &quot;Slytherin, Malfoy, Rook&quot;;
+    }
+
+    @Override
+    public String getMapFile() {
+<span class="nc" id="L76">        return &quot;    \n&quot;</span>
+                + &quot; 01 \n&quot;
+                + &quot;    &quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HealAndKillFairyTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">HealAndKillFairyTest.java</span></div><h1>HealAndKillFairyTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Lukas Kirschner on 9/19/16.
+ */
+public class HealAndKillFairyTest extends OurSystemTest {
+
+    public HealAndKillFairyTest() {
+<span class="nc" id="L14">        super(&quot;HealAndKillFairyTests&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L19">        ClientConnection&lt;Event&gt; bomber = register(0, &quot;Bomber&quot;, CreatureType.WRAITH, &quot;TeamSuicide&quot;, 0, 0);</span>
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; troll = register(1, &quot;Troll&quot;, CreatureType.WRAITH, &quot;TeamTroll&quot;, 14, 0);</span>
+<span class="nc" id="L21">        assertRegisterEvent(troll.nextEvent(), 0, &quot;Bomber&quot;, CreatureType.WRAITH, &quot;TeamSuicide&quot;, 0, 0);</span>
+<span class="nc" id="L22">        assertRegisterEvent(bomber.nextEvent(), 1, &quot;Troll&quot;, CreatureType.WRAITH, &quot;TeamTroll&quot;, 14, 0);</span>
+
+<span class="nc" id="L24">        assertFairySpawned(assertAndMerge(troll, bomber), 2, 1, 0);</span>
+
+        // Round 1
+<span class="nc" id="L27">        assertRoundBegin(assertAndMerge(troll, bomber), 1);</span>
+
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        for (int i = 0; i &lt; 4; i++) {</span>
+<span class="nc" id="L30">            assertMoved(assertAndMerge(troll, bomber), 2, Direction.EAST);</span>
+        } //New coord: 5,0
+
+<span class="nc" id="L33">        assertActNow(assertAndMerge(troll, bomber), 0);</span>
+<span class="nc" id="L34">        bomber.sendMove(Direction.EAST); //Bomber moves onto the heal tile</span>
+<span class="nc" id="L35">        assertMoved(assertAndMerge(troll, bomber), 0, Direction.EAST);</span>
+<span class="nc" id="L36">        assertActNow(assertAndMerge(troll, bomber), 0);</span>
+
+<span class="nc" id="L38">        bomber.sendSwap(1, 0); //Bomber swaps with himself, draining 0 energy and 6 HP</span>
+<span class="nc" id="L39">        assertSwapped(assertAndMerge(troll, bomber), 0, 1, 0);</span>
+<span class="nc" id="L40">        assertActNow(assertAndMerge(troll, bomber), 0);</span>
+<span class="nc" id="L41">        bomber.sendDoneActing();</span>
+<span class="nc" id="L42">        assertDoneActing(assertAndMerge(troll, bomber), 0);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L44">            assertActNow(assertAndMerge(troll, bomber), 1);</span>
+<span class="nc" id="L45">            troll.sendMove(Direction.WEST);</span>
+<span class="nc" id="L46">            assertMoved(assertAndMerge(troll, bomber), 1, Direction.WEST); //New Coord Troll: 12,0</span>
+        }
+<span class="nc" id="L48">        assertActNow(assertAndMerge(troll, bomber), 1);</span>
+<span class="nc" id="L49">        troll.sendDoneActing();</span>
+<span class="nc" id="L50">        assertDoneActing(assertAndMerge(troll, bomber), 1);</span>
+<span class="nc" id="L51">        assertFieldEffect(assertAndMerge(troll, bomber), 1, 0, -6);</span>
+<span class="nc" id="L52">        assertRoundEnd(assertAndMerge(troll, bomber), 1, 1);</span>
+
+        // Round 2
+<span class="nc" id="L55">        assertRoundBegin(assertAndMerge(troll, bomber), 2);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        for (int i = 0; i &lt; 4; i++) {</span>
+<span class="nc" id="L57">            assertMoved(assertAndMerge(troll, bomber), 2, Direction.EAST);</span>
+        } //New coord: 9,0
+
+<span class="nc" id="L60">        assertActNow(assertAndMerge(troll, bomber), 0);</span>
+<span class="nc" id="L61">        bomber.sendSwap(1, 0);//Bomber swaps with himself again</span>
+<span class="nc" id="L62">        assertSwapped(assertAndMerge(troll, bomber), 0, 1, 0);</span>
+<span class="nc" id="L63">        assertActNow(assertAndMerge(troll, bomber), 0);</span>
+<span class="nc" id="L64">        bomber.sendDoneActing();</span>
+<span class="nc" id="L65">        assertDoneActing(assertAndMerge(troll, bomber), 0);</span>
+
+<span class="nc" id="L67">        assertActNow(assertAndMerge(troll, bomber), 1);</span>
+<span class="nc" id="L68">        troll.sendSwap(9, 0);</span>
+<span class="nc" id="L69">        assertSwapped(assertAndMerge(troll, bomber), 1, 9, 0);</span>
+<span class="nc" id="L70">        assertActNow(assertAndMerge(troll, bomber), 1);</span>
+<span class="nc" id="L71">        troll.sendDoneActing();</span>
+<span class="nc" id="L72">        assertDoneActing(assertAndMerge(troll, bomber), 1);</span>
+<span class="nc" id="L73">        assertFieldEffect(assertAndMerge(troll, bomber), 1, 0, -6);</span>
+<span class="nc" id="L74">        assertRoundEnd(assertAndMerge(troll, bomber), 2, 0);</span>
+
+        // Round 3
+<span class="nc" id="L77">        assertRoundBegin(assertAndMerge(troll, bomber), 3);</span>
+<span class="nc" id="L78">        assertDied(assertAndMerge(troll, bomber), 2);</span>
+
+<span class="nc" id="L80">        assertActNow(assertAndMerge(troll, bomber), 0);</span>
+<span class="nc" id="L81">        bomber.sendSwap(1, 0);//Bomber swaps with himself again</span>
+<span class="nc" id="L82">        assertSwapped(assertAndMerge(troll, bomber), 0, 1, 0);</span>
+<span class="nc" id="L83">        assertActNow(assertAndMerge(troll, bomber), 0);</span>
+<span class="nc" id="L84">        bomber.sendDoneActing();</span>
+<span class="nc" id="L85">        assertDoneActing(assertAndMerge(troll, bomber), 0);</span>
+
+<span class="nc" id="L87">        assertActNow(assertAndMerge(troll, bomber), 1);</span>
+<span class="nc" id="L88">        troll.sendSwap(12, 0); //Kick</span>
+<span class="nc" id="L89">        assertKicked(assertAndMerge(troll, bomber), 1);</span>
+
+<span class="nc" id="L91">        assertRoundEnd(assertAndMerge(troll, bomber), 3, 0);</span>
+<span class="nc" id="L92">        assertWinner(assertAndMerge(troll, bomber), &quot;TeamSuicide&quot;);</span>
+
+<span class="nc" id="L94">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L98">        return &quot;0+            1&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L103">        return &quot;TeamSuicide, TeamTroll\n&quot;+</span>
+                &quot;TeamSuicide, Bomber, Wraith\n&quot;+
+                &quot;TeamTroll, Troll, Wraith&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

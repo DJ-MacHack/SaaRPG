@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BushFieldEffectTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">BushFieldEffectTest.java</span></div><h1>BushFieldEffectTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+import org.junit.Assert;
+
+/**
+ * Created by Karla on 16.09.2016.
+ */
+public class BushFieldEffectTest extends OurSystemTest {
+
+    private static final String MAPFILE =
+            &quot;0xx\n&quot;
+            +&quot;x  \n&quot;
+            +&quot;1 x&quot;;
+
+    private static final String FIGHTFILE =
+            &quot;Snow, Bolton\n&quot;
+            +&quot;Snow, John, Kobold\n&quot;
+            +&quot;Bolton, Ramsay, Ifrit&quot;;
+
+
+    public BushFieldEffectTest(){
+<span class="nc" id="L26">        super(&quot;FieldEffects Bush Test&quot;);</span>
+<span class="nc" id="L27">    }</span>
+    @Override
+    protected void executeTest() {
+        //Register
+<span class="nc" id="L31">        ClientConnection&lt;Event&gt; john = register(0,&quot;John&quot;, CreatureType.KOBOLD, &quot;Snow&quot;,0,0);</span>
+<span class="nc" id="L32">        ClientConnection&lt;Event&gt; ramsay = register(1, &quot;Ramsay&quot;, CreatureType.IFRIT, &quot;Bolton&quot;, -1,2);</span>
+
+<span class="nc" id="L34">        assertRegisterEvent(ramsay.nextEvent(),0,&quot;John&quot;, CreatureType.KOBOLD, &quot;Snow&quot;,0,0);</span>
+<span class="nc" id="L35">        assertRegisterEvent(john.nextEvent(),1,&quot;Ramsay&quot;,CreatureType.IFRIT,&quot;Bolton&quot;,-1,2);</span>
+
+        //Everyone is Registered, no Boars or Fairies in Map---&gt; RoundBeginn
+        //Ramsay: HP:87, John: HP:100
+<span class="nc" id="L39">        assertRoundBegin(assertAndMerge(john,ramsay),1);</span>
+
+        //John's turn E: 1000, HP:100
+<span class="nc" id="L42">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        // John moves E:900, HP :100
+<span class="nc" id="L44">        john.sendMove(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L45">        assertMoved(assertAndMerge(john,ramsay),0,Direction.SOUTH_EAST);</span>
+<span class="nc" id="L46">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks E:480, HP:100
+<span class="nc" id="L48">        john.sendSlash(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L49">        assertSlashed(assertAndMerge(john,ramsay),0,Direction.SOUTH_WEST);      //Ramsay HP:75</span>
+<span class="nc" id="L50">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks again E:60, HP: 100
+<span class="nc" id="L52">        john.sendSlash(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L53">        assertSlashed(assertAndMerge(john,ramsay),0,Direction.SOUTH_WEST);      //Ramsay HP:63</span>
+<span class="nc" id="L54">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        // John Passes
+<span class="nc" id="L56">        john.sendDoneActing();</span>
+<span class="nc" id="L57">        assertDoneActing(assertAndMerge(john,ramsay),0);</span>
+
+        //Ramsay's Turn E:1000, HP: 63
+<span class="nc" id="L60">        assertActNow(assertAndMerge(john,ramsay),1);</span>
+        //Ramsay attacks E:550, HP:63
+<span class="nc" id="L62">        ramsay.sendBurn();</span>
+<span class="nc" id="L63">        assertBurned(assertAndMerge(john,ramsay),1);                            //John HP:94</span>
+<span class="nc" id="L64">        assertActNow(assertAndMerge(john,ramsay),1);</span>
+        //Ramsay attacks E:295, HP:63
+<span class="nc" id="L66">        ramsay.sendSinge(Direction.NORTH_EAST);</span>
+<span class="nc" id="L67">        assertSinged(assertAndMerge(john,ramsay),1,Direction.NORTH_EAST);       //John HP: 91</span>
+<span class="nc" id="L68">        assertActNow(assertAndMerge(john,ramsay),1);</span>
+        //Ramsay attacks E:40, HP:63
+<span class="nc" id="L70">        ramsay.sendSinge(Direction.NORTH_EAST);</span>
+<span class="nc" id="L71">        assertSinged(assertAndMerge(john,ramsay),1,Direction.NORTH_EAST);       //John HP: 88</span>
+<span class="nc" id="L72">        assertActNow(assertAndMerge(john,ramsay),1);</span>
+        //Ramsay passes
+<span class="nc" id="L74">        ramsay.sendDoneActing();</span>
+<span class="nc" id="L75">        assertDoneActing(assertAndMerge(john,ramsay),1);</span>
+
+        //Round 1 done
+<span class="nc" id="L78">        assertRoundEnd(assertAndMerge(john,ramsay),1,0);</span>
+
+        //Round 2 starts-------------------------------------------------
+<span class="nc" id="L81">        assertRoundBegin(assertAndMerge(john,ramsay),2);</span>
+
+        //John's turn E:1000, HP: 88
+<span class="nc" id="L84">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks E:750, HP:88
+<span class="nc" id="L86">        john.sendStab(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L87">        assertStabbed(assertAndMerge(john,ramsay),0,Direction.SOUTH_WEST);      //Ramsay:56</span>
+<span class="nc" id="L88">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks E:500, HP:88
+<span class="nc" id="L90">        john.sendStab(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L91">        assertStabbed(assertAndMerge(john,ramsay),0,Direction.SOUTH_WEST);      //Ramsay:49</span>
+<span class="nc" id="L92">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks E:250, HP:88
+<span class="nc" id="L94">        john.sendStab(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L95">        assertStabbed(assertAndMerge(john,ramsay),0,Direction.SOUTH_WEST);      //Ramsay:42</span>
+<span class="nc" id="L96">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks E:0, HP:88
+<span class="nc" id="L98">        john.sendStab(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L99">        assertStabbed(assertAndMerge(john,ramsay),0,Direction.SOUTH_WEST);      //Ramsay:35</span>
+<span class="nc" id="L100">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John passes
+<span class="nc" id="L102">        john.sendDoneActing();</span>
+<span class="nc" id="L103">        assertDoneActing(assertAndMerge(john,ramsay),0);</span>
+
+        //Ramsay's turn E:1000 HP:35
+<span class="nc" id="L106">        assertActNow(assertAndMerge(john, ramsay),1);</span>
+        //Ramsay attacks E:550, HP:35
+<span class="nc" id="L108">        ramsay.sendBurn();</span>
+<span class="nc" id="L109">        assertBurned(assertAndMerge(john,ramsay),1);                            //John HP:82</span>
+<span class="nc" id="L110">        assertActNow(assertAndMerge(john,ramsay),1);</span>
+        //Ramsay attacks E:100, HP:35
+<span class="nc" id="L112">        ramsay.sendBurn();</span>
+<span class="nc" id="L113">        assertBurned(assertAndMerge(john,ramsay),1);                            //John HP:74</span>
+<span class="nc" id="L114">        assertActNow(assertAndMerge(john,ramsay),1);</span>
+        //Ramsay passes
+<span class="nc" id="L116">        ramsay.sendDoneActing();</span>
+<span class="nc" id="L117">        assertDoneActing(assertAndMerge(john,ramsay),1);</span>
+
+        //Round 1 done
+<span class="nc" id="L120">        assertRoundEnd(assertAndMerge(john,ramsay),2,0);</span>
+
+        //Round 3 starts-------------------------------------------------
+<span class="nc" id="L123">        assertRoundBegin(assertAndMerge(john,ramsay),3);</span>
+
+        //Ramsay's turn E:1000 HP:35
+<span class="nc" id="L126">        assertActNow(assertAndMerge(john, ramsay),1);</span>
+        //Ramsay attacks E:550, HP:35
+<span class="nc" id="L128">        ramsay.sendBurn();</span>
+<span class="nc" id="L129">        assertBurned(assertAndMerge(john,ramsay),1);                            //John HP:68</span>
+<span class="nc" id="L130">        assertActNow(assertAndMerge(john,ramsay),1);</span>
+        //Ramsay attacks E:100, HP:35
+<span class="nc" id="L132">        ramsay.sendBurn();</span>
+<span class="nc" id="L133">        assertBurned(assertAndMerge(john,ramsay),1);                            //John HP:62</span>
+<span class="nc" id="L134">        assertActNow(assertAndMerge(john,ramsay),1);</span>
+        //Ramsay moves E:0, HP: 35
+<span class="nc" id="L136">        ramsay.sendMove(Direction.EAST);</span>
+<span class="nc" id="L137">        assertMoved(assertAndMerge(john,ramsay),1,Direction.EAST);</span>
+<span class="nc" id="L138">        assertActNow(assertAndMerge(john,ramsay),1);</span>
+        //Ramsay passes
+<span class="nc" id="L140">        ramsay.sendDoneActing();</span>
+<span class="nc" id="L141">        assertDoneActing(assertAndMerge(john,ramsay),1);</span>
+
+        //John's turn E:1000, HP: 62
+<span class="nc" id="L144">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks E:580, HP:62
+<span class="nc" id="L146">        john.sendSlash(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L147">        assertSlashed(assertAndMerge(john,ramsay),0,Direction.SOUTH_EAST);      //Ramsay HP: 23</span>
+<span class="nc" id="L148">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks E:330, HP:62
+<span class="nc" id="L150">        john.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L151">        assertStabbed(assertAndMerge(john,ramsay),0,Direction.SOUTH_EAST);</span>
+<span class="nc" id="L152">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks E:80, HP:62
+<span class="nc" id="L154">        john.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L155">        assertStabbed(assertAndMerge(john,ramsay),0,Direction.SOUTH_EAST);      //Ramsay HP:9</span>
+<span class="nc" id="L156">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John passes
+<span class="nc" id="L158">        john.sendDoneActing();</span>
+<span class="nc" id="L159">        assertDoneActing(assertAndMerge(john,ramsay),0);</span>
+
+
+
+        //Round 3 ends
+<span class="nc" id="L164">        assertRoundEnd(assertAndMerge(john,ramsay),3,0);</span>
+
+        //Round 4 starts------------------------------------------------------------
+<span class="nc" id="L167">        assertRoundBegin(assertAndMerge(john,ramsay),4);</span>
+
+        //John starts
+<span class="nc" id="L170">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //John attacks E:1000, HP:62
+<span class="nc" id="L172">        john.sendSlash(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L173">        assertSlashed(assertAndMerge(john,ramsay),0,Direction.SOUTH_EAST);      //Ramsay 0</span>
+<span class="nc" id="L174">        assertDied(assertAndMerge(john,ramsay),1);</span>
+<span class="nc" id="L175">        assertActNow(assertAndMerge(john,ramsay),0);</span>
+        //Ramsay dies
+<span class="nc" id="L177">        john.sendDoneActing();</span>
+<span class="nc" id="L178">        assertDoneActing(assertAndMerge(john,ramsay),0);</span>
+
+<span class="nc" id="L180">        assertRoundEnd(assertAndMerge(john,ramsay),4,0);</span>
+        //John wins
+<span class="nc" id="L182">        assertWinner(assertAndMerge(john,ramsay),&quot;Snow&quot;);</span>
+<span class="nc" id="L183">        passed();</span>
+<span class="nc" id="L184">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L188">        return MAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L193">        return FIGHTFILE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

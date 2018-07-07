@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StareKillPlayerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">StareKillPlayerTest.java</span></div><h1>StareKillPlayerTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team14 on 23/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class StareKillPlayerTest extends OurSystemTest {
+    public StareKillPlayerTest() {
+<span class="nc" id="L14">        super(&quot;StareKillPlayerTest&quot;);</span>
+<span class="nc" id="L15">    }</span>
+
+    @Override
+    protected void executeTest() {
+        // registration phase
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; rag = register(0, &quot;Ragnaros&quot;, CreatureType.IFRIT, &quot;Fire&quot;, 0, 0);</span>
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; thera = register(1, &quot;Therazane&quot;, CreatureType.ROOK, &quot;Earth&quot;, 1, 0);</span>
+
+<span class="nc" id="L23">        assertRegisterEvent(rag.nextEvent(), 1, &quot;Therazane&quot;, CreatureType.ROOK, &quot;Earth&quot;, 1, 0);</span>
+<span class="nc" id="L24">        assertRegisterEvent(thera.nextEvent(), 0, &quot;Ragnaros&quot;, CreatureType.IFRIT, &quot;Fire&quot;, 0, 0);</span>
+
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        for (int round = 1; round &lt; 5; round++) {</span>
+            // round begins
+<span class="nc" id="L28">            assertRoundBegin(assertAndMerge(rag, thera), round);</span>
+
+            // rag's turn
+<span class="nc" id="L31">            assertActNow(assertAndMerge(rag, thera), 0);</span>
+<span class="nc" id="L32">            rag.sendDoneActing();</span>
+<span class="nc" id="L33">            assertDoneActing(assertAndMerge(rag, thera), 0);</span>
+
+            // thera's turn
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L37">                assertActNow(assertAndMerge(rag, thera), 1);</span>
+<span class="nc" id="L38">                thera.sendCast(0, 0);</span>
+<span class="nc" id="L39">                assertCast(assertAndMerge(rag, thera), 1, 0, 0);</span>
+            }
+<span class="nc" id="L41">            assertActNow(assertAndMerge(rag, thera), 1);</span>
+<span class="nc" id="L42">            thera.sendDoneActing();</span>
+<span class="nc" id="L43">            assertDoneActing(assertAndMerge(rag, thera), 1);</span>
+
+            // round ends
+<span class="nc" id="L46">            assertRoundEnd(assertAndMerge(rag, thera), round, 0);</span>
+        }
+
+        // round 5 begins
+<span class="nc" id="L50">        assertRoundBegin(assertAndMerge(rag, thera), 5);</span>
+
+        // rag's turn
+<span class="nc" id="L53">        assertActNow(assertAndMerge(rag, thera), 0);</span>
+<span class="nc" id="L54">        rag.sendDoneActing();</span>
+<span class="nc" id="L55">        assertDoneActing(assertAndMerge(rag, thera), 0);</span>
+
+        // thera's turn
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L59">            assertActNow(assertAndMerge(rag, thera), 1);</span>
+<span class="nc" id="L60">            thera.sendStare(Direction.WEST);</span>
+<span class="nc" id="L61">            assertStared(assertAndMerge(rag, thera), 1, Direction.WEST);</span>
+        }
+<span class="nc" id="L63">        assertDied(assertAndMerge(rag, thera), 0);</span>
+<span class="nc" id="L64">        assertActNow(assertAndMerge(rag, thera), 1);</span>
+<span class="nc" id="L65">        thera.sendDoneActing();</span>
+<span class="nc" id="L66">        assertDoneActing(assertAndMerge(rag, thera), 1);</span>
+
+        // round 5 ends
+<span class="nc" id="L69">        assertRoundEnd(assertAndMerge(rag, thera), 5, 0);</span>
+
+<span class="nc" id="L71">        assertWinner(assertAndMerge(rag, thera), &quot;Earth&quot;);</span>
+<span class="nc" id="L72">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L76">        return &quot;01&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L81">        return &quot;Fire, Earth\n&quot;</span>
+                + &quot;Fire, Ragnaros, Ifrit\n&quot;
+                + &quot;Earth, Therazane, Rook&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

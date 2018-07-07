@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra;
+
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.gui.Gui;
+import de.unisaarland.sopra.model.CreatureType;
+import de.unisaarland.sopra.publictest.*;
+import de.unisaarland.sopra.systemtest.*;
+import de.unisaarland.sopra.utility.InvalidFightFileException;
+import de.unisaarland.sopra.utility.InvalidMapFileException;
+import de.unisaarland.sopra.utility.RegistrationAbortedException;
+import org.apache.commons.cli.*;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * The entry point for your {@link Server} implementation.
+ *
+ * @author Henrik Paul Koehn
+ */
+<span class="nc bnc" id="L25" title="All 2 branches missed.">public final class Main {</span>
+<span class="nc" id="L26">    private Main() {</span>
+<span class="nc" id="L27">    }</span>
+
+    /**
+     * This method is called when the {@link Server} is started.
+     *
+     * @param args Command line arguments
+     */
+    public static void main(final String[] args) {
+
+        //Setup options
+<span class="nc" id="L37">        Options options = setupOptions();</span>
+
+        // Setup Parser
+<span class="nc" id="L40">        CommandLineParser parser = new DefaultParser();</span>
+<span class="nc" id="L41">        CommandLine line = null;</span>
+
+        // run parser
+        try {
+<span class="nc" id="L45">            line = parser.parse(options, args);</span>
+<span class="nc" id="L46">        } catch (ParseException e) {</span>
+<span class="nc" id="L47">            exit(&quot;Error while parsing:\n&quot; + e.getMessage());</span>
+<span class="nc" id="L48">        }</span>
+
+        // Handle parsed results
+<span class="nc bnc" id="L51" title="All 4 branches missed.">        assert line != null; // TODO maybe redundant</span>
+        // Server
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (line.hasOption(&quot;server&quot;)) {</span>
+
+            // Check if args are valid
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (!checkServerArgs(line)) {</span>
+<span class="nc" id="L57">                exit(&quot;Invalid server arguments&quot;);</span>
+            }
+            // Get parameters
+<span class="nc" id="L60">            int port = Integer.parseInt(line.getOptionValue(&quot;port&quot;));</span>
+<span class="nc" id="L61">            int timeout = Integer.parseInt(line.getOptionValue(&quot;timeout&quot;, &quot;1000&quot;));</span>
+<span class="nc" id="L62">            String map = line.getOptionValue(&quot;map&quot;);</span>
+<span class="nc" id="L63">            String fight = line.getOptionValue(&quot;file&quot;);</span>
+
+<span class="nc" id="L65">            setupServer(port, timeout, fight, map);</span>
+<span class="nc" id="L66">        }</span>
+        // Client
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        else if (line.hasOption(&quot;ki&quot;)) {</span>
+
+            // Check if args are valid
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            if (!checkClientArgs(line)) {</span>
+<span class="nc" id="L72">                exit(&quot;Invalid ki arguments&quot;);</span>
+            }
+            // Get parameters
+<span class="nc" id="L75">            String host = line.getOptionValue(&quot;host&quot;);</span>
+<span class="nc" id="L76">            int port = Integer.parseInt(line.getOptionValue(&quot;port&quot;));</span>
+<span class="nc" id="L77">            int timeout = Integer.parseInt(line.getOptionValue(&quot;timeout&quot;, &quot;1000&quot;));</span>
+<span class="nc" id="L78">            String name = line.getOptionValue(&quot;name&quot;);</span>
+<span class="nc" id="L79">            String team = line.getOptionValue(&quot;team&quot;);</span>
+<span class="nc" id="L80">            String monster = line.getOptionValue(&quot;monster&quot;).toUpperCase();</span>
+
+            // If Monster is valid create ki, else abort
+<span class="nc" id="L83">            setupClient(host, port, timeout, name, team, monster);</span>
+<span class="nc" id="L84">        }</span>
+        // Test
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        else if (line.hasOption(&quot;test&quot;)) {</span>
+            // Check if args are valid
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if (!checkTestArgs(line)) {</span>
+<span class="nc" id="L89">                exit(&quot;Invalid test arguments!&quot;);</span>
+            }
+            // Parse test arguments
+<span class="nc" id="L92">            String test = line.getOptionValue(&quot;test&quot;);</span>
+<span class="nc" id="L93">            String json = line.getOptionValue(&quot;json&quot;);</span>
+<span class="nc" id="L94">            int port = Integer.parseInt(line.getOptionValue(&quot;port&quot;));</span>
+<span class="nc" id="L95">            int timeout = Integer.parseInt(line.getOptionValue(&quot;timeout&quot;, &quot;1000&quot;));</span>
+<span class="nc" id="L96">            int dport = Integer.parseInt(line.getOptionValue(&quot;dport&quot;, &quot;-1&quot;));</span>
+
+<span class="nc" id="L98">            setupTests(test, json, port, timeout, dport);</span>
+<span class="nc" id="L99">        }</span>
+        // gui
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        else if (line.hasOption(&quot;gui&quot;)) {</span>
+            //Check if args are valid
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            if (!checkGuiArgs(line)) {</span>
+<span class="nc" id="L104">                exit(&quot;Invalid Gui arguments!&quot;);</span>
+            }
+            // Parse gui arguments
+<span class="nc" id="L107">            String host = line.getOptionValue(&quot;host&quot;);</span>
+<span class="nc" id="L108">            int port = Integer.parseInt(line.getOptionValue(&quot;port&quot;));</span>
+<span class="nc" id="L109">            int timeout = Integer.parseInt(line.getOptionValue(&quot;timeout&quot;, &quot;1000&quot;));</span>
+
+<span class="nc" id="L111">            setupGui(host, port, timeout);</span>
+<span class="nc" id="L112">        }</span>
+        // Human player mode
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        else if (line.hasOption(&quot;player&quot;)) {</span>
+            // Check if args are valid
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if (!checkPlayerArgs(line)) {</span>
+<span class="nc" id="L117">                exit(&quot;Invalid player arguments&quot;);</span>
+            }
+            // Get parameters
+<span class="nc" id="L120">            String host = line.getOptionValue(&quot;host&quot;);</span>
+<span class="nc" id="L121">            int port = Integer.parseInt(line.getOptionValue(&quot;port&quot;));</span>
+<span class="nc" id="L122">            int timeout = Integer.parseInt(line.getOptionValue(&quot;timeout&quot;, &quot;1000&quot;));</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            String name = line.hasOption(&quot;name&quot;) ? line.getOptionValue(&quot;name&quot;) : null;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            String team = line.hasOption(&quot;team&quot;) ? line.getOptionValue(&quot;team&quot;) : null;</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            String monster = line.hasOption(&quot;monster&quot;) ? line.getOptionValue(&quot;monster&quot;).toUpperCase() : null;</span>
+
+            // Create and start a human player
+<span class="nc" id="L128">            setupHumanPlayer(host, port, timeout, name, team, monster);</span>
+<span class="nc" id="L129">        }</span>
+        //Map Generator Mode
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        else if (line.hasOption(&quot;mapgenerator&quot;)) {</span>
+            // Check if args are valid
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            if (!checkMapGeneratorArgs(line)) {</span>
+<span class="nc" id="L134">                exit(&quot;Invalid player arguments&quot;);</span>
+            }
+
+            try {
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                int xdim = line.hasOption(&quot;xdim&quot;) ? Integer.parseInt(line.getOptionValue(&quot;xdim&quot;)) : 100;</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">                int ydim = line.hasOption(&quot;ydim&quot;) ? Integer.parseInt(line.getOptionValue(&quot;ydim&quot;)) : 100;</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                String algorithm = line.hasOption(&quot;algorithm&quot;) ? line.getOptionValue(&quot;algorithm&quot;) : &quot;perlinnoise&quot;;</span>
+<span class="nc" id="L141">                String path = line.getOptionValue(&quot;map&quot;);</span>
+<span class="nc" id="L142">                setupMapGenerator(xdim, ydim, algorithm, path);</span>
+<span class="nc" id="L143">            } catch (NumberFormatException e) {</span>
+<span class="nc" id="L144">                exit(&quot;Invalid Arguments, NumberFormatException&quot;);</span>
+<span class="nc" id="L145">            }</span>
+            // Create and start a Map Generator
+        }
+        // No valid option
+        else {
+<span class="nc" id="L150">            exit(&quot;Invalid parameters! Use either -server, -ki, -test, -player or -gui&quot;);</span>
+        }
+<span class="nc" id="L152">    }</span>
+
+    private static boolean checkMapGeneratorArgs(CommandLine line) {
+<span class="nc" id="L155">        return line.hasOption(&quot;map&quot;);</span>
+    }
+
+    /**
+     * Setups all needed options for SaaRPG
+     * @return {@link Options} with all needed {@link Option}
+     */
+
+    // Validation methods
+
+    /**
+     * Tests if commandline has needed options for server
+     *
+     * @param line {@link CommandLine} to controll
+     * @return Returns true if arguments are valid
+     */
+    private static boolean checkServerArgs(CommandLine line) {
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        return line.hasOption(&quot;port&quot;)</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">                &amp;&amp; line.hasOption(&quot;map&quot;)</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">                &amp;&amp; line.hasOption(&quot;file&quot;);</span>
+    }
+
+    /**
+     * Tests if commandline has needed options for client
+     *
+     * @param line {@link CommandLine} to control
+     * @return Returns true if arguments are valid
+     */
+
+    private static boolean checkClientArgs(CommandLine line) {
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        return line.hasOption(&quot;port&quot;)</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">                &amp;&amp; line.hasOption(&quot;name&quot;)</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                &amp;&amp; line.hasOption(&quot;team&quot;)</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">                &amp;&amp; line.hasOption(&quot;monster&quot;)</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">                &amp;&amp; line.hasOption(&quot;host&quot;);</span>
+    }
+
+    /**
+     * Tests if commandline has needed options for test
+     *
+     * @param line {@link CommandLine} to control
+     * @return Returns true if arguments are valid
+     */
+
+    private static boolean checkTestArgs(CommandLine line) {
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        return line.hasOption(&quot;json&quot;)</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                &amp;&amp; line.hasOption(&quot;port&quot;);</span>
+    }
+
+    /**
+     * Tests if commandline has needed options for gui
+     *
+     * @param line {@link CommandLine} to control
+     * @return Returns true if arguments are valid
+     */
+
+    private static boolean checkGuiArgs(CommandLine line) {
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        return line.hasOption(&quot;port&quot;)</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">                &amp;&amp; line.hasOption(&quot;host&quot;);</span>
+    }
+
+    /**
+     * Tests if commandline has needed options for human player
+     *
+     * @param line {@link CommandLine} to control
+     * @return Returns true if arguments are valid
+     */
+    private static boolean checkPlayerArgs(CommandLine line) {
+<span class="nc bnc" id="L223" title="All 2 branches missed.">        return line.hasOption(&quot;port&quot;)</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">                &amp;&amp; line.hasOption(&quot;host&quot;);</span>
+    }
+
+    // Setup methods
+
+    private static void setupMapGenerator(int xdim, int ydim, String algorithm, String outFile) {
+        try {
+<span class="nc" id="L231">            MapGenerator myGen = new MapGenerator(xdim, ydim, algorithm, outFile);</span>
+<span class="nc" id="L232">            myGen.generateMap();</span>
+<span class="nc" id="L233">            myGen.generatePlayerSpawns(9);</span>
+<span class="nc" id="L234">            myGen.saveMap();</span>
+<span class="nc" id="L235">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L236">            e.printStackTrace();</span>
+<span class="nc" id="L237">            exit(&quot;Could not use &quot; + algorithm);</span>
+<span class="nc" id="L238">        } catch (IOException e) {</span>
+<span class="nc" id="L239">            e.printStackTrace();</span>
+<span class="nc" id="L240">            exit(&quot;File IO Error&quot;);</span>
+<span class="nc" id="L241">        }</span>
+<span class="nc" id="L242">    }</span>
+
+    /**
+     * Setup and start of {@link Server}
+     *
+     * @param port      Port for {@link Server}
+     * @param timeout   Timeout for client-server connection
+     * @param fightFile Path to fightFile
+     * @param mapFile   Path mapFile
+     */
+    private static void setupServer(int port, int timeout, String fightFile, String mapFile) {
+        // Tries to build a server and handles upcoming exceptions via ending program
+        try {
+<span class="nc" id="L255">            String pFightFile = readFile(fightFile);</span>
+<span class="nc" id="L256">            String pMapFile = readFile(mapFile);</span>
+
+<span class="nc" id="L258">            Server server = new Server(port, timeout, pFightFile, pMapFile);</span>
+<span class="nc" id="L259">            server.run();</span>
+<span class="nc" id="L260">        } catch (InvalidFightFileException e) {</span>
+<span class="nc" id="L261">            e.printStackTrace();</span>
+<span class="nc" id="L262">            exit(&quot;Invalid FightFile!&quot;);</span>
+<span class="nc" id="L263">        } catch (InvalidMapFileException e) {</span>
+<span class="nc" id="L264">            e.printStackTrace();</span>
+<span class="nc" id="L265">            exit(&quot;Invalid MapFile!&quot;);</span>
+<span class="nc" id="L266">        } catch (IOException e) {</span>
+<span class="nc" id="L267">            e.printStackTrace();</span>
+<span class="nc" id="L268">            exit(&quot;Error reading files:\n&quot; + e.getMessage());</span>
+<span class="nc" id="L269">        } catch (RegistrationAbortedException e) {</span>
+<span class="nc" id="L270">            e.printStackTrace();</span>
+<span class="nc" id="L271">            exit(&quot;Registration was aborted!&quot;);</span>
+<span class="nc" id="L272">        }</span>
+<span class="nc" id="L273">    }</span>
+
+    /**
+     * Setup and start of a {@link KI} ({@link Client})
+     *
+     * @param host         Name of the host
+     * @param port         Port for connection
+     * @param timeout      Timeout for client-server connection
+     * @param name         Name of {@link de.unisaarland.sopra.model.Player}
+     * @param teamname     Teamname of {@link de.unisaarland.sopra.model.Player}
+     * @param creatureType Creature type of {@link KI} as String
+     */
+    private static void setupClient(String host, int port, int timeout, String name, String teamname, String creatureType) {
+        /*
+        Client ki = null;
+        CreatureType ct = null;
+        try {
+            ct = CreatureType.valueOf(creatureType);
+        } catch (IllegalArgumentException e) {
+            exit(&quot;Monster type does not exist:\n&quot; + e.getMessage());
+        }
+        assert ct != null; // Just to make sure, but it should not happen
+        switch (ct) {
+            case KOBOLD:
+                ki = new KoboldKI(name, port, timeout, teamname, host);
+                break;
+            case ELF:
+                ki = new ElfKI(name, port, timeout, teamname, host);
+                break;
+            case ROOK:
+                ki = new RookKi(name, port, timeout, teamname, host);
+                break;
+            case IFRIT:
+                ki = new IfritKi(name, port, timeout, teamname, host);
+                break;
+            case YETI:
+                ki = new YetiKi(name, port, timeout, teamname, host);
+                break;
+            case WRAITH:
+                ki = new WraithKi(name, port, timeout, teamname, host);
+                break;
+            case NAGA:
+                ki = new NagaKi(name, port, timeout, teamname, host);
+                break;
+            default:
+                exit(&quot;It is not possible to play a boar or a fairy!&quot;);
+        }
+        assert ki != null; // Just to make sure, but it should not happen
+        ki.run();*/
+<span class="nc" id="L322">        throw new UnsupportedOperationException();</span>
+    }
+
+    /**
+     * Setup and start of the testmode
+     *
+     * @param tests      Path to &lt;tests&gt;.jar
+     * @param outputFile Target file for test output
+     * @param port       Port for connection
+     * @param timeout    Timeout for client-server connection
+     * @param dport      Debugger port
+     */
+    private static void setupTests(String tests, String outputFile, int port, int timeout, int dport) {
+
+        // Open files
+<span class="nc" id="L337">        File tFile = new File(tests);</span>
+<span class="nc" id="L338">        File oFile = new File(outputFile);</span>
+
+        // Start test controller and get tests
+<span class="nc" id="L341">        TestController tc = new TestController(tFile, port, dport, timeout, oFile);</span>
+<span class="nc" id="L342">        List&lt;SystemTest&gt; sysTests = setupSystemTests();</span>
+
+        // Execute system tests
+        try {
+<span class="nc" id="L346">            tc.executeTests(sysTests);</span>
+<span class="nc" id="L347">        } catch (IOException e) {</span>
+<span class="nc" id="L348">            exit(&quot;IO error: &quot; + e.getMessage());</span>
+<span class="nc" id="L349">        }</span>
+
+        // Print results
+<span class="nc" id="L352">        System.out.println(&quot;SUCCESS: &quot; + tc.count(SystemTest.TestState.SUCCESS) + &quot;/&quot; + tc.getTestCount());</span>
+<span class="nc" id="L353">        System.out.println(&quot;FAIL: &quot; + tc.count(SystemTest.TestState.FAIL) + &quot;/&quot; + tc.getTestCount());</span>
+<span class="nc" id="L354">        System.out.println(&quot;NOEXEC: &quot; + tc.count(SystemTest.TestState.NOEXEC) + &quot;/&quot; + tc.getTestCount());</span>
+<span class="nc" id="L355">        System.out.println(&quot;SERVERFAIL: &quot; + tc.count(SystemTest.TestState.SERVERFAIL) + &quot;/&quot; + tc.getTestCount());</span>
+
+<span class="nc" id="L357">    }</span>
+
+    /**
+     * Runs gui
+     *
+     * @param host    host
+     * @param port    port
+     * @param timeout timeout
+     */
+    private static void setupGui(String host, int port, int timeout) {
+<span class="nc" id="L367">        Gui gui = new Gui(host, port, timeout);</span>
+<span class="nc" id="L368">        gui.run();</span>
+<span class="nc" id="L369">    }</span>
+
+    /**
+     * Runs game in player mode
+     *
+     * @param host     Name of the host
+     * @param port     Port for connection
+     * @param timeout  Timeout for client-server connection
+     * @param name     Name of {@link de.unisaarland.sopra.model.Player}
+     * @param teamname Teamname of {@link de.unisaarland.sopra.model.Player}
+     * @param monster  Creature type of {@link KI} as String
+     */
+
+    private static void setupHumanPlayer(String host, int port, int timeout, String name, String teamname,
+                                         String monster) {
+<span class="nc" id="L384">        CreatureType ct = null;</span>
+        // Cast string to creature type
+        try {
+<span class="nc bnc" id="L387" title="All 2 branches missed.">            ct = (monster != null) ? CreatureType.valueOf(monster) : null;</span>
+<span class="nc" id="L388">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L389">            exit(&quot;Monster type does not exist:\n&quot; + e.getMessage());</span>
+<span class="nc" id="L390">        }</span>
+        // Create new human player and start him
+<span class="nc" id="L392">        Human human = new Human(host, port, timeout, name, teamname, ct);</span>
+<span class="nc" id="L393">        human.run();</span>
+<span class="nc" id="L394">    }</span>
+
+    /**
+     * Builds all required options
+     *
+     * @return {@link Options} with all needed {@link Option}
+     */
+
+    private static Options setupOptions() {
+
+        // Setup classes
+<span class="nc" id="L405">        Options options = new Options();</span>
+<span class="nc" id="L406">        OptionGroup mode = new OptionGroup();</span>
+
+        // add options for modes
+<span class="nc" id="L409">        mode.addOption(new Option(&quot;server&quot;, &quot;starts server mode&quot;));       // Server</span>
+<span class="nc" id="L410">        mode.addOption(new Option(&quot;ki&quot;, &quot;starts ki mode&quot;));               // Ki</span>
+<span class="nc" id="L411">        mode.addOption(new Option(&quot;test&quot;, true, &quot;starts test mode&quot;));     // Test</span>
+<span class="nc" id="L412">        mode.addOption(new Option(&quot;gui&quot;, &quot;starts gui mode&quot;));             // gui</span>
+<span class="nc" id="L413">        mode.addOption(new Option(&quot;player&quot;, &quot;starts human player mode&quot;)); // human player</span>
+<span class="nc" id="L414">        mode.addOption(new Option(&quot;mapgenerator&quot;, &quot;starts map generator mode&quot;));</span>
+
+<span class="nc" id="L416">        options.addOptionGroup(mode);</span>
+
+        // parameter with arguments
+        // Host
+<span class="nc" id="L420">        options.addOption(Option.builder(&quot;host&quot;)</span>
+<span class="nc" id="L421">                .hasArg()</span>
+<span class="nc" id="L422">                .argName(&quot;host&quot;)</span>
+<span class="nc" id="L423">                .desc(&quot;Adress of host&quot;)</span>
+<span class="nc" id="L424">                .build());</span>
+
+        // Port
+<span class="nc" id="L427">        options.addOption(Option.builder(&quot;port&quot;)</span>
+<span class="nc" id="L428">                .hasArg()</span>
+<span class="nc" id="L429">                .argName(&quot;port&quot;)</span>
+<span class="nc" id="L430">                .type(Number.class)</span>
+<span class="nc" id="L431">                .desc(&quot;port to listen&quot;)</span>
+<span class="nc" id="L432">                .build());</span>
+
+        // Timeout
+<span class="nc" id="L435">        options.addOption(Option.builder(&quot;timeout&quot;)</span>
+<span class="nc" id="L436">                .hasArg()</span>
+<span class="nc" id="L437">                .argName(&quot;milliseconds&quot;)</span>
+<span class="nc" id="L438">                .desc(&quot;timeout for connection&quot;)</span>
+<span class="nc" id="L439">                .build());</span>
+
+
+        // Map file
+<span class="nc" id="L443">        options.addOption(Option.builder(&quot;map&quot;)</span>
+<span class="nc" id="L444">                .longOpt(&quot;mapfile&quot;)</span>
+<span class="nc" id="L445">                .hasArg()</span>
+<span class="nc" id="L446">                .argName(&quot;path&quot;)</span>
+<span class="nc" id="L447">                .desc(&quot;specify map file&quot;)</span>
+<span class="nc" id="L448">                .build());</span>
+
+        // Fight file
+<span class="nc" id="L451">        options.addOption(Option.builder(&quot;file&quot;)</span>
+<span class="nc" id="L452">                .longOpt(&quot;fightfile&quot;)</span>
+<span class="nc" id="L453">                .hasArg()</span>
+<span class="nc" id="L454">                .argName(&quot;path&quot;)</span>
+<span class="nc" id="L455">                .desc(&quot;specify fight file&quot;)</span>
+<span class="nc" id="L456">                .build());</span>
+
+        // Name
+<span class="nc" id="L459">        options.addOption(Option.builder(&quot;name&quot;)</span>
+<span class="nc" id="L460">                .numberOfArgs(1)</span>
+<span class="nc" id="L461">                .hasArg()</span>
+<span class="nc" id="L462">                .argName(&quot;Name&quot;)</span>
+<span class="nc" id="L463">                .desc(&quot;Name of Player&quot;)</span>
+<span class="nc" id="L464">                .build());</span>
+
+        // Team name
+<span class="nc" id="L467">        options.addOption(Option.builder(&quot;team&quot;)</span>
+<span class="nc" id="L468">                .longOpt(&quot;teamname&quot;)</span>
+<span class="nc" id="L469">                .hasArg()</span>
+<span class="nc" id="L470">                .argName(&quot;teamName&quot;)</span>
+<span class="nc" id="L471">                .desc(&quot;Team name of player&quot;)</span>
+<span class="nc" id="L472">                .build());</span>
+
+        // Monster type
+<span class="nc" id="L475">        options.addOption(Option.builder(&quot;monster&quot;)</span>
+<span class="nc" id="L476">                .longOpt(&quot;monstertype&quot;)</span>
+<span class="nc" id="L477">                .hasArg()</span>
+<span class="nc" id="L478">                .argName(&quot;monsterType&quot;)</span>
+<span class="nc" id="L479">                .desc(&quot;monster ki shall play&quot;)</span>
+<span class="nc" id="L480">                .build());</span>
+
+        // Output for tests (json)
+<span class="nc" id="L483">        options.addOption(Option.builder(&quot;json&quot;)</span>
+<span class="nc" id="L484">                .hasArg()</span>
+<span class="nc" id="L485">                .argName(&quot;debuggerPort&quot;)</span>
+<span class="nc" id="L486">                .desc(&quot;Path to output file for test results&quot;)</span>
+<span class="nc" id="L487">                .build());</span>
+
+        // Debbuger port
+<span class="nc" id="L490">        options.addOption(Option.builder(&quot;dport&quot;)</span>
+<span class="nc" id="L491">                .longOpt(&quot;debuggerport&quot;)</span>
+<span class="nc" id="L492">                .hasArg()</span>
+<span class="nc" id="L493">                .argName(&quot;port&quot;)</span>
+<span class="nc" id="L494">                .type(Number.class)</span>
+<span class="nc" id="L495">                .desc(&quot;port for debugging&quot;)</span>
+<span class="nc" id="L496">                .build());</span>
+
+        //X Dimensions for Map Generator
+<span class="nc" id="L499">        options.addOption(Option.builder(&quot;xdim&quot;)</span>
+<span class="nc" id="L500">                .longOpt(&quot;xdimensions&quot;)</span>
+<span class="nc" id="L501">                .hasArg()</span>
+<span class="nc" id="L502">                .argName(&quot;xDimensions&quot;)</span>
+<span class="nc" id="L503">                .desc(&quot;X Dimensions of the created map (in tiles)&quot;)</span>
+<span class="nc" id="L504">                .build());</span>
+
+        //Y Dimensions for Map Generator
+<span class="nc" id="L507">        options.addOption(Option.builder(&quot;ydim&quot;)</span>
+<span class="nc" id="L508">                .longOpt(&quot;ydimensions&quot;)</span>
+<span class="nc" id="L509">                .hasArg()</span>
+<span class="nc" id="L510">                .argName(&quot;yDimensions&quot;)</span>
+<span class="nc" id="L511">                .desc(&quot;Y Dimensions of the created map (in tiles)&quot;)</span>
+<span class="nc" id="L512">                .build());</span>
+
+        //Algorithm for Map Generator
+<span class="nc" id="L515">        options.addOption(Option.builder(&quot;algorithm&quot;)</span>
+<span class="nc" id="L516">                .hasArg()</span>
+<span class="nc" id="L517">                .argName(&quot;Algorithm&quot;)</span>
+<span class="nc" id="L518">                .desc(&quot;Algorithm to use in creation&quot;)</span>
+<span class="nc" id="L519">                .build());</span>
+
+
+
+
+<span class="nc" id="L524">        return options;</span>
+    }
+
+    /**
+     * Setups all system tests
+     * add a test here to execute it
+     * if tests shall not be execute, comment them
+     *
+     * @return A list with all system tests
+     */
+    private static List&lt;SystemTest&gt; setupSystemTests() {
+<span class="nc" id="L535">        List&lt;SystemTest&gt; sysTests = new LinkedList&lt;&gt;();</span>
+
+        // public tests
+<span class="nc" id="L538">        sysTests.add(new AmokBoar2Test());</span>
+<span class="nc" id="L539">        sysTests.add(new AmokBoarTest());</span>
+<span class="nc" id="L540">        sysTests.add(new BlinkOnIceTest());</span>
+<span class="nc" id="L541">        sysTests.add(new BoarAttackOnIceSameRound());</span>
+<span class="nc" id="L542">        sysTests.add(new BoarAttackOnIceTest());</span>
+<span class="nc" id="L543">        sysTests.add(new BoarAttackOnWaterTest());</span>
+<span class="nc" id="L544">        sysTests.add(new BoarRangeAttackTest());</span>
+<span class="nc" id="L545">        sysTests.add(new BoarSurroundedTest());</span>
+<span class="nc" id="L546">        sysTests.addAll(BrokenInputTest.getTests());</span>
+<span class="nc" id="L547">        sysTests.add(new PublicBeispielTest());</span>
+<span class="nc" id="L548">        sysTests.addAll(PublicWarCryTest.getTests());</span>
+<span class="nc" id="L549">        sysTests.add(new TrappedBoarTest());</span>
+
+        /*
+        // Our system tests
+        sysTests.add(new AnotherAttackOnCurseFieldTest());
+        sysTests.add(new AttackKickedPlayerTest());
+        sysTests.add(new AttackOnCurseFieldTest());
+        sysTests.add(new AttackOnWaterTest());
+        sysTests.add(new AttackOutsideOfMap());
+        sysTests.add(new BiteCutTest());
+        sysTests.add(new BiteKillPoisonTest());
+        sysTests.add(new BlinkSwapTestSimple());
+        sysTests.add(new BoarAndFairyTest());
+        //sysTests.add(new BoarAttackOnIce());
+        sysTests.add(new BoarKilledThenInvisibleTest());
+        sysTests.add(new BoarOnLavaTest());
+        sysTests.add(new BoarOnWaterTest());
+        sysTests.add(new BoarRespawnInhibitedTest());
+        sysTests.add(new BoarReviveTest());
+        sysTests.add(new BoringHundredRoundsTest());
+        sysTests.add(new BurnDoubleKillTest());             // TODO: new Test
+        sysTests.add(new BurnFourTargetsTest());            // TODO: new Test
+        sysTests.add(new BurnMultipleKillTest());
+        sysTests.add(new BurnOneDiedTest());                // TODO: new Test
+        sysTests.add(new Burn6Test());                      // TODO: new Test
+        sysTests.add(new BushFieldEffectTest());
+        sysTests.add(new CanBlinkTest());                   // TODO: New Test
+        sysTests.add(new CanBurnBlinkOnWater());            // TODO: New Test
+        sysTests.add(new CanAttackBurnTest());              // TODO: New Test
+        sysTests.add(new CastCanAttackTest());              //TODO: new Test
+        sysTests.add(new CastLimitsTest());                 // TODO: new Test
+        sysTests.add(new CastOnTreeNoEffectTest());
+        sysTests.add(new ClawCrushTestSimple());
+        sysTests.add(new CrushOnBoar());                    //TODO: New Test
+        sysTests.add(new CutOnBoar());                      //TODO: New Test
+        sysTests.add(new FairyKilledTest());
+        sysTests.add(new FairyOnIceTest());
+        sysTests.add(new FairyOnWaterTest());
+        sysTests.add(new FairyRespawnTest());
+        sysTests.add(new FightFileTests());
+        sysTests.add(new FightSimpleGrassTest());
+        sysTests.add(new HealAndKillFairyTest());
+        sysTests.add(new HSystemTest());
+        sysTests.add(new InitOrderKilledTest());
+        sysTests.add(new LavaFieldeffectTest());
+        sysTests.add(new LoosingLifeOnWaterTest());
+        sysTests.add(new NoHealTest());
+        //sysTests.add(new PoisonKillBoarTest());             // TODO: new Test
+        //sysTests.add(new PoisonKillFairyTest());            // TODO: new Test
+        sysTests.add(new PoisonKillTest());                 // TODO: new Test
+        sysTests.add(new RegistrationAbortedTest());
+        sysTests.add(new RegistrationAbortedTestOne());
+        sysTests.add(new RegistrationAbortedTestTwo());
+        sysTests.add(new RegistrationAbortedTestThree());
+        sysTests.add(new RegistrationAbortedTestFour());
+        sysTests.add(new RegistrationPhaseMoveCommandTest());
+        sysTests.add(new RegistrationPhaseTest());
+        sysTests.add(new RookRangeInHillFieldTest());
+        sysTests.add(new ShootAcrossRockfield());
+        sysTests.add(new ShootOnHillNoEffectTest());
+        sysTests.add(new ShootWithoutHindranceTest());
+        sysTests.add(new SimpleAttackTestOne());
+        sysTests.add(new SimpleFightTest());
+        sysTests.add(new SingeKillPlayerTest());     // TODO: new Test
+        sysTests.add(new SingeKillBoarTest());       // TODO: new Test
+        sysTests.add(new SingeBurnTestSimple());
+        sysTests.add(new StareKillPlayerTest());     // TODO: new Test
+        sysTests.add(new StareKillBoarTest());       // TODO: new Test
+        sysTests.add(new StareCastTestSimple());
+        sysTests.add(new SwapNoEnergyTest());       // TODO: new Test
+        sysTests.add(new SwapNotYourTurnTest());    // TODO: new Test
+        sysTests.add(new SwapAlreadyDeadTest());     // TODO: new Test
+        sysTests.add(new SwapAlreadyDeadTest());     // TODO: new Test
+        sysTests.add(new SwapKilledTest());         //TODO: new Test
+        sysTests.add(new TreeFieldEffectTest());
+
+        sysTests.addAll(StabKillTests.getTests());
+
+        // Attack commands while register phase tests
+        sysTests.addAll(RegisterPhaseAttackTest.getTests());  // TODO new Test
+
+        //WRONG DATA TESTS - TEST IF SERVER CRASHES WHEN WRONG MAP OR FIGHT DATA IS SENT
+        sysTests.addAll(WrongDataTest.getTests());
+        sysTests.addAll(TooManyMonstersInTeamTest.getTests());
+
+        //TURN ON ICE TESTS - TEST IF ONLY YETI CAN TURN ON ICE
+        sysTests.addAll(TurnOnIceTest.getTests());
+
+        //ILLEGAL ATTACK TESTS - TEST IF MISMATCHING CREATURES ARE ALLOWED TO ATTACK
+        sysTests.addAll(IllegalAttackHelper.getTests());
+
+        //MELEE TESTS - TEST IF CREATURES GET KICKED AFTER ATTACKING AN EMPTY FIELD
+        sysTests.addAll(MeleeTest.getTests());
+
+        sysTests.addAll(MovementTest.getTests());
+
+        //PRIVATE SYSTEM TESTS - PLS COMMENT THESE TESTS OUT BEFORE PUSHING
+        //sysTests.add(new BoarAttackOnIceTwo());
+        */
+<span class="nc" id="L648">        return sysTests;</span>
+    }
+
+    // utility methods
+
+    /**
+     * Pareses fightFile and returns the according String
+     *
+     * @param path Path to fightFile
+     * @return returns the parsed fightFile String
+     */
+
+    private static String readFile(String path) throws IOException {
+<span class="nc" id="L661">        byte[] bytes = Files.readAllBytes(Paths.get(path));</span>
+<span class="nc" id="L662">        return new String(bytes, StandardCharsets.UTF_8);</span>
+    }
+
+    /**
+     * Shutdowns program
+     *
+     * @param s Reason of shtudown
+     */
+    private static void exit(String s) {
+<span class="nc" id="L671">        System.out.println(s);</span>
+<span class="nc" id="L672">        System.exit(1);</span>
+<span class="nc" id="L673">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

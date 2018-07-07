@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AttackOnCurseFieldTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">AttackOnCurseFieldTest.java</span></div><h1>AttackOnCurseFieldTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Wiebk on 20.09.2016.
+ */
+public class AttackOnCurseFieldTest extends OurSystemTest {
+
+    public AttackOnCurseFieldTest(){
+<span class="nc" id="L15">        super(&quot;AttackOnCurseFieldTest&quot;);</span>
+<span class="nc" id="L16">    }</span>
+
+    @Override
+    public void executeTest(){
+<span class="nc" id="L20">        ClientConnection&lt;Event&gt; expresso = register(0, &quot;Expresso&quot;, CreatureType.WRAITH, &quot;Kaffee&quot;, 0, 0);</span>
+<span class="nc" id="L21">        ClientConnection&lt;Event&gt; hagebutte = register(1, &quot;Hagebutte&quot;, CreatureType.NAGA, &quot;Tee&quot;, 1, 0);</span>
+<span class="nc" id="L22">        assertRegisterEvent(expresso.nextEvent(), 1, &quot;Hagebutte&quot;, CreatureType.NAGA, &quot;Tee&quot;, 1, 0);</span>
+<span class="nc" id="L23">        assertRegisterEvent(hagebutte.nextEvent(), 0, &quot;Expresso&quot;, CreatureType.WRAITH, &quot;Kaffee&quot;, 0, 0);</span>
+
+        //1st round:
+<span class="nc" id="L26">        assertRoundBegin(assertAndMerge(expresso, hagebutte), 1);</span>
+
+        //expresso: moves onto cursefield, swapps hagebutte onto cursefield
+<span class="nc" id="L29">        assertActNow(assertAndMerge(expresso, hagebutte), 0);</span>
+<span class="nc" id="L30">        expresso.sendMove(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L31">        assertMoved(assertAndMerge(expresso, hagebutte), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L32">        assertActNow(assertAndMerge(expresso, hagebutte), 0);</span>
+<span class="nc" id="L33">        expresso.sendSwap(1, 0);</span>
+<span class="nc" id="L34">        assertSwapped(assertAndMerge(expresso, hagebutte), 0, 1, 0);</span>
+<span class="nc" id="L35">        assertActNow(assertAndMerge(expresso, hagebutte), 0);</span>
+<span class="nc" id="L36">        expresso.sendDoneActing();</span>
+<span class="nc" id="L37">        assertDoneActing(assertAndMerge(expresso, hagebutte), 0);</span>
+
+        //hagebutte: attacks expresso with cut (cost: 600 energy)
+<span class="nc" id="L40">        assertActNow(assertAndMerge(expresso, hagebutte), 1);</span>
+<span class="nc" id="L41">        hagebutte.sendCut(Direction.NORTH_EAST);</span>
+<span class="nc" id="L42">        assertCut(assertAndMerge(expresso, hagebutte), 1, Direction.NORTH_EAST);</span>
+<span class="nc" id="L43">        assertActNow(assertAndMerge(expresso, hagebutte), 1);</span>
+<span class="nc" id="L44">        hagebutte.sendDoneActing();</span>
+<span class="nc" id="L45">        assertDoneActing(assertAndMerge(expresso, hagebutte), 1);</span>
+
+<span class="nc" id="L47">        assertRoundEnd(assertAndMerge(expresso, hagebutte), 1, 0);</span>
+
+        //2nd round:
+<span class="nc" id="L50">        assertRoundBegin(assertAndMerge(expresso, hagebutte), 2);</span>
+        //expresso sends swap at empty field - gets kicked
+<span class="nc" id="L52">        assertActNow(assertAndMerge(expresso, hagebutte), 0);</span>
+<span class="nc" id="L53">        expresso.sendSwap(0, 0);</span>
+<span class="nc" id="L54">        assertKicked(assertAndMerge(expresso, hagebutte), 0);</span>
+
+        //hagebutte: does nothing
+<span class="nc" id="L57">        assertActNow(assertAndMerge(expresso, hagebutte), 1);</span>
+<span class="nc" id="L58">        hagebutte.sendDoneActing();</span>
+<span class="nc" id="L59">        assertDoneActing(assertAndMerge(expresso, hagebutte), 1);</span>
+
+<span class="nc" id="L61">        assertRoundEnd(assertAndMerge(expresso, hagebutte), 2, 0);</span>
+
+        //Winner: Hagebutte
+<span class="nc" id="L64">        assertWinner(assertAndMerge(expresso, hagebutte), &quot;Tee&quot;);</span>
+<span class="nc" id="L65">    }</span>
+
+    @Override
+    public String getMapFile(){
+<span class="nc" id="L69">        return &quot;01$\n&quot;</span>
+              +&quot;$$$\n&quot;
+              +&quot;$$$&quot;;
+    }
+
+    @Override
+    public String getFightFile(){
+<span class="nc" id="L76">        return &quot;Kaffee, Tee\n&quot;</span>
+              +&quot;Kaffee, Expresso, Wraith\n&quot;
+              +&quot;Tee, Hagebutte, Naga&quot;;
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

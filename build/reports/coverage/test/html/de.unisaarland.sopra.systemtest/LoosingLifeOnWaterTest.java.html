@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoosingLifeOnWaterTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">LoosingLifeOnWaterTest.java</span></div><h1>LoosingLifeOnWaterTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.messages.FieldEffect;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
+
+/**
+ * Created by Wiebk on 19.09.2016.
+ */
+public class LoosingLifeOnWaterTest extends OurSystemTest{
+
+    public LoosingLifeOnWaterTest(){
+<span class="nc" id="L21">        super(&quot;LoosingLifeOnWaterTest&quot;);</span>
+<span class="nc" id="L22">    }</span>
+
+    @Override
+    public void executeTest() {
+        //register
+<span class="nc" id="L27">        ClientConnection&lt;Event&gt; neuer = register(0, &quot;Neuer&quot;, CreatureType.ROOK, &quot;Deutschland&quot;, 0, 1);</span>
+<span class="nc" id="L28">        ClientConnection&lt;Event&gt; zidane = register(1, &quot;Zidane&quot;, CreatureType.IFRIT, &quot;Frankreich&quot;, 1, 1);</span>
+<span class="nc" id="L29">        Event neuerreg = zidane.nextEvent();</span>
+<span class="nc" id="L30">        assertRegisterEvent(neuerreg, 0, &quot;Neuer&quot;, CreatureType.ROOK, &quot;Deutschland&quot;, 0, 1);</span>
+<span class="nc" id="L31">        assertRegisterEvent(neuer.nextEvent(), 1, &quot;Zidane&quot;, CreatureType.IFRIT, &quot;Frankreich&quot;, 1, 1);</span>
+
+<span class="nc" id="L33">        assertRoundBegin(assertAndMerge(neuer, zidane), 1);</span>
+
+        //Neuer: move North_East onto water
+<span class="nc" id="L36">        assertActNow(assertAndMerge(neuer, zidane), 0);</span>
+<span class="nc" id="L37">        neuer.sendMove(Direction.NORTH_EAST);</span>
+<span class="nc" id="L38">        assertMoved(assertAndMerge(neuer, zidane), 0, Direction.NORTH_EAST);</span>
+<span class="nc" id="L39">        assertActNow(assertAndMerge(neuer, zidane), 0);</span>
+<span class="nc" id="L40">        neuer.sendDoneActing();</span>
+<span class="nc" id="L41">        assertDoneActing(assertAndMerge(neuer, zidane), 0);</span>
+
+        //Zidane: move North_East onto water
+<span class="nc" id="L44">        assertActNow(assertAndMerge(neuer, zidane), 1);</span>
+<span class="nc" id="L45">        zidane.sendMove(Direction.NORTH_EAST);</span>
+<span class="nc" id="L46">        assertMoved(assertAndMerge(neuer, zidane), 1, Direction.NORTH_EAST);</span>
+<span class="nc" id="L47">        assertActNow(assertAndMerge(neuer, zidane), 1);</span>
+<span class="nc" id="L48">        zidane.sendDoneActing();</span>
+<span class="nc" id="L49">        assertDoneActing(assertAndMerge(neuer, zidane), 1);</span>
+
+<span class="nc" id="L51">        Event e = assertAndMerge(neuer, zidane);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (!(e instanceof FieldEffect)) {</span>
+<span class="nc" id="L53">            throw new IllegalArgumentException(&quot;53: FieldEffect was expected but Event was of other kind.&quot;);</span>
+        }
+<span class="nc" id="L55">        FieldEffect fe = (FieldEffect) e;</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (fe.getValue() != 20) {</span>
+<span class="nc" id="L57">            throw new IllegalArgumentException(&quot;57: FieldEffect with value of 20 was expected but other value was found.&quot;);</span>
+        }
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (fe.getyCoord() != 0) {</span>
+<span class="nc" id="L60">            throw new IllegalArgumentException(&quot;60: FieldEffect with y-Coord of 0 was expected but other value was found.&quot;);</span>
+        }
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (fe.getxCoord() == 1) {</span>
+<span class="nc" id="L63">            assertFieldEffect(assertAndMerge(neuer, zidane), 2, 0, 20);</span>
+        } else {
+<span class="nc bnc" id="L65" title="All 2 branches missed.">            if (fe.getxCoord() == 2) {</span>
+<span class="nc" id="L66">                assertFieldEffect(assertAndMerge(neuer, zidane), 1, 0, 20);</span>
+            } else {
+<span class="nc" id="L68">                throw new IllegalArgumentException(&quot;68: FieldEffect at invalid coord (x-Coord was neither 1 nor 2).&quot;);</span>
+            }
+        }
+<span class="nc" id="L71">        assertRoundEnd(assertAndMerge(neuer, zidane), 1, 0);</span>
+
+        //No Movement for 4 rounds, both loose 20HP each Round and die
+        //Round 1 of 4
+<span class="nc" id="L75">        assertRoundBegin(assertAndMerge(neuer, zidane), 2);</span>
+
+<span class="nc" id="L77">        assertActNow(assertAndMerge(neuer, zidane), 1);</span>
+<span class="nc" id="L78">        zidane.sendDoneActing();</span>
+<span class="nc" id="L79">        assertDoneActing(assertAndMerge(neuer, zidane), 1);</span>
+
+<span class="nc" id="L81">        assertActNow(assertAndMerge(neuer, zidane), 0);</span>
+<span class="nc" id="L82">        neuer.sendDoneActing();</span>
+<span class="nc" id="L83">        assertDoneActing(assertAndMerge(neuer, zidane), 0);</span>
+
+<span class="nc" id="L85">        e = assertAndMerge(neuer, zidane);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (!(e instanceof FieldEffect)) {</span>
+<span class="nc" id="L87">            throw new IllegalArgumentException(&quot;87: FieldEffect was expected but Event was of other kind.&quot;);</span>
+        }
+<span class="nc" id="L89">        fe = (FieldEffect) e;</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        if (fe.getValue() != 20) {</span>
+<span class="nc" id="L91">            throw new IllegalArgumentException(&quot;91: FieldEffect with value of 20 was expected but other value was found.&quot;);</span>
+        }
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (fe.getyCoord() != 0) {</span>
+<span class="nc" id="L94">            throw new IllegalArgumentException(&quot;94: FieldEffect with y-Coord of 0 was expected but other value was found.&quot;);</span>
+        }
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (fe.getxCoord() == 1) {</span>
+<span class="nc" id="L97">            assertFieldEffect(assertAndMerge(neuer, zidane), 2, 0, 20);</span>
+        } else {
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (fe.getxCoord() == 2) {</span>
+<span class="nc" id="L100">                assertFieldEffect(assertAndMerge(neuer, zidane), 1, 0, 20);</span>
+            } else {
+<span class="nc" id="L102">                throw new IllegalArgumentException(&quot;102: FieldEffect at invalid coord (x-Coord was neither 1 nor 2).&quot;);</span>
+            }
+        }
+<span class="nc" id="L105">        assertRoundEnd(assertAndMerge(neuer, zidane), 2, 0);</span>
+
+        //Round 2 of 4
+<span class="nc" id="L108">        assertRoundBegin(assertAndMerge(neuer, zidane), 3);</span>
+
+<span class="nc" id="L110">        assertActNow(assertAndMerge(neuer, zidane), 0);</span>
+<span class="nc" id="L111">        neuer.sendDoneActing();</span>
+<span class="nc" id="L112">        assertDoneActing(assertAndMerge(neuer, zidane), 0);</span>
+
+<span class="nc" id="L114">        assertActNow(assertAndMerge(neuer, zidane), 1);</span>
+<span class="nc" id="L115">        zidane.sendDoneActing();</span>
+<span class="nc" id="L116">        assertDoneActing(assertAndMerge(neuer, zidane), 1);</span>
+
+<span class="nc" id="L118">        e = assertAndMerge(neuer, zidane);</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (!(e instanceof FieldEffect)) {</span>
+<span class="nc" id="L120">            throw new IllegalArgumentException(&quot;120: FieldEffect was expected but Event was of other kind.&quot;);</span>
+        }
+<span class="nc" id="L122">        fe = (FieldEffect) e;</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        if (fe.getValue() != 20) {</span>
+<span class="nc" id="L124">            throw new IllegalArgumentException(&quot;124: FieldEffect with value of 20 was expected but other value was found.&quot;);</span>
+        }
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        if (fe.getyCoord() != 0) {</span>
+<span class="nc" id="L127">            throw new IllegalArgumentException(&quot;127: FieldEffect with y-Coord of 0 was expected but other value was found.&quot;);</span>
+        }
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        if (fe.getxCoord() == 1) {</span>
+<span class="nc" id="L130">            assertFieldEffect(assertAndMerge(neuer, zidane), 2, 0, 20);</span>
+        } else {
+<span class="nc bnc" id="L132" title="All 2 branches missed.">            if (fe.getxCoord() == 2) {</span>
+<span class="nc" id="L133">                assertFieldEffect(assertAndMerge(neuer, zidane), 1, 0, 20);</span>
+            } else {
+<span class="nc" id="L135">                throw new IllegalArgumentException(&quot;135: FieldEffect at invalid coord (x-Coord was neither 1 nor 2).&quot;);</span>
+            }
+        }
+<span class="nc" id="L138">        assertRoundEnd(assertAndMerge(neuer, zidane), 3, 0);</span>
+
+        //Round 3 of 4
+<span class="nc" id="L141">        assertRoundBegin(assertAndMerge(neuer, zidane), 4);</span>
+
+<span class="nc" id="L143">        assertActNow(assertAndMerge(neuer, zidane), 1);</span>
+<span class="nc" id="L144">        zidane.sendDoneActing();</span>
+<span class="nc" id="L145">        assertDoneActing(assertAndMerge(neuer, zidane), 1);</span>
+
+<span class="nc" id="L147">        assertActNow(assertAndMerge(neuer, zidane), 0);</span>
+<span class="nc" id="L148">        neuer.sendDoneActing();</span>
+<span class="nc" id="L149">        assertDoneActing(assertAndMerge(neuer, zidane), 0);</span>
+
+<span class="nc" id="L151">        e = assertAndMerge(neuer, zidane);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (!(e instanceof FieldEffect)) {</span>
+<span class="nc" id="L153">            throw new IllegalArgumentException(&quot;153: FieldEffect was expected but Event was of other kind.&quot;);</span>
+        }
+<span class="nc" id="L155">        fe = (FieldEffect) e;</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (fe.getValue() != 20) {</span>
+<span class="nc" id="L157">            throw new IllegalArgumentException(&quot;157: FieldEffect with value of 20 was expected but other value was found.&quot;);</span>
+        }
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        if (fe.getyCoord() != 0) {</span>
+<span class="nc" id="L160">            throw new IllegalArgumentException(&quot;160: FieldEffect with y-Coord of 0 was expected but other value was found.&quot;);</span>
+        }
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        if (fe.getxCoord() == 1) {</span>
+<span class="nc" id="L163">            assertFieldEffect(assertAndMerge(neuer, zidane), 2, 0, 20);</span>
+        } else {
+<span class="nc bnc" id="L165" title="All 2 branches missed.">            if (fe.getxCoord() == 2) {</span>
+<span class="nc" id="L166">                assertFieldEffect(assertAndMerge(neuer, zidane), 1, 0, 20);</span>
+            } else {
+<span class="nc" id="L168">                throw new IllegalArgumentException(&quot;168: FieldEffect at invalid coord (x-Coord was neither 1 nor 2).&quot;);</span>
+            }
+        }
+<span class="nc" id="L171">        assertRoundEnd(assertAndMerge(neuer, zidane), 4, 0);</span>
+
+        //Round 4 of 4
+<span class="nc" id="L174">        assertRoundBegin(assertAndMerge(neuer, zidane), 5);</span>
+
+<span class="nc" id="L176">        assertActNow(assertAndMerge(neuer, zidane), 0);</span>
+<span class="nc" id="L177">        neuer.sendDoneActing();</span>
+<span class="nc" id="L178">        assertDoneActing(assertAndMerge(neuer, zidane), 0);</span>
+
+<span class="nc" id="L180">        assertActNow(assertAndMerge(neuer, zidane), 1);</span>
+<span class="nc" id="L181">        zidane.sendDoneActing();</span>
+<span class="nc" id="L182">        assertDoneActing(assertAndMerge(neuer, zidane), 1);</span>
+
+<span class="nc" id="L184">        Event e1 = assertAndMerge(neuer, zidane);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if (!(e1 instanceof FieldEffect)) {</span>
+<span class="nc" id="L186">            throw new IllegalArgumentException(&quot;166: Expected FieldEffect (Water) but was other event.&quot;);</span>
+        }
+<span class="nc" id="L188">        FieldEffect fe1 = (FieldEffect) e1;</span>
+<span class="nc" id="L189">        assertEquals(fe1.getValue(), 20);</span>
+<span class="nc" id="L190">        assertEquals(fe1.getyCoord(), 0);</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if (fe1.getxCoord() == 1) {</span>
+<span class="nc" id="L192">            assertDied(assertAndMerge(neuer, zidane), 0);</span>
+<span class="nc" id="L193">            assertFieldEffect(assertAndMerge(neuer, zidane), 2, 0, 20);</span>
+<span class="nc" id="L194">            assertDied(assertAndMerge(neuer, zidane), 1);</span>
+        } else {
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            if (fe1.getxCoord() == 2) {</span>
+<span class="nc" id="L197">                assertDied(assertAndMerge(neuer, zidane), 1);</span>
+<span class="nc" id="L198">                assertFieldEffect(assertAndMerge(neuer, zidane), 1, 0, 20);</span>
+<span class="nc" id="L199">                assertDied(assertAndMerge(neuer, zidane), 0);</span>
+            } else {
+<span class="nc" id="L201">                throw new IllegalArgumentException(&quot;181: Expected FieldEffect (Water) at either (1, 0) or (2, 0) but was at invalid x-Position.&quot;);</span>
+            }
+        }
+<span class="nc" id="L204">        assertRoundEnd(assertAndMerge(neuer, zidane), 5, 0);</span>
+
+        //Both are dead, no winne
+<span class="nc" id="L207">        assertWinner(assertAndMerge(neuer, zidane), &quot;&quot;);</span>
+<span class="nc" id="L208">    }</span>
+
+    @Override
+    public String getMapFile(){
+<span class="nc" id="L212">        return &quot;~~~\n&quot;</span>
+              +&quot;01~\n&quot;
+              +&quot;~~~&quot;;
+    }
+
+    public String getFightFile(){
+<span class="nc" id="L218">        return &quot;Deutschland, Frankreich\n&quot;</span>
+              +&quot;Deutschland, Neuer, Rook\n&quot;
+              +&quot;Frankreich, Zidane, Ifrit&quot;;
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

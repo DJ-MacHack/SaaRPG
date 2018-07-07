@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FightSimpleGrassTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">FightSimpleGrassTest.java</span></div><h1>FightSimpleGrassTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import static de.unisaarland.sopra.Direction.WEST;
+import static de.unisaarland.sopra.Direction.EAST;
+
+/**
+ * Created by Lukas Kirschner on 9/16/16.
+ *
+ * Simple fight on a grass map 4x4, ELF against YETI (rather unfair?)
+ */
+public class FightSimpleGrassTest extends OurSystemTest {
+    public FightSimpleGrassTest() {
+<span class="nc" id="L18">        super(&quot;FightSimpleGrassTest&quot;);</span>
+<span class="nc" id="L19">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L23">        ClientConnection&lt;Event&gt; cersei = register(0, &quot;Cersei&quot;, CreatureType.ELF, &quot;Lannister&quot;, 0, 0);</span>
+<span class="nc" id="L24">        ClientConnection&lt;Event&gt; eddard = register(1, &quot;Eddard&quot;, CreatureType.YETI, &quot;Stark&quot;, 3, 0);</span>
+
+<span class="nc" id="L26">        assertRegisterEvent(eddard.nextEvent(), 0, &quot;Cersei&quot;, CreatureType.ELF, &quot;Lannister&quot;, 0, 0);</span>
+<span class="nc" id="L27">        assertRegisterEvent(cersei.nextEvent(), 1, &quot;Eddard&quot;, CreatureType.YETI, &quot;Stark&quot;, 3, 0);</span>
+
+        //Everyone is registered now, there are neither boars nor fairies on the map --&gt; Next expected event: RoundBegin
+<span class="nc" id="L30">        assertRoundBegin(assertAndMerge(cersei, eddard), 1);</span>
+        //###STATUS Cersei: 100HP, Eddard: 200HP---------------------------------------
+
+        //Round has begun --&gt; It's Cersei's turn
+<span class="nc" id="L34">        assertActNow(assertAndMerge(cersei, eddard), 0);</span>
+
+        //Cersei (1000) shoots Eddard
+<span class="nc" id="L37">        cersei.sendShoot(EAST);</span>
+
+<span class="nc" id="L39">        assertShot(assertAndMerge(cersei, eddard),0,EAST);</span>
+
+        //Cersei (580) shoots again
+<span class="nc" id="L42">        assertActNow(assertAndMerge(cersei, eddard), 0);</span>
+<span class="nc" id="L43">        cersei.sendShoot(EAST);</span>
+
+<span class="nc" id="L45">        assertShot(assertAndMerge(cersei, eddard),0,EAST);</span>
+
+        //Cersei (160) passes
+<span class="nc" id="L48">        assertActNow(assertAndMerge(cersei, eddard), 0);</span>
+<span class="nc" id="L49">        cersei.sendDoneActing();</span>
+
+<span class="nc" id="L51">        assertDoneActing(assertAndMerge(cersei, eddard), 0);</span>
+
+        //It's Eddard's turn
+
+        //Eddard (1000) moves west in order to reach Cersei
+<span class="nc" id="L56">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L57">        eddard.sendMove(WEST);</span>
+
+<span class="nc" id="L59">        assertMoved(assertAndMerge(cersei, eddard),1, WEST);</span>
+
+        //Eddard(800) moves west again
+<span class="nc" id="L62">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L63">        eddard.sendMove(WEST);</span>
+
+<span class="nc" id="L65">        assertMoved(assertAndMerge(cersei, eddard),1, WEST);</span>
+
+        //Eddard (600) crushes Cersei
+<span class="nc" id="L68">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L69">        eddard.sendCrush(WEST);</span>
+
+<span class="nc" id="L71">        assertCrush(assertAndMerge(cersei, eddard),1, WEST);</span>
+
+        //Eddard (140) passes
+<span class="nc" id="L74">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L75">        eddard.sendDoneActing();</span>
+
+<span class="nc" id="L77">        assertDoneActing(assertAndMerge(cersei, eddard),1);</span>
+
+        //Round 1 finished
+<span class="nc" id="L80">        assertRoundEnd(assertAndMerge(cersei, eddard),1,0);</span>
+
+<span class="nc" id="L82">        assertRoundBegin(assertAndMerge(cersei, eddard),2);</span>
+        //###STATUS: Cersei: 84HP, Eddard: 178HP-------------------------------------
+
+        //It's Cersei's turn
+
+        //Cersei (1000) stabs Eddard four times
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        for (int i = 0; i &lt; 4; i++){</span>
+<span class="nc" id="L89">            assertActNow(assertAndMerge(cersei, eddard),0);</span>
+<span class="nc" id="L90">            cersei.sendStab(EAST);</span>
+<span class="nc" id="L91">            assertStabbed(assertAndMerge(cersei, eddard),0,EAST);</span>
+        }
+
+        //Cersei (0) passes
+<span class="nc" id="L95">        assertActNow(assertAndMerge(cersei, eddard),0);</span>
+<span class="nc" id="L96">        cersei.sendDoneActing();</span>
+
+<span class="nc" id="L98">        assertDoneActing(assertAndMerge(cersei, eddard),0);</span>
+
+        //It's Eddard's turn
+<span class="nc" id="L101">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+
+        //Eddard (1000) crushes Cersei twice
+<span class="nc" id="L104">        eddard.sendCrush(WEST);</span>
+
+<span class="nc" id="L106">        assertCrush(assertAndMerge(cersei, eddard),1, WEST);</span>
+
+<span class="nc" id="L108">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L109">        eddard.sendCrush(WEST);</span>
+
+<span class="nc" id="L111">        assertCrush(assertAndMerge(cersei, eddard),1, WEST);</span>
+
+        //Eddard (80) passes
+<span class="nc" id="L114">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L115">        eddard.sendDoneActing();</span>
+
+<span class="nc" id="L117">        assertDoneActing(assertAndMerge(cersei, eddard),1);</span>
+
+        //Round 2 finished
+<span class="nc" id="L120">        assertRoundEnd(assertAndMerge(cersei, eddard),2,0);</span>
+
+<span class="nc" id="L122">        assertRoundBegin(assertAndMerge(cersei, eddard),3);</span>
+        //###STATUS: Eddard: 150HP, Cersei: 52HP-----------------------------------------
+
+        //It's Eddard's turn
+<span class="nc" id="L126">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+
+        //Eddard (1000) crushes Cersei twice
+<span class="nc" id="L129">        eddard.sendCrush(WEST);</span>
+
+<span class="nc" id="L131">        assertCrush(assertAndMerge(cersei, eddard),1, WEST);</span>
+
+<span class="nc" id="L133">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L134">        eddard.sendCrush(WEST);</span>
+
+<span class="nc" id="L136">        assertCrush(assertAndMerge(cersei, eddard),1, WEST);</span>
+
+        //Eddard (80) passes
+<span class="nc" id="L139">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L140">        eddard.sendDoneActing();</span>
+
+<span class="nc" id="L142">        assertDoneActing(assertAndMerge(cersei, eddard),1);</span>
+
+        //It's Cersei's turn
+
+        //Cersei (1000) stabs Eddard four times
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        for (int i = 0; i &lt; 4; i++){</span>
+<span class="nc" id="L148">            assertActNow(assertAndMerge(cersei, eddard),0);</span>
+<span class="nc" id="L149">            cersei.sendStab(EAST);</span>
+<span class="nc" id="L150">            assertStabbed(assertAndMerge(cersei, eddard),0,EAST);</span>
+        }
+
+        //Cersei (0) passes
+<span class="nc" id="L154">        assertActNow(assertAndMerge(cersei, eddard),0);</span>
+<span class="nc" id="L155">        cersei.sendDoneActing();</span>
+
+<span class="nc" id="L157">        assertDoneActing(assertAndMerge(cersei, eddard),0);</span>
+
+        //Finished Round 3
+<span class="nc" id="L160">        assertRoundEnd(assertAndMerge(cersei, eddard),3,0);</span>
+
+<span class="nc" id="L162">        assertRoundBegin(assertAndMerge(cersei, eddard),4);</span>
+        //###STATUS: Eddard: 122HP, Cersei: 20HP----------------------------------------
+
+        //It's Eddard's turn
+<span class="nc" id="L166">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+
+        //Eddard (1000) crushes Cersei twice
+<span class="nc" id="L169">        eddard.sendCrush(WEST);</span>
+
+<span class="nc" id="L171">        assertCrush(assertAndMerge(cersei, eddard),1, WEST);</span>
+
+<span class="nc" id="L173">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L174">        eddard.sendCrush(WEST);</span>
+
+<span class="nc" id="L176">        assertCrush(assertAndMerge(cersei, eddard),1, WEST);</span>
+
+        //Cersei has 0 HP and dies
+<span class="nc" id="L179">        assertDied(assertAndMerge(cersei, eddard),0);</span>
+
+<span class="nc" id="L181">        assertActNow(assertAndMerge(cersei, eddard),1);</span>
+<span class="nc" id="L182">        eddard.sendDoneActing();</span>
+
+<span class="nc" id="L184">        assertDoneActing(assertAndMerge(cersei, eddard),1);</span>
+
+<span class="nc" id="L186">        assertRoundEnd(assertAndMerge(cersei, eddard),4,0);</span>
+
+        //Eddard wins
+<span class="nc" id="L189">        assertWinner(assertAndMerge(cersei, eddard),&quot;Stark&quot;);</span>
+<span class="nc" id="L190">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L194">        return &quot;0  1\n    \n    \n    &quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L199">        return &quot;Lannister, Stark\n\n\nLannister, Cersei, Elf\nStark, Eddard, Yeti&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

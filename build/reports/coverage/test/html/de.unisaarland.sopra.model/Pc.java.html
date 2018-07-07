@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Pc.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.model</a> &gt; <span class="el_source">Pc.java</span></div><h1>Pc.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.model;
+
+import de.unisaarland.sopra.utility.GameVector;
+
+/**
+ * Created by Team14 on 12/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class Pc extends Creature {
+
+    private static final int MAGICPRIM = 31;
+
+    // HP data
+    private static final int MAX_HP_100 = 100;
+    private static final int MAX_HP_IFRIT = 87;
+    private static final int MAX_HP_YETI = 200;
+
+    // Energy
+    private static final int MAX_ENERGY = 1000;
+
+    // Fields
+    private int energy;
+    private boolean criedInRound;
+    private int fairness;
+
+    /**
+     * creates an instance of {@link Pc} with given attributes
+     *
+     * @param id           {@link Pc} monsterId
+     * @param position     {@link Pc} position as a {@link GameVector}
+     * @param hp           {@link Pc} health points
+     * @param creatureType {@link Pc} type of Creature {@link CreatureType}
+     */
+    public Pc(int id, GameVector position, int hp, CreatureType creatureType) throws IllegalArgumentException {
+<span class="fc" id="L35">        super(id, position, hp, creatureType);</span>
+
+        /*
+        if (id &lt; 0 || hp &lt; 0) {
+            throw new IllegalArgumentException();
+        }
+
+        if (creatureType == CreatureType.BOAR || creatureType == CreatureType.FAIRY) {
+            throw new IllegalArgumentException();
+        } else {
+            if (creatureType == CreatureType.WRAITH &amp;&amp; hp &gt; MAX_HP_100) {
+                throw new IllegalArgumentException();
+            } else {
+                if (creatureType == CreatureType.ELF &amp;&amp; hp &gt; MAX_HP_100) {
+                    throw new IllegalArgumentException();
+                } else {
+                    if (creatureType == CreatureType.IFRIT &amp;&amp; hp &gt; MAX_HP_IFRIT) {
+                        throw new IllegalArgumentException();
+                    } else {
+                        if (creatureType == CreatureType.KOBOLD &amp;&amp; hp &gt; MAX_HP_100) {
+                            throw new IllegalArgumentException();
+                        } else {
+                            if (creatureType == CreatureType.NAGA &amp;&amp; hp &gt; MAX_HP_100) {
+                                throw new IllegalArgumentException();
+                            } else {
+                                if (creatureType == CreatureType.ROOK &amp;&amp; hp &gt; MAX_HP_100) {
+                                    throw new IllegalArgumentException();
+                                } else {
+                                    if (creatureType == CreatureType.YETI &amp;&amp; hp &gt; MAX_HP_YETI) {
+                                        throw new IllegalArgumentException();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        */
+<span class="fc" id="L74">        this.energy = MAX_ENERGY;</span>
+<span class="fc" id="L75">    }</span>
+
+    /*
+    @Override
+    public int hashCode() {
+        int result = energy;
+
+
+
+        result = MAGICPRIM * result + (criedInRound ? 1 : 0);
+        result = MAGICPRIM * result + fairness;
+        result = MAGICPRIM * result + super.hp;
+        result = MAGICPRIM * result + super.id;
+        result = MAGICPRIM * result + super.getMaxHp();
+        result = MAGICPRIM * result + super.getPosition().hashCode();
+        result = MAGICPRIM * result + (super.isDead() ? 1 : 0);
+        result = MAGICPRIM * result + super.getPoisons().hashCode();
+        result = MAGICPRIM * result + super.getCreatureType().hashCode();
+        result = MAGICPRIM * result + ((super.getLastDirection() == null) ? 0 : super.getLastDirection().hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Pc pc = (Pc) o;
+
+        return energy == pc.energy
+                &amp;&amp; criedInRound == pc.criedInRound
+                &amp;&amp; super.getId() == pc.getId()
+                &amp;&amp; super.getHp() == pc.getHp()
+                &amp;&amp; super.getMaxHp() == pc.getMaxHp()
+                &amp;&amp; super.getPosition().equals(pc.getPosition())
+                &amp;&amp; super.isDead() == pc.isDead()
+                &amp;&amp; super.getPoisons().equals(pc.getPoisons())
+                &amp;&amp; super.getCreatureType() == pc.getCreatureType()
+                &amp;&amp; !(super.lastDirection != null
+                &amp;&amp; super.getLastDirection() != pc.getLastDirection())
+                &amp;&amp; fairness == pc.fairness;
+    }
+    */
+
+    /**
+     * copy constructor of {@link Pc}
+     *
+     * @param pc {@link Pc} instance which is copied
+     */
+    public Pc(Pc pc) {
+<span class="fc" id="L129">        super(pc);</span>
+<span class="fc" id="L130">        this.energy = pc.getEnergy();</span>
+<span class="fc" id="L131">        this.criedInRound = pc.getCriedInRound();</span>
+<span class="fc" id="L132">        this.fairness = pc.getFairness();</span>
+<span class="fc" id="L133">    }</span>
+
+    /**
+     * gets energy value of {@link Pc}
+     *
+     * @return {@link Pc} energy
+     */
+    public int getEnergy() {
+<span class="fc" id="L141">        return this.energy;</span>
+    }
+
+    /**
+     * sets energy value of {@link Pc}
+     *
+     * @param energy {@link Pc} to set value of energy
+     */
+    public void setEnergy(int energy) {
+<span class="fc" id="L150">        this.energy = energy;</span>
+<span class="fc" id="L151">    }</span>
+
+    /**
+     * reduces {@link Pc} energy value by given drain
+     *
+     * @param drain {@link Pc} energy drain
+     */
+    public void drainEnergy(int drain) {
+        //assert(this.energy - drain &gt;= 0);
+        //assert(this.energy - drain  &lt;= MAX_ENERGY);
+<span class="fc" id="L161">        this.energy = this.energy - drain;</span>
+<span class="fc" id="L162">    }</span>
+
+    /**
+     * get {@link Pc} fairness value (used for initiative order)
+     *
+     * @return {@link Pc} fairness value
+     */
+    public int getFairness() {
+<span class="fc" id="L170">        return this.fairness;</span>
+    }
+
+    /**
+     * sets {@link Pc} fairness value (used for initiative oder)
+     *
+     * @param fairness {@link Pc} fairness value to set
+     */
+    public void setFairness(int fairness) {
+<span class="nc" id="L179">        this.fairness = fairness;</span>
+<span class="nc" id="L180">    }</span>
+
+    /**
+     * gets if the {@link Pc} has already used its WarCry in this round
+     *
+     * @return {@link Pc} if WarCry was already used in this round
+     */
+    public boolean getCriedInRound() {
+<span class="fc" id="L188">        return this.criedInRound;</span>
+    }
+
+    /**
+     * sets the attribute if {@link Pc} has already used its WarCry in this round
+     *
+     * @param criedInRound {@link Pc} WarCry used value in this round to set
+     */
+    public void setCriedInRound(boolean criedInRound) {
+<span class="fc" id="L197">        this.criedInRound = criedInRound;</span>
+<span class="fc" id="L198">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OurSystemTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">OurSystemTest.java</span></div><h1>OurSystemTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.MonsterType;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.*;
+import de.unisaarland.sopra.messages.attack.*;
+import de.unisaarland.sopra.model.CreatureType;
+import org.junit.Assert;
+
+import java.util.List;
+
+/**
+ * Created by Team 14 on 16.09.2016.
+ */
+public abstract class OurSystemTest extends SystemTest {
+
+    /**
+     * @param name der Name des Tests.
+     */
+    protected OurSystemTest(String name) {
+<span class="nc" id="L22">        super(name);</span>
+<span class="nc" id="L23">    }</span>
+
+    public ClientConnection&lt;Event&gt; register(int id, String name, CreatureType creatureType, String team, int x, int y) {
+<span class="nc" id="L26">        ClientConnection&lt;Event&gt; cc = openClient(new EventFactoryImpl());</span>
+<span class="nc" id="L27">        cc.sendRegister(name, MonsterType.valueOf(creatureType.name()), team);</span>
+
+<span class="nc" id="L29">        Event mapEvent = cc.nextEvent();</span>
+<span class="nc" id="L30">        assertMap(mapEvent, getMapFile());</span>
+
+<span class="nc" id="L32">        Event fightEvent = cc.nextEvent();</span>
+<span class="nc" id="L33">        assertFight(fightEvent, getFightFile());</span>
+
+<span class="nc" id="L35">        Event regEvent = cc.nextEvent();</span>
+<span class="nc" id="L36">        assertRegisterEvent(regEvent, id, name, creatureType, team, x, y);</span>
+
+<span class="nc" id="L38">        return cc;</span>
+    }
+
+    public final void assertRegisterEvent(Event event, int id, String name, CreatureType creatureType, String team, int x, int y) {
+<span class="nc" id="L42">        Assert.assertEquals(Register.class, event.getClass());</span>
+<span class="nc" id="L43">        Register regEvent = (Register) event;</span>
+
+<span class="nc" id="L45">        Assert.assertEquals(id, regEvent.getId());</span>
+<span class="nc" id="L46">        Assert.assertEquals(name, regEvent.getName());</span>
+<span class="nc" id="L47">        Assert.assertEquals(creatureType, regEvent.getCreatureType());</span>
+<span class="nc" id="L48">        Assert.assertEquals(team, regEvent.getTeamName());</span>
+<span class="nc" id="L49">        Assert.assertEquals(x, regEvent.getxCoord());</span>
+<span class="nc" id="L50">        Assert.assertEquals(y, regEvent.getyCoord());</span>
+<span class="nc" id="L51">    }</span>
+
+    public final void assertRegistrationAborted(Event event) {
+<span class="nc" id="L54">        Assert.assertEquals(RegistrationAborted.class, event.getClass());</span>
+<span class="nc" id="L55">    }</span>
+
+    public final void assertMoved(Event event, int actorId, Direction direction) {
+<span class="nc" id="L58">        Assert.assertEquals(Move.class, event.getClass());</span>
+<span class="nc" id="L59">        Move moveEvent = (Move) event;</span>
+
+<span class="nc" id="L61">        Assert.assertEquals(actorId, moveEvent.getActorId());</span>
+<span class="nc" id="L62">        Assert.assertEquals(direction, moveEvent.getDirection());</span>
+<span class="nc" id="L63">    }</span>
+
+    public final void assertStabbed(Event event, int actorId, Direction direction) {
+<span class="nc" id="L66">        Assert.assertEquals(Stab.class, event.getClass());</span>
+<span class="nc" id="L67">        Stab stabEvent = (Stab) event;</span>
+
+<span class="nc" id="L69">        Assert.assertEquals(actorId, stabEvent.getActorId());</span>
+<span class="nc" id="L70">        Assert.assertEquals(direction, stabEvent.getDirection());</span>
+<span class="nc" id="L71">    }</span>
+
+    public final void assertSlashed(Event event, int actorId, Direction direction) {
+<span class="nc" id="L74">        Assert.assertEquals(Slash.class, event.getClass());</span>
+<span class="nc" id="L75">        Slash slashEvent = (Slash) event;</span>
+
+<span class="nc" id="L77">        Assert.assertEquals(actorId, slashEvent.getActorId());</span>
+<span class="nc" id="L78">        Assert.assertEquals(direction, slashEvent.getDirection());</span>
+<span class="nc" id="L79">    }</span>
+
+    public final void assertStared(Event event, int actorId, Direction direction) {
+<span class="nc" id="L82">        Assert.assertEquals(Stare.class, event.getClass());</span>
+<span class="nc" id="L83">        Stare attackEvent = (Stare) event;</span>
+
+<span class="nc" id="L85">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L86">        Assert.assertEquals(direction, attackEvent.getDirection());</span>
+<span class="nc" id="L87">    }</span>
+
+    public final void assertClaw(Event event, int actorId, Direction direction) {
+<span class="nc" id="L90">        Assert.assertEquals(Claw.class, event.getClass());</span>
+<span class="nc" id="L91">        Claw attackEvent = (Claw) event;</span>
+
+<span class="nc" id="L93">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L94">        Assert.assertEquals(direction, attackEvent.getDirection());</span>
+<span class="nc" id="L95">    }</span>
+
+    public final void assertCrush(Event event, int actorId, Direction direction) {
+<span class="nc" id="L98">        Assert.assertEquals(Crush.class, event.getClass());</span>
+<span class="nc" id="L99">        Crush attackEvent = (Crush) event;</span>
+
+<span class="nc" id="L101">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L102">        Assert.assertEquals(direction, attackEvent.getDirection());</span>
+<span class="nc" id="L103">    }</span>
+
+    public final void assertSinged(Event event, int actorId, Direction direction) {
+<span class="nc" id="L106">        Assert.assertEquals(Singe.class, event.getClass());</span>
+<span class="nc" id="L107">        Singe attackEvent = (Singe) event;</span>
+
+<span class="nc" id="L109">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L110">        Assert.assertEquals(direction, attackEvent.getDirection());</span>
+<span class="nc" id="L111">    }</span>
+
+    public final void assertShot(Event event, int actorId, Direction direction) {
+<span class="nc" id="L114">        Assert.assertEquals(Shoot.class, event.getClass());</span>
+<span class="nc" id="L115">        Shoot attackEvent = (Shoot) event;</span>
+
+<span class="nc" id="L117">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L118">        Assert.assertEquals(direction, attackEvent.getDirection());</span>
+<span class="nc" id="L119">    }</span>
+
+    public final void assertBurned(Event event, int actorId) {
+<span class="nc" id="L122">        Assert.assertEquals(Burn.class, event.getClass());</span>
+<span class="nc" id="L123">        Burn attackEvent = (Burn) event;</span>
+
+<span class="nc" id="L125">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L126">    }</span>
+
+    public final void assertCast(Event event, int actorId, int x, int y) {
+<span class="nc" id="L129">        Assert.assertEquals(Cast.class, event.getClass());</span>
+<span class="nc" id="L130">        Cast attackEvent = (Cast) event;</span>
+
+<span class="nc" id="L132">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L133">        Assert.assertEquals(x, attackEvent.getxCoord());</span>
+<span class="nc" id="L134">        Assert.assertEquals(y, attackEvent.getyCoord());</span>
+<span class="nc" id="L135">    }</span>
+
+    public final void assertBlinked(Event event, int actorId, int x, int y) {
+<span class="nc" id="L138">        Assert.assertEquals(Blink.class, event.getClass());</span>
+<span class="nc" id="L139">        Blink attackEvent = (Blink) event;</span>
+
+<span class="nc" id="L141">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L142">        Assert.assertEquals(x, attackEvent.getX());</span>
+<span class="nc" id="L143">        Assert.assertEquals(y, attackEvent.getY());</span>
+<span class="nc" id="L144">    }</span>
+
+    public final void assertSwapped(Event event, int actorId, int x, int y) {
+<span class="nc" id="L147">        Assert.assertEquals(Swap.class, event.getClass());</span>
+<span class="nc" id="L148">        Swap attackEvent = (Swap) event;</span>
+
+<span class="nc" id="L150">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L151">        Assert.assertEquals(x, attackEvent.getxCoord());</span>
+<span class="nc" id="L152">        Assert.assertEquals(y, attackEvent.getyCoord());</span>
+<span class="nc" id="L153">    }</span>
+
+    public final void assertCut(Event event, int actorId, Direction direction) {
+<span class="nc" id="L156">        Assert.assertEquals(Cut.class, event.getClass());</span>
+<span class="nc" id="L157">        Cut attackEvent = (Cut) event;</span>
+
+<span class="nc" id="L159">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L160">        Assert.assertEquals(direction, attackEvent.getDirection());</span>
+<span class="nc" id="L161">    }</span>
+
+    public final void assertBitten(Event event, int actorId, Direction direction) {
+<span class="nc" id="L164">        Assert.assertEquals(Bite.class, event.getClass());</span>
+<span class="nc" id="L165">        Bite attackEvent = (Bite) event;</span>
+
+<span class="nc" id="L167">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L168">        Assert.assertEquals(direction, attackEvent.getDirection());</span>
+<span class="nc" id="L169">    }</span>
+
+    public final void assertWarCry(Event event, int actorId, String warCry) {
+<span class="nc" id="L172">        Assert.assertEquals(WarCry.class, event.getClass());</span>
+<span class="nc" id="L173">        WarCry attackEvent = (WarCry) event;</span>
+
+<span class="nc" id="L175">        Assert.assertEquals(actorId, attackEvent.getActorId());</span>
+<span class="nc" id="L176">        Assert.assertEquals(warCry, attackEvent.getCry());</span>
+<span class="nc" id="L177">    }</span>
+
+    public final void assertPoisonEffect(Event event, int entityId, int value) {
+<span class="nc" id="L180">        Assert.assertEquals(PoisonEffect.class, event.getClass());</span>
+<span class="nc" id="L181">        PoisonEffect attackEvent = (PoisonEffect) event;</span>
+
+<span class="nc" id="L183">        Assert.assertEquals(entityId, attackEvent.getEntityId());</span>
+<span class="nc" id="L184">        Assert.assertEquals(value, attackEvent.getValue());</span>
+<span class="nc" id="L185">    }</span>
+
+    public final void assertBoarAttack(Event event, int boarId, int victimId) {
+<span class="nc" id="L188">        Assert.assertEquals(BoarAttack.class, event.getClass());</span>
+<span class="nc" id="L189">        BoarAttack attackEvent = (BoarAttack) event;</span>
+
+<span class="nc" id="L191">        Assert.assertEquals(boarId, attackEvent.getBoardId());</span>
+<span class="nc" id="L192">        Assert.assertEquals(victimId, attackEvent.getVictimId());</span>
+<span class="nc" id="L193">    }</span>
+
+    public final void assertDied(Event event, int entityId) {
+<span class="nc" id="L196">        Assert.assertEquals(Died.class, event.getClass());</span>
+<span class="nc" id="L197">        Died diedEvent = (Died) event;</span>
+
+<span class="nc" id="L199">        Assert.assertEquals(entityId, diedEvent.getEntityId());</span>
+<span class="nc" id="L200">    }</span>
+
+    public final void assertKicked(Event event, int monsterId) {
+<span class="nc" id="L203">        Assert.assertEquals(Kicked.class, event.getClass());</span>
+<span class="nc" id="L204">        Kicked kickedEvent = (Kicked) event;</span>
+
+<span class="nc" id="L206">        Assert.assertEquals(monsterId, kickedEvent.getMonsterId());</span>
+<span class="nc" id="L207">    }</span>
+
+    public final void assertBoarSpawned(Event event, int creatureId, int x, int y) {
+<span class="nc" id="L210">        Assert.assertEquals(BoarSpawned.class, event.getClass());</span>
+<span class="nc" id="L211">        BoarSpawned boarSpawnedEvent = (BoarSpawned) event;</span>
+
+<span class="nc" id="L213">        Assert.assertEquals(creatureId, boarSpawnedEvent.getCreatureId());</span>
+<span class="nc" id="L214">        Assert.assertEquals(x, boarSpawnedEvent.getX_coord());</span>
+<span class="nc" id="L215">        Assert.assertEquals(y, boarSpawnedEvent.getY_coord());</span>
+<span class="nc" id="L216">    }</span>
+
+    public final void assertFairySpawned(Event event, int creatureId, int x, int y) {
+<span class="nc" id="L219">        Assert.assertEquals(FairySpawned.class, event.getClass());</span>
+<span class="nc" id="L220">        FairySpawned fairySpawnedEvent = (FairySpawned) event;</span>
+
+<span class="nc" id="L222">        Assert.assertEquals(creatureId, fairySpawnedEvent.getCreatureId());</span>
+<span class="nc" id="L223">        Assert.assertEquals(x, fairySpawnedEvent.getX_coord());</span>
+<span class="nc" id="L224">        Assert.assertEquals(y, fairySpawnedEvent.getY_coord());</span>
+<span class="nc" id="L225">    }</span>
+
+    public final void assertActNow(Event event, int monsterId) {
+<span class="nc" id="L228">        Assert.assertEquals(ActNow.class, event.getClass());</span>
+<span class="nc" id="L229">        ActNow actNowEvent = (ActNow) event;</span>
+
+<span class="nc" id="L231">        Assert.assertEquals(monsterId, actNowEvent.getMonsterId());</span>
+<span class="nc" id="L232">    }</span>
+
+    public final void assertFieldEffect(Event event, int x, int y, int value) {
+<span class="nc" id="L235">        Assert.assertEquals(FieldEffect.class, event.getClass());</span>
+<span class="nc" id="L236">        FieldEffect fieldEffectEvent = (FieldEffect) event;</span>
+
+<span class="nc" id="L238">        Assert.assertEquals(x, fieldEffectEvent.getxCoord());</span>
+<span class="nc" id="L239">        Assert.assertEquals(y, fieldEffectEvent.getyCoord());</span>
+<span class="nc" id="L240">        Assert.assertEquals(value, fieldEffectEvent.getValue());</span>
+<span class="nc" id="L241">    }</span>
+
+    public final void assertDoneActing(Event event, int actorId) {
+<span class="nc" id="L244">        Assert.assertEquals(DoneActing.class, event.getClass());</span>
+<span class="nc" id="L245">        DoneActing doneActingEvent = (DoneActing) event;</span>
+
+<span class="nc" id="L247">        Assert.assertEquals(actorId, doneActingEvent.getActorId());</span>
+<span class="nc" id="L248">    }</span>
+
+    public final void assertMap(Event event, String map) {
+<span class="nc" id="L251">        Assert.assertEquals(MapFile.class, event.getClass());</span>
+<span class="nc" id="L252">        MapFile mapFileEvent = (MapFile) event;</span>
+
+<span class="nc" id="L254">        Assert.assertEquals(map, mapFileEvent.getValue());</span>
+<span class="nc" id="L255">    }</span>
+
+    public final void assertFight(Event event, String fight) {
+<span class="nc" id="L258">        Assert.assertEquals(Fight.class, event.getClass());</span>
+<span class="nc" id="L259">        Fight fightEvent = (Fight) event;</span>
+
+<span class="nc" id="L261">        Assert.assertEquals(fight, fightEvent.getFightFile());</span>
+<span class="nc" id="L262">    }</span>
+
+    public final void assertRoundBegin(Event event, int round) {
+<span class="nc" id="L265">        Assert.assertEquals(RoundBegin.class, event.getClass());</span>
+<span class="nc" id="L266">        RoundBegin roundBeginEvent = (RoundBegin) event;</span>
+
+<span class="nc" id="L268">        Assert.assertEquals(round, roundBeginEvent.getRoundNumber());</span>
+<span class="nc" id="L269">    }</span>
+
+    public final void assertRoundEnd(Event event, int round, int boredom) {
+<span class="nc" id="L272">        Assert.assertEquals(RoundEnd.class, event.getClass());</span>
+<span class="nc" id="L273">        RoundEnd roundEndEvent = (RoundEnd) event;</span>
+
+<span class="nc" id="L275">        Assert.assertEquals(round, roundEndEvent.getRoundNumber());</span>
+<span class="nc" id="L276">        Assert.assertEquals(boredom, roundEndEvent.getBoredom());</span>
+<span class="nc" id="L277">    }</span>
+
+    public final void assertWinner(Event event, String winner) {
+<span class="nc" id="L280">        Assert.assertEquals(Winner.class, event.getClass());</span>
+<span class="nc" id="L281">        Winner winnerEvent = (Winner) event;</span>
+
+<span class="nc" id="L283">        Assert.assertEquals(winner, winnerEvent.getTeamName());</span>
+<span class="nc" id="L284">    }</span>
+
+    private void assertSameEvents(Event e1, Event e2) {
+        //TODO 1: Write Equals()-methods for events? Right now, only the class name is tested for equality
+        //TODO 2: Noooo!
+<span class="nc" id="L289">        Assert.assertEquals(e1.getClass(), e2.getClass());</span>
+<span class="nc" id="L290">    }</span>
+
+    public final Event assertAndMerge(List&lt;ClientConnection&lt;Event&gt;&gt; ccs) {
+<span class="nc" id="L293">        Event tmp = null;</span>
+<span class="nc bnc" id="L294" title="All 2 branches missed.">        for (ClientConnection&lt;Event&gt; cc : ccs) {</span>
+<span class="nc bnc" id="L295" title="All 2 branches missed.">            if (tmp == null) {</span>
+<span class="nc" id="L296">                tmp = cc.nextEvent();</span>
+            } else {
+<span class="nc" id="L298">                assertSameEvents(tmp, cc.nextEvent());</span>
+            }
+<span class="nc" id="L300">        }</span>
+<span class="nc" id="L301">        return tmp;</span>
+    }
+
+    @SafeVarargs
+    public final Event assertAndMerge(ClientConnection&lt;Event&gt;... ccs) {
+<span class="nc" id="L306">        Event tmp = null;</span>
+<span class="nc bnc" id="L307" title="All 2 branches missed.">        for (ClientConnection&lt;Event&gt; cc : ccs) {</span>
+<span class="nc bnc" id="L308" title="All 2 branches missed.">            if (tmp == null) {</span>
+<span class="nc" id="L309">                tmp = cc.nextEvent();</span>
+            } else {
+<span class="nc" id="L311">                assertSameEvents(tmp, cc.nextEvent());</span>
+            }
+        }
+<span class="nc" id="L314">        return tmp;</span>
+    }
+
+    public final Event assertAndMerge(ClientConnection&lt;Event&gt; c1, ClientConnection&lt;Event&gt; c2) {
+<span class="nc" id="L318">        Event e1 = c1.nextEvent();</span>
+<span class="nc" id="L319">        Event e2 = c2.nextEvent();</span>
+<span class="nc" id="L320">        assertSameEvents(e1, e2);</span>
+<span class="nc" id="L321">        return e1;</span>
+    }
+
+    public static final String buildValidFightFile(String teamA, String teamB, String playerA, String playerB, String creatureA, String creatureB){
+<span class="nc" id="L325">        return teamA + &quot;, &quot; + teamB + &quot;\n&quot; + teamA + &quot;, &quot; + playerA + &quot;, &quot; + creatureA + &quot;\n&quot; + teamB + &quot;, &quot; + playerB + &quot;, &quot; + creatureB;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

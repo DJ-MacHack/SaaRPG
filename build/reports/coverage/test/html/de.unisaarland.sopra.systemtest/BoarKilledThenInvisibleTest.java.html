@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoarKilledThenInvisibleTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">BoarKilledThenInvisibleTest.java</span></div><h1>BoarKilledThenInvisibleTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Karla on 22.09.2016.
+ * Boar kills someone and moves forward
+ */
+public class BoarKilledThenInvisibleTest extends OurSystemTest {
+
+    private static final String FIGHTFILE =
+                        &quot;Red, Blue\n&quot;
+                    + &quot;Red, Lukas, Wraith\n&quot;
+                    + &quot;Blue, Chris, Yeti&quot;;
+    //MAP
+    private static final String MAPFILE = &quot;X      01&quot;;
+
+    public BoarKilledThenInvisibleTest(){
+<span class="nc" id="L22">        super(&quot;Boar kills, then moves forward&quot;);</span>
+<span class="nc" id="L23">    }</span>
+    @Override
+    protected void executeTest() {
+
+<span class="nc" id="L27">        ClientConnection&lt;Event&gt; chris = register(0,&quot;Chris&quot;,CreatureType.YETI,&quot;Blue&quot;,8,0);</span>
+<span class="nc" id="L28">        ClientConnection&lt;Event&gt; lukas = register(1,&quot;Lukas&quot;, CreatureType.WRAITH,&quot;Red&quot;,7,0);</span>
+
+<span class="nc" id="L30">        assertRegisterEvent(chris.nextEvent(),1,&quot;Lukas&quot;, CreatureType.WRAITH,&quot;Red&quot;,7,0);</span>
+<span class="nc" id="L31">        assertRegisterEvent(lukas.nextEvent(),0,&quot;Chris&quot;,CreatureType.YETI,&quot;Blue&quot;,8,0);</span>
+
+<span class="nc" id="L33">        assertRoundBegin(assertAndMerge(chris,lukas),1);</span>
+
+        //Boar lives
+<span class="nc" id="L36">        assertBoarSpawned(assertAndMerge(chris,lukas),2,0,0);</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        for(int i = 0; i &lt; 6; i++) {</span>
+<span class="nc" id="L38">            assertMoved(assertAndMerge(chris, lukas), 2, Direction.EAST);</span>
+        }
+        //Chris passes
+<span class="nc" id="L41">        assertActNow(assertAndMerge(chris,lukas),0);</span>
+<span class="nc" id="L42">        chris.sendDoneActing();</span>
+<span class="nc" id="L43">        assertDoneActing(assertAndMerge(chris,lukas),0);</span>
+
+        //Lukas E:1000, HP:4
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        for(int i = 0; i &lt; 16;i++ ){</span>
+<span class="nc" id="L47">            assertActNow(assertAndMerge(chris,lukas),1);</span>
+<span class="nc" id="L48">            lukas.sendSwap(7,0);</span>
+<span class="nc" id="L49">            assertSwapped(assertAndMerge(chris,lukas),1,7,0);</span>
+        }
+<span class="nc" id="L51">        assertActNow(assertAndMerge(chris,lukas),1);</span>
+<span class="nc" id="L52">        lukas.sendDoneActing();</span>
+<span class="nc" id="L53">        assertDoneActing(assertAndMerge(chris,lukas),1);</span>
+
+<span class="nc" id="L55">        assertRoundEnd(assertAndMerge(chris,lukas),1,0);</span>
+
+        //Round 2 starts
+<span class="nc" id="L58">        assertRoundBegin(assertAndMerge(chris,lukas),2);</span>
+        //Boar attacks
+<span class="nc" id="L60">        assertBoarAttack(assertAndMerge(chris,lukas),2,1);</span>
+<span class="nc" id="L61">        assertDied(assertAndMerge(chris,lukas),1);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        for(int i = 0; i &lt; 6;i++ ) {</span>
+<span class="nc" id="L63">            assertMoved(assertAndMerge(chris, lukas), 2, Direction.WEST);</span>
+        }
+        //Chris passes
+<span class="nc" id="L66">        assertActNow(assertAndMerge(chris,lukas),0);</span>
+<span class="nc" id="L67">        chris.sendDoneActing();</span>
+<span class="nc" id="L68">        assertDoneActing(assertAndMerge(chris,lukas),0);</span>
+
+<span class="nc" id="L70">        assertRoundEnd(assertAndMerge(chris,lukas),2,0);</span>
+<span class="nc" id="L71">        assertWinner(assertAndMerge(chris,lukas),&quot;Blue&quot;);</span>
+<span class="nc" id="L72">        passed();</span>
+
+<span class="nc" id="L74">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L78">        return MAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L83">        return FIGHTFILE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

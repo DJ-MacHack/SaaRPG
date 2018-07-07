@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.model</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.model;
+
+import de.unisaarland.sopra.MonsterType;
+import de.unisaarland.sopra.utility.GameVector;
+import de.unisaarland.sopra.utility.InvalidFightFileException;
+import de.unisaarland.sopra.utility.InvalidMapFileException;
+import java.util.*;
+
+/**
+ * Created by Team 14 on 12.09.2016.
+ * Implemented by Wiebk and Lukas Kirschner
+ */
+
+public class Game {
+
+    private Map map;
+    private List&lt;Player&gt; players;
+    private List&lt;Team&gt; teams;
+    private HashMap&lt;Integer, Npc&gt; npcs;
+    private HashMap&lt;Integer, Pc&gt; monsters;
+    private RoundState roundstate;
+    private int boringRounds;
+    private int roundCounter;
+    private List&lt;Integer&gt; initorder;
+    private int currentMonsterIndex;
+    private String fightFile;
+    private String mapFile;
+    private int mapHeight, mapWidth;
+
+<span class="fc" id="L30">    public Game() {</span>
+<span class="fc" id="L31">        this.map = new Map();</span>
+<span class="fc" id="L32">        this.players = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L33">        this.teams = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L34">        this.npcs = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L35">        this.monsters = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L36">        this.roundstate = RoundState.REGISTER;</span>
+<span class="fc" id="L37">        this.boringRounds = 0;</span>
+<span class="fc" id="L38">        this.roundCounter = 0;</span>
+<span class="fc" id="L39">        this.initorder = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L40">        this.currentMonsterIndex = 0;</span>
+<span class="fc" id="L41">        this.mapHeight = 0;</span>
+<span class="fc" id="L42">        this.mapWidth = 0;</span>
+<span class="fc" id="L43">   }</span>
+
+<span class="fc" id="L45">    public Game(Game gameToCopy) {</span>
+        // copy map
+<span class="fc" id="L47">        this.map = new Map(gameToCopy.map);</span>
+
+        // copy all players
+<span class="fc" id="L50">        this.players = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for (Player player : gameToCopy.getPlayers()) {</span>
+<span class="fc" id="L52">            this.players.add(new Player(player));</span>
+<span class="fc" id="L53">        }</span>
+
+        // copy all teams
+<span class="fc" id="L56">        this.teams = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (Team team : gameToCopy.getTeams()) {</span>
+<span class="fc" id="L58">            this.teams.add(team);</span>
+<span class="fc" id="L59">        }</span>
+
+        // copy all npcs
+<span class="fc" id="L62">        this.npcs = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L63">        Collection&lt;Npc&gt; npcs = gameToCopy.npcs.values();</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        for (Npc t : npcs) {</span>
+<span class="nc" id="L65">            this.npcs.put(t.getId(), new Npc(t));</span>
+<span class="nc" id="L66">        }</span>
+
+        // copy all monsters
+<span class="fc" id="L69">        this.monsters = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L70">        Collection&lt;Pc&gt; pcs = gameToCopy.monsters.values();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (Pc t : pcs) {</span>
+<span class="fc" id="L72">            this.monsters.put(t.getId(), new Pc(t));</span>
+<span class="fc" id="L73">        }</span>
+
+<span class="fc" id="L75">        this.roundstate = gameToCopy.roundstate;</span>
+<span class="fc" id="L76">        this.boringRounds = gameToCopy.boringRounds;</span>
+<span class="fc" id="L77">        this.roundCounter = gameToCopy.roundCounter;</span>
+<span class="fc" id="L78">        this.initorder = new ArrayList&lt;&gt;(gameToCopy.initorder);</span>
+<span class="fc" id="L79">        this.currentMonsterIndex = gameToCopy.currentMonsterIndex;</span>
+<span class="fc" id="L80">        this.fightFile = gameToCopy.fightFile;</span>
+<span class="fc" id="L81">        this.mapFile = gameToCopy.mapFile;</span>
+<span class="fc" id="L82">    }</span>
+
+    public Map getMap() {
+<span class="fc" id="L85">        return map;</span>
+    }
+
+    public Field getFieldAt(GameVector v) {
+<span class="fc" id="L89">        return map.getFieldAt(v);</span>
+    }
+
+    public void setFieldAt(GameVector v, Field f) {
+<span class="fc" id="L93">        map.setFieldAt(v, f);</span>
+<span class="fc" id="L94">    }</span>
+
+    public List&lt;GameVector&gt; getFairySpawns() {
+<span class="nc" id="L97">        return map.getFairySpawns();</span>
+    }
+
+    public List&lt;GameVector&gt; getBoarSpawns() {
+<span class="nc" id="L101">        return map.getBoarSpawns();</span>
+    }
+
+    public Player getPlayerByName(String name) {
+        //if(players.contains(name)){
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        for (int i = 0; i &lt; players.size(); i++) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            if (players.get(i).getName().equals(name)) {</span>
+<span class="fc" id="L108">                return players.get(i);</span>
+            }
+        }
+        //}
+<span class="fc" id="L112">        return null;</span>
+    }
+
+    public Player getPlayerByMonsterId(int monster_id) {
+        //if(players.contains(monster_id)) {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        for (int i = 0; i &lt; players.size(); i++) {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (players.get(i).getId() == monster_id) {</span>
+<span class="nc" id="L119">                return players.get(i);</span>
+            }
+        }
+        //}
+<span class="nc" id="L123">        return null;</span>
+    }
+
+    public List&lt;Player&gt; getPlayers() {
+<span class="fc" id="L127">        return players;</span>
+    }
+
+    /*
+    private void removePlayer(Player player) {
+        players.remove(player);
+    }
+    */
+
+    public void addTeam(Team team) {
+<span class="nc" id="L137">        teams.add(team);</span>
+<span class="nc" id="L138">    }</span>
+
+    public Team getTeam(String teamName) {
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        for (Team team : teams) {</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">            if (team.getName().equals(teamName)) {</span>
+<span class="fc" id="L143">                return team;</span>
+            }
+<span class="fc" id="L145">        }</span>
+
+<span class="fc" id="L147">        return null;</span>
+    }
+
+    public List&lt;Team&gt; getTeams() {
+<span class="fc" id="L151">        return teams;</span>
+    }
+
+    public void removeNpc(Npc npc) {
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if (npc.getCreatureType() == CreatureType.FAIRY) {</span>
+<span class="fc" id="L156">            map.setFieldAt(npc.getAnchorPoint(), Field.HEAL_DISABLED);</span>
+        }
+
+<span class="fc" id="L159">        npcs.remove(npc.getId()); //Feel the magic happen</span>
+<span class="fc" id="L160">    }</span>
+
+    public Npc getNpcById(int id) {
+<span class="fc" id="L163">        Npc npc = npcs.get(id);</span>
+
+<span class="fc" id="L165">        return npc;</span>
+    }
+
+    public void setMapFile(String mapFile) {
+<span class="fc" id="L169">        this.mapFile = mapFile;</span>
+<span class="fc" id="L170">    }</span>
+
+    public Npc getNpcByPosition(GameVector v) {
+<span class="fc" id="L173">        Npc j = null;</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        for (Npc i : npcs.values()) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            if (i.getPosition().equals(v)) {</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">                if (i.isDead()) {</span>
+<span class="fc" id="L177">                    continue;</span>
+                }
+<span class="fc" id="L179">                j = i;</span>
+<span class="fc" id="L180">                break;</span>
+            }
+<span class="fc" id="L182">        }</span>
+<span class="fc" id="L183">        return j;</span>
+
+    }
+
+    public List&lt;Npc&gt; getNpcs() {
+<span class="fc" id="L188">        List&lt;Npc&gt; allNpcs = new ArrayList&lt;Npc&gt;();</span>
+<span class="fc" id="L189">        allNpcs.addAll(npcs.values());</span>
+<span class="fc" id="L190">        return allNpcs;</span>
+    }
+
+    public void addNpc(Npc npc) {
+<span class="fc" id="L194">        npcs.put(npc.getId(), npc);</span>
+<span class="fc" id="L195">    }</span>
+
+    public void removeMonster(Pc pc) {
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (monsters.containsKey(pc.getId())) {</span>
+<span class="fc" id="L199">            monsters.remove(pc.getId());</span>
+
+<span class="fc bfc" id="L201" title="All 2 branches covered.">            for (int i = 0; i &lt; players.size(); i++) {</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">                if (pc.getId() == players.get(i).getId()) {</span>
+<span class="fc" id="L203">                    players.remove(i);</span>
+<span class="fc" id="L204">                    break;</span>
+                }
+            }
+
+<span class="fc bfc" id="L208" title="All 2 branches covered.">            for (int i = 0; i &lt; initorder.size(); i++) {</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">                if (pc.getId() == initorder.get(i)) {</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">                    if (currentMonsterIndex &gt; i) {</span>
+<span class="fc" id="L211">                        currentMonsterIndex--;</span>
+                    }
+<span class="fc" id="L213">                    initorder.remove(i);</span>
+<span class="fc" id="L214">                    break;</span>
+                }
+            }
+        }
+<span class="fc" id="L218">    }</span>
+
+
+    public Pc getMonsterById(int id) {
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        if(monsters.containsKey(id)){</span>
+<span class="fc" id="L223">            return monsters.get(id);</span>
+        }
+
+<span class="fc" id="L226">        return null;</span>
+    }
+
+    public Pc getMonsterByPosition(GameVector v) {
+
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        for (Pc me : monsters.values()) {</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">            if (me.getPosition().equals(v)) {</span>
+<span class="fc" id="L233">                return me;</span>
+            }
+<span class="fc" id="L235">        }</span>
+<span class="fc" id="L236">        return null;</span>
+    }
+
+    public List&lt;Pc&gt; getMonsters() {
+<span class="fc" id="L240">        List&lt;Pc&gt; allPcs = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L241">        allPcs.addAll(monsters.values());</span>
+<span class="fc" id="L242">        return allPcs;</span>
+    }
+
+    public void addMonster(Pc pc) {
+<span class="fc" id="L246">        monsters.put(pc.getId(), pc);</span>
+<span class="fc" id="L247">    }</span>
+
+    public RoundState getRoundState() {
+<span class="fc" id="L250">        return roundstate;</span>
+    }
+
+    public void setRoundState(RoundState roundstate) {
+<span class="fc" id="L254">        this.roundstate = roundstate;</span>
+
+<span class="fc" id="L256">    }</span>
+
+    public int getBoringRounds() {
+<span class="fc" id="L259">        return boringRounds;</span>
+    }
+
+    public void setBoringRounds(int rounds) {
+<span class="nc" id="L263">        boringRounds = rounds;</span>
+<span class="nc" id="L264">    }</span>
+
+    public int getRoundCounter() {
+<span class="fc" id="L267">        return roundCounter;</span>
+    }
+
+    public void increaseRoundCounter() {
+<span class="fc" id="L271">        roundCounter++;</span>
+<span class="fc" id="L272">    }</span>
+
+    public void increaseBoringRounds() {
+<span class="fc" id="L275">        boringRounds++;</span>
+<span class="fc" id="L276">    }</span>
+
+    public void removeCreature(Creature creature) {
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">        if (creature instanceof Pc) {</span>
+<span class="fc" id="L280">            this.removeMonster((Pc) creature);</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">        } else if (creature instanceof Npc) {</span>
+<span class="nc" id="L282">            this.removeNpc((Npc) creature);</span>
+        }
+
+        /*
+        if(creature instanceof Pc &amp;&amp; monsters.containsValue(creature)){
+            monsters.remove(creature);
+        }
+        if(creature instanceof Npc &amp;&amp; monsters.containsValue(creature)){
+            npcs.remove(creature);
+        }*/
+<span class="fc" id="L292">    }</span>
+
+    public List&lt;Integer&gt; getInitOrder() {
+<span class="fc" id="L295">        return initorder;</span>
+    }
+
+    public void setInitOrder(List&lt;Integer&gt; initorder) {
+<span class="fc" id="L299">        this.initorder = initorder;</span>
+<span class="fc" id="L300">    }</span>
+
+    public int getCurrentMonsterIndex() {
+<span class="fc" id="L303">        return currentMonsterIndex;</span>
+    }
+
+    public void setCurrentMonsterIndex(int monsterindex) {
+<span class="fc" id="L307">        currentMonsterIndex = monsterindex;</span>
+<span class="fc" id="L308">    }</span>
+
+    public int getMonsterActing() {
+<span class="fc" id="L311">        return initorder.get(currentMonsterIndex);</span>
+    }
+
+    public void nextMonster() {
+<span class="fc" id="L315">        currentMonsterIndex++;</span>
+<span class="fc" id="L316">    }</span>
+
+    public Creature getCreatureById(int creatureId) {
+
+<span class="fc" id="L320">        Creature tmp = this.getMonsterById(creatureId);</span>
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">        if (tmp == null) {</span>
+<span class="nc" id="L322">            tmp = this.getNpcById(creatureId);</span>
+        }
+<span class="fc" id="L324">        return tmp;</span>
+
+        /*List&lt;Creature&gt; allcreatures = getCreatures();
+        for(int i = 0; i &lt; allcreatures.size(); i++){
+            if(allcreatures.get(i).getId() == creatureid){
+                return allcreatures.get(i);
+            }
+        }
+        return null;*/
+    }
+
+    public Creature getCreatureByPosition(GameVector v) {
+
+<span class="fc" id="L337">        Creature tmp = this.getMonsterByPosition(v);</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">        if (tmp == null) {</span>
+<span class="fc" id="L339">            tmp = getNpcByPosition(v);</span>
+        }
+
+<span class="fc" id="L342">        return tmp;</span>
+
+        /*List&lt;Creature&gt; allcreatures = getCreatures();
+        for(int i = 0; i &lt; allcreatures.size(); i++){
+            if(allcreatures.get(i).getPosition() == v){
+                return allcreatures.get(i);
+            }
+        }
+        return null;*/
+
+    }
+
+    public List&lt;Creature&gt; getCreatures() {
+<span class="nc" id="L355">        List&lt;Creature&gt; allCreatures = new ArrayList&lt;Creature&gt;();</span>
+<span class="nc" id="L356">        allCreatures.addAll(npcs.values());</span>
+<span class="nc" id="L357">        allCreatures.addAll(monsters.values());</span>
+<span class="nc" id="L358">        return allCreatures;</span>
+    }
+
+    public void handleFightfile(String fightFile) throws InvalidFightFileException {
+<span class="fc" id="L362">        this.fightFile = fightFile;</span>
+<span class="fc" id="L363">        String[] splittedFightFile = fightFile.split(&quot;\n&quot;);</span>
+<span class="fc" id="L364">        HashMap&lt;String, Boolean&gt; playerRegistered = new HashMap&lt;&gt;();</span>
+
+        // Teams
+<span class="fc" id="L367">        String[] teamnames = splittedFightFile[0].split(&quot;,&quot;);</span>
+<span class="pc bpc" id="L368" title="1 of 4 branches missed.">        if (teamnames.length &gt; 10 || teamnames.length &lt; 2) {</span>
+<span class="fc" id="L369">            throw new InvalidFightFileException(&quot;Wrong number of teams!&quot;);</span>
+        }
+
+<span class="fc bfc" id="L372" title="All 2 branches covered.">        for (int i = 0; i &lt; teamnames.length; i++) {</span>
+<span class="fc" id="L373">            String teamName = teamnames[i].trim();</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">            if (getTeam(teamName) != null) {</span>
+<span class="fc" id="L375">                throw new InvalidFightFileException(&quot;Double registration of teams!&quot;);</span>
+            }
+<span class="fc" id="L377">            Team newTeam = new Team(teamName);</span>
+<span class="fc" id="L378">            teams.add(newTeam);</span>
+<span class="fc" id="L379">            playerRegistered.put(teamName, false);</span>
+        }
+
+        // Gladiators
+<span class="fc" id="L383">        List&lt;String&gt; playerNames = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L384" title="All 2 branches covered.">        for (int i = 1; i &lt; splittedFightFile.length; i++) {</span>
+<span class="fc" id="L385">            String[] playerAttributes = splittedFightFile[i].split(&quot;,&quot;);</span>
+
+<span class="pc bpc" id="L387" title="1 of 4 branches missed.">            if (playerAttributes.length &lt;= 1 &amp;&amp; playerAttributes[0].trim().isEmpty()) {</span>
+<span class="fc" id="L388">                continue;</span>
+            }
+
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">            if (playerAttributes.length != 3) {</span>
+<span class="nc" id="L392">                throw new InvalidFightFileException(&quot;Wrong number of arguments for player!&quot;);</span>
+            }
+
+<span class="fc" id="L395">            String playerTeam = playerAttributes[0].trim();</span>
+<span class="fc" id="L396">            String playerName = playerAttributes[1].trim();</span>
+<span class="fc" id="L397">            String playerCreatureType = playerAttributes[2].trim();</span>
+<span class="pc bpc" id="L398" title="3 of 6 branches missed.">            if (playerTeam.isEmpty() || playerName.isEmpty() || playerCreatureType.isEmpty()) {</span>
+<span class="nc" id="L399">                throw new InvalidFightFileException(&quot;No name, team or creatureType!&quot;);</span>
+            }
+
+<span class="fc bfc" id="L402" title="All 2 branches covered.">            if (playerNames.contains(playerName)) {</span>
+<span class="fc" id="L403">                throw new InvalidFightFileException(&quot;Double registration of player!&quot;);</span>
+            }
+
+<span class="pc bpc" id="L406" title="1 of 2 branches missed.">            if (getTeam(playerTeam) == null) {</span>
+<span class="nc" id="L407">                throw new InvalidFightFileException(&quot;Wrong Team name!&quot;);</span>
+            }
+
+            CreatureType creatureType;
+
+            try {
+<span class="fc" id="L413">                MonsterType monsterType = MonsterType.valueOf(playerCreatureType.toUpperCase());</span>
+<span class="fc" id="L414">                creatureType = CreatureType.valueOf(monsterType.name());</span>
+<span class="fc" id="L415">            } catch (IllegalArgumentException exception) {</span>
+<span class="fc" id="L416">                throw new InvalidFightFileException(&quot;Unknown MonsterType!&quot;, exception);</span>
+<span class="fc" id="L417">            }</span>
+
+<span class="pc bpc" id="L419" title="2 of 4 branches missed.">            if (creatureType == CreatureType.BOAR || creatureType == CreatureType.FAIRY) {</span>
+<span class="nc" id="L420">                throw new InvalidFightFileException(&quot;Not allowed to spawn as boar or fairy!&quot;);</span>
+            }
+
+<span class="fc" id="L423">            Player player = new Player(playerName, playerTeam, creatureType);</span>
+<span class="fc" id="L424">            players.add(player);</span>
+<span class="fc" id="L425">            playerRegistered.put(playerTeam, true);</span>
+<span class="fc" id="L426">            playerNames.add(playerName);</span>
+        }
+
+<span class="fc bfc" id="L429" title="All 2 branches covered.">        for (boolean hasPlayer : playerRegistered.values()) {</span>
+<span class="fc bfc" id="L430" title="All 2 branches covered.">            if (!hasPlayer) {</span>
+<span class="fc" id="L431">                throw new InvalidFightFileException(&quot;One team has no players!&quot;);</span>
+            }
+<span class="fc" id="L433">        }</span>
+<span class="fc" id="L434">    }</span>
+
+    public void handleMapfile(String mapFile) throws InvalidMapFileException {
+<span class="fc" id="L437">        this.mapFile = mapFile;</span>
+<span class="fc" id="L438">        char[] mapString = mapFile.toCharArray();</span>
+<span class="fc" id="L439">        int x = 0;</span>
+<span class="fc" id="L440">        int y = 0;</span>
+<span class="fc" id="L441">        int widthCount = 0;</span>
+<span class="fc" id="L442">        int maxWidth = -1;</span>
+
+<span class="fc" id="L444">        HashMap&lt;String, Integer&gt; teamSpawns = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L445">        boolean multiLine = false;</span>
+
+<span class="fc bfc" id="L447" title="All 2 branches covered.">        for (int cnt = 0; cnt &lt; mapFile.length(); cnt++) {</span>
+<span class="fc bfc" id="L448" title="All 2 branches covered.">            if (mapString[cnt] == '\n') {</span>
+<span class="pc bpc" id="L449" title="1 of 2 branches missed.">                if (cnt == mapFile.length() - 1) {</span>
+<span class="nc" id="L450">                    throw new InvalidMapFileException(&quot;Wrong number of chars!&quot;);</span>
+                }
+
+<span class="fc bfc" id="L453" title="All 2 branches covered.">                if (maxWidth &lt; 0) {</span>
+<span class="fc" id="L454">                    maxWidth = widthCount;</span>
+                }
+<span class="fc" id="L456">                multiLine = true;</span>
+
+<span class="pc bpc" id="L458" title="1 of 2 branches missed.">                if (maxWidth != widthCount) {</span>
+<span class="nc" id="L459">                    throw new InvalidMapFileException(&quot;Wrong number of chars!&quot;);</span>
+                }
+
+<span class="fc" id="L462">                y++;</span>
+<span class="fc" id="L463">                x = -(y / 2);</span>
+<span class="fc" id="L464">                widthCount = 0;</span>
+<span class="fc" id="L465">                continue;</span>
+            }
+
+<span class="fc" id="L468">            GameVector pos = new GameVector(x, y);</span>
+
+<span class="pc bpc" id="L470" title="1 of 2 branches missed.">            if (mapString[cnt] == Character.LINE_SEPARATOR) {</span>
+<span class="nc" id="L471">                continue;</span>
+            }
+
+<span class="fc" id="L474">            Field f = Map.charToField(mapString[cnt]);</span>
+
+<span class="fc" id="L476">            this.map.setFieldAt(pos, f);</span>
+<span class="fc bfc" id="L477" title="All 2 branches covered.">            if (Character.isDigit(mapString[cnt])) {</span>
+<span class="fc" id="L478">                int teamId = Character.getNumericValue(mapString[cnt]);</span>
+<span class="pc bpc" id="L479" title="2 of 4 branches missed.">                if (teamId &lt; 0 || teamId &gt; 9) {</span>
+<span class="nc" id="L480">                    throw new InvalidMapFileException(&quot;Team id was too high or to low(&lt;0)!&quot;);</span>
+                }
+
+<span class="pc bpc" id="L483" title="1 of 2 branches missed.">                if (teamId &lt; teams.size()) {</span>
+<span class="fc" id="L484">                    Team team = teams.get(teamId);</span>
+<span class="fc" id="L485">                    team.addStartPosition(pos);</span>
+
+<span class="fc" id="L487">                    int spawns = 0;</span>
+<span class="fc bfc" id="L488" title="All 2 branches covered.">                    if (teamSpawns.containsKey(team.getName())) {</span>
+<span class="fc" id="L489">                        spawns = teamSpawns.get(team.getName());</span>
+                    }
+
+<span class="fc" id="L492">                    spawns++;</span>
+<span class="fc" id="L493">                    teamSpawns.put(team.getName(), spawns);</span>
+                }
+<span class="fc" id="L495">            } else {</span>
+<span class="pc bpc" id="L496" title="1 of 4 branches missed.">                if (f == Field.HEAL || f == Field.HEAL_DISABLED) {</span>
+<span class="fc" id="L497">                    map.addFairySpawn(pos);</span>
+                } else {
+<span class="fc bfc" id="L499" title="All 10 branches covered.">                    if (mapString[cnt] == 'X' || mapString[cnt] == 'A' || mapString[cnt] == 'T' || mapString[cnt] == '&amp;' || mapString[cnt] == '.') {</span>
+<span class="fc" id="L500">                        map.addBoarSpawn(pos);</span>
+                    }
+                }
+            }
+
+<span class="fc" id="L505">            x++;</span>
+<span class="fc" id="L506">            widthCount++;</span>
+        }
+
+<span class="pc bpc" id="L509" title="1 of 2 branches missed.">        if (!multiLine) {</span>
+<span class="nc" id="L510">            maxWidth = widthCount;</span>
+        }
+
+<span class="fc" id="L513">        this.mapWidth = maxWidth;       // mapWidth hier setzen, da hier die Breite(maxWidth) auch fÃ¼r ein zeilige Maps gesetzt wurde</span>
+<span class="fc" id="L514">        this.mapHeight = y + 1;         // y bezeichnet den Index der letzten Zeile (bei einer HÃ¶he von 8 also 7), d.h. man muss +1 rechnen</span>
+
+<span class="fc bfc" id="L516" title="All 2 branches covered.">        if (maxWidth != widthCount) {</span>
+<span class="fc" id="L517">            throw new InvalidMapFileException(&quot;Wrong number of chars!&quot;);</span>
+        }
+
+<span class="fc bfc" id="L520" title="All 2 branches covered.">        for (int wX = -2; wX &lt; maxWidth + 2; wX++) {</span>
+<span class="fc" id="L521">            int yOff = (y / 2);</span>
+<span class="fc" id="L522">            this.map.setFieldAt(new GameVector(wX, -2), Field.ROCK);</span>
+<span class="fc" id="L523">            this.map.setFieldAt(new GameVector(wX, -1), Field.ROCK);</span>
+
+<span class="fc" id="L525">            this.map.setFieldAt(new GameVector(wX - yOff, y + 1), Field.ROCK);</span>
+<span class="fc" id="L526">            this.map.setFieldAt(new GameVector(wX - yOff, y + 2), Field.ROCK);</span>
+        }
+
+<span class="fc bfc" id="L529" title="All 2 branches covered.">        for (int wY = -2; wY &lt; y + 2; wY++) {</span>
+<span class="fc" id="L530">            int yOff = wY / 2;</span>
+<span class="fc" id="L531">            this.map.setFieldAt(new GameVector(-yOff - 2, wY), Field.ROCK);</span>
+<span class="fc" id="L532">            this.map.setFieldAt(new GameVector(-yOff - 1, wY), Field.ROCK);</span>
+
+<span class="fc" id="L534">            this.map.setFieldAt(new GameVector(maxWidth - yOff, wY), Field.ROCK);</span>
+<span class="fc" id="L535">            this.map.setFieldAt(new GameVector(maxWidth - yOff + 1, wY), Field.ROCK);</span>
+        }
+
+<span class="fc bfc" id="L538" title="All 2 branches covered.">        for (Player player : players) {</span>
+<span class="fc" id="L539">            int spawns = 0;</span>
+<span class="fc bfc" id="L540" title="All 2 branches covered.">            if (teamSpawns.containsKey(player.getTeamName())) {</span>
+<span class="fc" id="L541">                spawns = teamSpawns.get(player.getTeamName());</span>
+            }
+<span class="fc" id="L543">            spawns--;</span>
+
+<span class="fc bfc" id="L545" title="All 2 branches covered.">            if (spawns &lt; 0) {</span>
+<span class="fc" id="L546">                throw new InvalidMapFileException(&quot;Too few player spawns!&quot;);</span>
+            }
+
+<span class="fc" id="L549">            teamSpawns.put(player.getTeamName(), spawns);</span>
+<span class="fc" id="L550">        }</span>
+<span class="fc" id="L551">    }</span>
+
+    public int getMapHeight(){
+<span class="nc" id="L554">        return this.mapHeight; // HÃ¶he der map</span>
+    }
+
+    public int getMapWidth(){
+<span class="nc" id="L558">        return this.mapWidth; // Breite der map</span>
+    }
+
+    public String getFightFile() {
+<span class="fc" id="L562">        return fightFile;</span>
+    }
+
+    public String getMapFile() {
+<span class="fc" id="L566">        return mapFile;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

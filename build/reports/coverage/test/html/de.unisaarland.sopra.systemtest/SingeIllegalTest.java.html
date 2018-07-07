@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingeIllegalTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">SingeIllegalTest.java</span></div><h1>SingeIllegalTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Lukas Kirschner on 9/19/16.
+ * This test checks if only Ifrit has access to the Singe attacktest - Please create an instance of this test for every other creature.
+ */
+public class SingeIllegalTest extends OurSystemTest {
+    private CreatureType t;
+
+    public SingeIllegalTest(CreatureType t) {
+<span class="nc" id="L16">        super(&quot;SingeIllegalTest&quot; + t.toString());</span>
+<span class="nc" id="L17">        this.t = t;</span>
+<span class="nc" id="L18">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L22">        ClientConnection&lt;Event&gt; legalCreature = register(0, &quot;Fuchur&quot;, CreatureType.IFRIT, &quot;TeamLegal&quot;, 0, 0);</span>
+<span class="nc" id="L23">        ClientConnection&lt;Event&gt; illegalCreature = register(1, &quot;ein&quot; + t.toString(), t, &quot;TeamIllegal&quot;, 1, 0);</span>
+<span class="nc" id="L24">        assertRegisterEvent(illegalCreature.nextEvent(), 0, &quot;Fuchur&quot;, CreatureType.IFRIT, &quot;TeamLegal&quot;, 0, 0);</span>
+<span class="nc" id="L25">        assertRegisterEvent(legalCreature.nextEvent(), 1, &quot;ein&quot; + t.toString(), t, &quot;TeamIllegal&quot;, 1, 0);</span>
+
+        //Round 1 begins
+<span class="nc" id="L28">        assertRoundBegin(assertAndMerge(legalCreature, illegalCreature), 1);</span>
+
+        //legalCreature is on turn
+<span class="nc" id="L31">        assertActNow(assertAndMerge(legalCreature, illegalCreature), 0);</span>
+
+<span class="nc" id="L33">        legalCreature.sendSinge(Direction.EAST); //LegalCreature singes IllegalCreature</span>
+<span class="nc" id="L34">        assertSinged(assertAndMerge(legalCreature, illegalCreature), 0, Direction.EAST);</span>
+
+<span class="nc" id="L36">        assertActNow(assertAndMerge(legalCreature, illegalCreature), 0);</span>
+<span class="nc" id="L37">        legalCreature.sendDoneActing();</span>
+<span class="nc" id="L38">        assertDoneActing(assertAndMerge(legalCreature, illegalCreature), 0);</span>
+
+<span class="nc" id="L40">        assertActNow(assertAndMerge(legalCreature, illegalCreature), 1);</span>
+<span class="nc" id="L41">        illegalCreature.sendSinge(Direction.WEST); //IllegalCreature tries to singe back</span>
+<span class="nc" id="L42">        assertKicked(assertAndMerge(legalCreature, illegalCreature), 1);</span>
+
+<span class="nc" id="L44">        assertRoundEnd(assertAndMerge(legalCreature, illegalCreature), 1, 0);</span>
+<span class="nc" id="L45">        assertWinner(assertAndMerge(legalCreature, illegalCreature), &quot;TeamLegal&quot;);</span>
+<span class="nc" id="L46">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L50">        return &quot;01\n  &quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L55">        return &quot;TeamLegal, TeamIllegal\nTeamLegal, Fuchur, IFRIT\nTeamIllegal, ein&quot; + t.toString() + &quot;, &quot; + t.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

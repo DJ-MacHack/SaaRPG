@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpleAttack.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages.attack</a> &gt; <span class="el_source">SimpleAttack.java</span></div><h1>SimpleAttack.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages.attack;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.CommIds;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.messages.Command;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.*;
+import de.unisaarland.sopra.utility.DirectionHelper;
+import de.unisaarland.sopra.utility.GameVector;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.ServerConnection;
+
+import static de.unisaarland.sopra.model.FieldEffects.canAttack;
+import static de.unisaarland.sopra.model.FieldEffects.getAttackCostMultiplier;
+import static de.unisaarland.sopra.model.FieldEffects.getDefensiveMultiplier;
+
+/**
+ * Created by Team14 on 9/12/16.
+ * Abstract superclass of commands and events concerning attacks. For a detailed documentation, see javadocs of the subclass.
+ */
+public abstract class SimpleAttack implements Command, Event {
+
+    protected int actorId;
+    protected Direction direction;
+    protected int targetId;
+    protected int damage;
+    protected int range;
+    protected int energyCost;
+    protected CommIds commIDs;
+    protected boolean targetDied;
+
+
+<span class="fc" id="L34">    public SimpleAttack(CommIds comm, int actorId, Direction dir) {</span>
+<span class="fc" id="L35">        this.commIDs = comm;</span>
+<span class="fc" id="L36">        this.direction = dir;</span>
+<span class="fc" id="L37">        this.actorId = actorId;</span>
+<span class="fc" id="L38">        this.targetDied = false;</span>
+<span class="fc" id="L39">        this.targetId = -1;</span>
+<span class="fc" id="L40">    }</span>
+
+    /**
+     * Executes the command at the given {@link Game} instance.
+     *
+     * @param game Game model to change by the command
+     */
+    @Override
+    public abstract void executeCommand(Game game);
+
+    /**
+     * Tests the command using the given {@link Game} instance
+     *
+     * @param game {@link Game} instance
+     * @return true, if command test was successful
+     */
+    @Override
+    public abstract boolean validateCommand(Game game);
+
+    /**
+     * Sends the result of the executed command to the client using a given {@link ServerConnection}
+     *
+     * @param serverConn Connection to the clients
+     */
+    @Override
+    public abstract void sendResults(ServerConnection serverConn);
+
+    /**
+     * Sends a command to the server using a given {@link ClientConnection} instance
+     *
+     * @param cliConn Connection instance to use for sending
+     */
+    @Override
+    public abstract void sendCommand(ClientConnection cliConn);
+
+    /**
+     * Executes the event at a given {@link Client}
+     *
+     * @param cli {@link Client} to be changed
+     */
+    @Override
+    public abstract void executeEvent(Game game, Client cli);
+
+    /**
+     * Tests the event using a given {@link Client}
+     *
+     * @param cli {@link Client} to test on
+     * @return true, if test was successful
+     */
+    @Override
+    public abstract boolean validateEvent(Game game, Client cli);
+
+    protected boolean meleeTestCommand(Game game, int energyCost, CreatureType[] validCreatures) {
+<span class="fc" id="L93">        Pc me = game.getMonsterById(this.actorId);</span>
+
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if(me == null){</span>
+<span class="nc" id="L96">            return false;</span>
+        }
+
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (me.isDead()) {</span>
+<span class="nc" id="L100">            return false; //Check if me is a cheater</span>
+        }
+
+<span class="fc" id="L103">        int attackCost = getAttackCost(energyCost, game.getFieldAt(me.getPosition()), me.getCreatureType());</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (me.getEnergy() &lt; attackCost) {</span>
+<span class="fc" id="L105">            return false; //Check if me has sufficient energy</span>
+        }
+
+<span class="fc" id="L108">        boolean allowed = false;</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        for (CreatureType t : validCreatures) {</span>
+<span class="fc bfc" id="L110" title="All 4 branches covered.">            allowed = allowed || (me.getCreatureType() == t);</span>
+        }
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (!allowed) {</span>
+<span class="fc" id="L113">            return false; //Check if me is a valid creature</span>
+        }
+
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (!canAttack(game.getFieldAt(me.getPosition()), me.getCreatureType())) {</span>
+<span class="fc" id="L117">            return false; //Check if field me is standing on allows me to attack</span>
+        }
+
+<span class="fc" id="L120">        GameVector target = me.getPosition().add(DirectionHelper.toVector(this.direction));</span>
+<span class="fc" id="L121">        Creature targetCreature = game.getCreatureByPosition(target);</span>
+        //Check if Direction of attacktest points to a creature
+<span class="pc bpc" id="L123" title="1 of 4 branches missed.">        return (targetCreature != null &amp;&amp; !targetCreature.isDead());</span>
+    }
+
+    protected void meleeAttack(Game game, int energyCost, CreatureType[] validCreatures, int damage) {
+<span class="fc" id="L127">        Pc me = game.getMonsterById(this.actorId);</span>
+<span class="fc" id="L128">        GameVector target = me.getPosition().add(DirectionHelper.toVector(this.direction));</span>
+<span class="fc" id="L129">        Creature targetCreature = game.getCreatureByPosition(target);</span>
+<span class="fc" id="L130">        int attackCost = getAttackCost(energyCost, game.getFieldAt(me.getPosition()), me.getCreatureType());</span>
+<span class="fc" id="L131">        int targetDamg = getTargetDamg(game, damage, targetCreature);</span>
+
+
+<span class="fc" id="L134">        me.drainEnergy(attackCost);  //Drain energy of me</span>
+<span class="fc" id="L135">        targetCreature.receiveDamage(targetDamg);   //Target receives damage</span>
+
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (targetCreature.isDead()) {</span>
+<span class="fc" id="L138">            targetDied = true;</span>
+        }
+
+<span class="fc" id="L141">        targetId = targetCreature.getId();</span>
+<span class="fc" id="L142">    }</span>
+
+    private int getAttackCost(int baseNrg, Field myField, CreatureType myCreatureType) {
+<span class="fc" id="L145">        return (baseNrg * getAttackCostMultiplier(myField, myCreatureType));</span>
+    }
+
+    private int getTargetDamg(Game myGame, int baseDmg, Creature targetCreature) {
+<span class="fc" id="L149">        return (int) (baseDmg * getDefensiveMultiplier(myGame.getFieldAt(targetCreature.getPosition()), targetCreature.getCreatureType()));</span>
+    }
+
+    // Getter for test purposes
+
+    public int getActorId() {
+<span class="nc" id="L155">        return actorId;</span>
+    }
+
+    public Direction getDirection() {
+<span class="nc" id="L159">        return direction;</span>
+    }
+
+    public int getTargetId() {
+<span class="nc" id="L163">        return targetId;</span>
+    }
+
+    public int getDamage() {
+<span class="nc" id="L167">        return damage;</span>
+    }
+
+    public int getRange() {
+<span class="nc" id="L171">        return range;</span>
+    }
+
+    public int getEnergyCost() {
+<span class="nc" id="L175">        return energyCost;</span>
+    }
+
+    public CommIds getCommIDs() {
+<span class="nc" id="L179">        return commIDs;</span>
+    }
+
+    public boolean isTargetDead() {
+<span class="nc" id="L183">        return targetDied;</span>
+    }
+
+    @Override
+    public int getMonsterId() {
+<span class="nc" id="L188">        return actorId;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

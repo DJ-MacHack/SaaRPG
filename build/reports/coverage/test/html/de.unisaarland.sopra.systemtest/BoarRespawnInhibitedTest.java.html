@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoarRespawnInhibitedTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">BoarRespawnInhibitedTest.java</span></div><h1>BoarRespawnInhibitedTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created on 22.09.16.
+ *
+ * @author Henrik Paul Koehn
+ */
+public class BoarRespawnInhibitedTest extends OurSystemTest {
+
+    public BoarRespawnInhibitedTest() {
+<span class="nc" id="L20">        super(&quot;BoarRespawnInhibitedTest&quot;);</span>
+<span class="nc" id="L21">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L25">        List&lt;ClientConnection&lt;Event&gt;&gt; ccs = new ArrayList&lt;&gt;();</span>
+
+        // Registration Phase
+<span class="nc" id="L28">        ClientConnection&lt;Event&gt; kob = register(0, &quot;a&quot;, CreatureType.KOBOLD, &quot;Alpha&quot;, 0, 0);</span>
+<span class="nc" id="L29">        ClientConnection&lt;Event&gt; elf = register(1, &quot;b&quot;, CreatureType.ELF, &quot;Beta&quot;, 2, 0);</span>
+<span class="nc" id="L30">        assertRegisterEvent(kob.nextEvent(), 1, &quot;b&quot;, CreatureType.ELF, &quot;Beta&quot;, 2, 0);</span>
+<span class="nc" id="L31">        assertRegisterEvent(elf.nextEvent(), 0, &quot;a&quot;, CreatureType.KOBOLD, &quot;Alpha&quot;, 0, 0);</span>
+<span class="nc" id="L32">        ccs.add(kob);</span>
+<span class="nc" id="L33">        ccs.add(elf);</span>
+
+        // Round Begin
+<span class="nc" id="L36">        assertRoundBegin(assertAndMerge(ccs), 1);</span>
+
+        // Spawn Boar
+<span class="nc" id="L39">        assertBoarSpawned(assertAndMerge(ccs), 2, 1, 0);</span>
+<span class="nc" id="L40">        assertBoarAttack(assertAndMerge(ccs), 2, 1);</span>
+<span class="nc" id="L41">        assertBoarAttack(assertAndMerge(ccs), 2, 0);</span>
+
+        // Move Boars does not happen since not possible
+
+        // Slash twice
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++){</span>
+<span class="nc" id="L47">            assertActNow(assertAndMerge(ccs), 0);</span>
+<span class="nc" id="L48">            kob.sendSlash(Direction.EAST);</span>
+<span class="nc" id="L49">            assertSlashed(assertAndMerge(ccs), 0, Direction.EAST);</span>
+        }
+<span class="nc" id="L51">        assertDied(assertAndMerge(ccs), 2);</span>
+        // Move on BoarSpawn
+<span class="nc" id="L53">        assertActNow(assertAndMerge(ccs), 0);</span>
+<span class="nc" id="L54">        kob.sendMove(Direction.EAST);</span>
+<span class="nc" id="L55">        assertMoved(assertAndMerge(ccs), 0, Direction.EAST);</span>
+
+        // Done acting
+<span class="nc" id="L58">        assertActNow(assertAndMerge(ccs), 0);</span>
+<span class="nc" id="L59">        kob.sendDoneActing();</span>
+<span class="nc" id="L60">        assertDoneActing(assertAndMerge(ccs), 0);</span>
+
+        // Next Done acting
+<span class="nc" id="L63">        assertActNow(assertAndMerge(ccs), 1);</span>
+<span class="nc" id="L64">        elf.sendDoneActing();</span>
+<span class="nc" id="L65">        assertDoneActing(assertAndMerge(ccs), 1);</span>
+
+<span class="nc" id="L67">        assertRoundEnd(assertAndMerge(ccs), 1, 0);</span>
+
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        for (int round = 2; round &lt; 15; round++){</span>
+<span class="nc" id="L70">            assertRoundBegin(assertAndMerge(ccs), round);</span>
+
+            // Both do nothing
+
+<span class="nc" id="L74">            assertActNow(assertAndMerge(ccs), (round + 1) % 2);</span>
+<span class="nc" id="L75">            ccs.get((round + 1) % 2).sendDoneActing();</span>
+<span class="nc" id="L76">            assertDoneActing(assertAndMerge(ccs) ,(round + 1) % 2);</span>
+
+<span class="nc" id="L78">            assertActNow(assertAndMerge(ccs), round % 2);</span>
+<span class="nc" id="L79">            ccs.get(round % 2).sendDoneActing();</span>
+<span class="nc" id="L80">            assertDoneActing(assertAndMerge(ccs) ,round % 2);</span>
+
+<span class="nc" id="L82">            assertRoundEnd(assertAndMerge(ccs), round, round-1);</span>
+        }
+
+        // Now move away from boar spawn
+
+<span class="nc" id="L87">        assertRoundBegin(assertAndMerge(ccs), 15);</span>
+
+<span class="nc" id="L89">        assertActNow(assertAndMerge(ccs), 0);</span>
+<span class="nc" id="L90">        kob.sendMove(Direction.WEST);</span>
+<span class="nc" id="L91">        assertMoved(assertAndMerge(ccs), 0, Direction.WEST);</span>
+
+        // Done acting
+<span class="nc" id="L94">        assertActNow(assertAndMerge(ccs), 0);</span>
+<span class="nc" id="L95">        kob.sendDoneActing();</span>
+<span class="nc" id="L96">        assertDoneActing(assertAndMerge(ccs), 0);</span>
+
+        // Next Done acting
+<span class="nc" id="L99">        assertActNow(assertAndMerge(ccs), 1);</span>
+<span class="nc" id="L100">        elf.sendDoneActing();</span>
+<span class="nc" id="L101">        assertDoneActing(assertAndMerge(ccs), 1);</span>
+
+<span class="nc" id="L103">        assertRoundEnd(assertAndMerge(ccs), 15, 14);</span>
+<span class="nc" id="L104">        assertRoundBegin(assertAndMerge(ccs), 16);</span>
+
+<span class="nc" id="L106">        assertBoarSpawned(assertAndMerge(ccs), 2, 1, 0);</span>
+<span class="nc" id="L107">        passed();</span>
+
+<span class="nc" id="L109">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L113">        return &quot;0X1&quot;;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L118">        return &quot;Alpha, Beta\nAlpha, a, Kobold\nBeta, b, Elf&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

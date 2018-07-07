@@ -1,0 +1,1151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="7.1">
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\Client.java">
+<error line="5" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.utility.InvalidMapFileException." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="14" column="39" severity="warning" message="Variable &apos;clientConnection&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="15" column="19" severity="warning" message="Variable &apos;ownCreatureId&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="16" column="28" severity="warning" message="Variable &apos;warcrys&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="62" column="14" severity="warning" message="Nach &apos;while&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="64" column="49" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="79" column="31" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="83" column="40" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\CommIds.java">
+<error line="13" column="38" severity="warning" message="Variable &apos;commLibIdsToMonsterIds&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="14" column="26" severity="warning" message="Variable &apos;commLibIds&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\Human.java">
+<error line="3" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.messages.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="4" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.messages.attack.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="9" column="8" severity="warning" message="Nicht benutztes import - java.io.Console." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="16" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="19" column="93" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="20" column="30" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="21" column="51" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="22" column="85" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="23" column="45" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="24" column="83" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="25" column="53" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="26" column="49" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="27" column="54" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="28" column="72" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="29" column="28" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="30" column="77" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="31" column="65" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="32" column="53" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="33" column="65" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="34" column="65" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="35" column="53" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="36" column="65" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="37" column="51" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="38" column="53" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="39" column="53" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="40" column="51" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="41" column="53" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="42" column="53" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="43" column="94" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="44" column="83" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="45" column="81" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="46" column="81" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="47" column="32" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="48" column="74" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="49" column="47" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="50" column="77" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="51" column="78" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="52" column="48" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="53" column="77" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="54" column="27" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="57" column="18" severity="warning" message="Variable &apos;creature&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="58" column="12" severity="warning" message="Variable &apos;name&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="59" column="12" severity="warning" message="Variable &apos;team&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="60" column="17" severity="warning" message="Variable &apos;monster&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="113" column="43" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="210" column="47" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="219" column="47" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="228" column="47" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\KI.java">
+<error line="13" column="107" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\Main.java">
+<error line="3" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.comm.ClientConnection." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="6" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.publictest.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="7" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.systemtest.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="11" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - org.apache.commons.cli.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="13" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.io.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="66" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="84" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="99" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="112" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="129" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="138" column="101" severity="warning" message="&apos;100&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="139" column="101" severity="warning" message="&apos;100&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="147" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="233" column="40" severity="warning" message="&apos;9&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\MapGenerator.java">
+<error line="7" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.io.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="8" column="8" severity="warning" message="Nicht benutztes import - java.nio.charset.Charset." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="9" column="8" severity="warning" message="Nicht benutztes import - java.nio.charset.StandardCharsets." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="10" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.nio.file.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="18" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="48" column="45" severity="warning" message="Nach &apos;typumwandlung&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="64" column="45" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="66" column="40" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="71" column="52" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="72" column="59" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="74" column="60" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="75" column="41" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="86" column="48" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="87" column="23" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="88" column="33" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="88" column="40" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="91" column="76" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="91" column="77" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="92" column="76" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="92" column="77" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="109" column="56" severity="warning" message="Nach &apos;typumwandlung&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="121" column="80" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\Master.java">
+<error line="16" column="23" severity="warning" message="Variable &apos;running&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="17" column="20" severity="warning" message="Variable &apos;game&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="40" column="46" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="42" column="31" severity="warning" message="&apos;1000&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\Observer.java">
+<error line="8" column="54" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\Server.java">
+<error line="3" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.comm.CommException." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="7" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.messages.RegistrationAborted." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="8" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="9" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.utility.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="12" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.util.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="50" column="58" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="75" column="69" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="119" column="44" severity="warning" message="&apos;100&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="119" column="69" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="119" column="72" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="179" column="16" severity="warning" message="Nach &apos;for&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="179" column="42" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="180" column="19" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="180" column="101" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="189" column="49" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="202" column="43" severity="warning" message="&apos;20&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="202" column="66" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="202" column="69" severity="warning" message="&apos;20&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="231" column="34" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="236" column="38" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="268" column="34" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="273" column="38" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="280" column="44" severity="warning" message="Nach &apos;typumwandlung&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="280" column="45" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="321" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="321" column="127" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="352" column="15" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="352" column="27" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="373" column="19" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="379" column="19" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="379" column="28" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="381" column="23" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="381" column="35" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="395" column="15" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="395" column="34" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="403" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="411" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="434" column="15" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="434" column="34" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="441" column="19" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="441" column="38" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="449" column="47" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="461" column="18" severity="warning" message="&apos;DoPoisonDmg&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck"/>
+<error line="494" column="15" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="494" column="34" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="542" column="60" severity="warning" message="&apos;100&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="543" column="43" severity="warning" message="&apos;100&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="570" column="15" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="570" column="60" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\gui\Gui.java">
+<error line="6" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.messages.RoundBegin." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="12" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - javax.swing.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="43" column="40" severity="warning" message="&apos;0.05&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="68" column="52" severity="warning" message="&apos;20&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="78" column="41" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\gui\GuiFrame.java">
+<error line="3" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="7" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - javax.swing.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="8" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.awt.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="9" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.awt.event.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="12" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.util.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="20" column="18" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="21" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="24" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="25" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="26" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="27" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="28" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="29" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="30" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="31" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="32" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="33" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="34" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="36" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="37" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="74" column="50" severity="warning" message="&apos;800&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="74" column="55" severity="warning" message="&apos;600&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="88" column="66" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="90" column="45" severity="warning" message="&apos;1000&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="93" column="18" severity="warning" message="&apos;Load&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck"/>
+<error line="95" column="34" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="96" column="28" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="96" column="32" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="144" column="9" severity="warning" message="Methode ist 270 Zeilen lang, erlaubt sind höchstens 150." source="com.puppycrawl.tools.checkstyle.checks.sizes.MethodLengthCheck"/>
+<error line="239" column="120" severity="warning" message="&apos;16&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="242" column="31" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="242" column="65" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="244" column="73" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="248" column="35" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="248" column="62" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="264" column="64" severity="warning" message="&apos;150&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="267" column="60" severity="warning" message="&apos;16&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="267" column="88" severity="warning" message="&apos;24&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="268" column="60" severity="warning" message="&apos;16&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="268" column="88" severity="warning" message="&apos;40&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="272" column="56" severity="warning" message="&apos;16&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="272" column="84" severity="warning" message="&apos;60&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="281" column="55" severity="warning" message="&apos;200&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="281" column="83" severity="warning" message="&apos;200&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="284" column="67" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="284" column="139" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="284" column="165" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="348" column="127" severity="warning" message="&apos;16&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="363" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="367" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="371" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="375" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="379" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="383" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="401" column="56" severity="warning" message="&apos;1000.0&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="416" column="51" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="420" column="12" severity="warning" message="Nach &apos;for&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="420" column="48" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="426" column="15" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="426" column="23" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="429" column="14" severity="warning" message="Nach &apos;}&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="429" column="14" severity="warning" message="Vor &apos;else&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="429" column="18" severity="warning" message="Nach &apos;else&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="429" column="18" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\gui\GuiHelper.java">
+<error line="5" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.awt.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="11" severity="warning" message="Die Klasse GuiHelper sollte als final deklariert sein, da alle ihre Konstruktoren private sind." source="com.puppycrawl.tools.checkstyle.checks.design.FinalClassCheck"/>
+<error line="36" column="22" severity="warning" message="&apos;14&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="37" column="49" severity="warning" message="&apos;31&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="37" column="53" severity="warning" message="&apos;17&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="37" column="60" severity="warning" message="&apos;31&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="37" column="64" severity="warning" message="&apos;31&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="39" column="49" severity="warning" message="&apos;31&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="39" column="53" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="39" column="60" severity="warning" message="&apos;16&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="39" column="64" severity="warning" message="&apos;31&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="40" column="24" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="41" column="20" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="42" column="51" severity="warning" message="&apos;31&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="42" column="61" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="42" column="65" severity="warning" message="&apos;31&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="45" column="35" severity="warning" message="&apos;16&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="52" column="44" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="52" column="52" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="52" column="62" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="52" column="66" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="53" column="31" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="53" column="50" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="53" column="54" severity="warning" message="&apos;53&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="53" column="61" severity="warning" message="&apos;64&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="53" column="65" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="54" column="38" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="54" column="46" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="54" column="57" severity="warning" message="&apos;53&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="54" column="61" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="54" column="65" severity="warning" message="&apos;64&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="55" column="31" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="55" column="40" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="55" column="52" severity="warning" message="&apos;53&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="55" column="56" severity="warning" message="&apos;53&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="55" column="60" severity="warning" message="&apos;64&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="55" column="64" severity="warning" message="&apos;64&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="57" column="30" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="57" column="46" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="57" column="54" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="57" column="58" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="57" column="65" severity="warning" message="&apos;12&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="57" column="69" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="58" column="37" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="58" column="45" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="58" column="54" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="58" column="61" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="58" column="65" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="58" column="69" severity="warning" message="&apos;12&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="59" column="31" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="59" column="36" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="59" column="37" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="59" column="37" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="59" column="50" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="59" column="54" severity="warning" message="&apos;53&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="59" column="58" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="59" column="62" severity="warning" message="&apos;64&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="59" column="66" severity="warning" message="&apos;12&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="60" column="30" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="60" column="36" severity="warning" message="Vor &apos;-&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="60" column="37" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="60" column="37" severity="warning" message="Nach &apos;-&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="60" column="46" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="60" column="54" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="60" column="58" severity="warning" message="&apos;53&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="60" column="62" severity="warning" message="&apos;12&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="60" column="66" severity="warning" message="&apos;64&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="62" column="30" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="62" column="35" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="62" column="36" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="62" column="36" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="62" column="45" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="62" column="51" severity="warning" message="Vor &apos;-&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="62" column="52" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="62" column="52" severity="warning" message="Nach &apos;-&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="62" column="56" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="62" column="60" severity="warning" message="&apos;11&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="62" column="64" severity="warning" message="&apos;12&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="62" column="68" severity="warning" message="&apos;12&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="69" column="80" severity="warning" message="&apos;175&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="78" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\gui\InputListener.java">
+<error line="50" column="48" severity="warning" message="&apos;3.0&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="50" column="55" severity="warning" message="&apos;3.0&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="50" column="70" severity="warning" message="&apos;3.0&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="51" column="43" severity="warning" message="&apos;3.0&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="54" column="45" severity="warning" message="&apos;0.5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\gui\Music.java">
+<error line="3" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - javax.sound.midi.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="5" column="8" severity="warning" message="Nicht benutztes import - java.util.concurrent.Exchanger." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="8" column="1" severity="warning" message="Konstruktoren von Hilfsklassen sollten nicht public oder default deklariert sein." source="com.puppycrawl.tools.checkstyle.checks.design.HideUtilityClassConstructorCheck"/>
+<error line="8" column="19" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="11" column="16" severity="warning" message="Nach &apos;try&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="11" column="16" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="18" column="40" severity="warning" message="&apos;15&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="20" column="14" severity="warning" message="Nach &apos;}&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="20" column="14" severity="warning" message="Vor &apos;catch&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="20" column="19" severity="warning" message="Nach &apos;catch&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="20" column="111" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\ActNow.java">
+<error line="26" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="26" column="51" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="33" column="52" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="37" column="57" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="51" column="87" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\BoarAttack.java">
+<error line="4" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.Direction." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="6" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="7" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.utility.DirectionHelper." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="8" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.utility.GameVector." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="15" column="41" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="17" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="17" column="30" severity="warning" message="&apos;damage&apos; entspricht nicht dem Muster &apos;^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ConstantNameCheck"/>
+<error line="21" column="49" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="26" column="55" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="28" column="22" severity="warning" message="Nach &apos;typumwandlung&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="28" column="23" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="32" column="59" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="40" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="45" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="45" column="26" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="61" column="104" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\BoarSpawned.java">
+<error line="34" column="92" severity="warning" message="&apos;20&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="34" column="115" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="34" column="118" severity="warning" message="&apos;20&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="47" column="17" severity="warning" message="Nach &apos;(&apos; folgt ein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.ParenPadCheck"/>
+<error line="48" column="42" severity="warning" message="&apos;||&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="49" column="50" severity="warning" message="&apos;||&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="50" column="49" severity="warning" message="&apos;||&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="51" column="49" severity="warning" message="&apos;||&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="62" column="59" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="62" column="76" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="62" column="90" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\Command.java">
+<error line="4" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.comm.ClientConnection." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="15" column="5" severity="warning" message="Überflüssiger Modifier &apos;public&apos;." source="com.puppycrawl.tools.checkstyle.checks.modifier.RedundantModifierCheck"/>
+<error line="22" column="5" severity="warning" message="Überflüssiger Modifier &apos;public&apos;." source="com.puppycrawl.tools.checkstyle.checks.modifier.RedundantModifierCheck"/>
+<error line="28" column="5" severity="warning" message="Überflüssiger Modifier &apos;public&apos;." source="com.puppycrawl.tools.checkstyle.checks.modifier.RedundantModifierCheck"/>
+<error line="30" column="5" severity="warning" message="Überflüssiger Modifier &apos;public&apos;." source="com.puppycrawl.tools.checkstyle.checks.modifier.RedundantModifierCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\CommandFactoryImpl.java">
+<error line="6" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.messages.attack.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="132" column="32" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\Died.java">
+<error line="7" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.model.RoundState." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="50" column="83" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\DoneActing.java">
+<error line="21" column="52" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="33" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="33" column="54" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="37" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="37" column="47" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="46" column="12" severity="warning" message="Nach &apos;for&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="46" column="48" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="47" column="36" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="77" column="93" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\Event.java">
+<error line="18" column="5" severity="warning" message="Überflüssiger Modifier &apos;public&apos;." source="com.puppycrawl.tools.checkstyle.checks.modifier.RedundantModifierCheck"/>
+<error line="26" column="5" severity="warning" message="Überflüssiger Modifier &apos;public&apos;." source="com.puppycrawl.tools.checkstyle.checks.modifier.RedundantModifierCheck"/>
+<error line="32" column="5" severity="warning" message="Überflüssiger Modifier &apos;public&apos;." source="com.puppycrawl.tools.checkstyle.checks.modifier.RedundantModifierCheck"/>
+<error line="39" column="5" severity="warning" message="Überflüssiger Modifier &apos;public&apos;." source="com.puppycrawl.tools.checkstyle.checks.modifier.RedundantModifierCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\EventFactoryImpl.java">
+<error line="5" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.messages.attack.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="15" column="6" severity="warning" message="Nach &apos;{&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="15" column="6" severity="warning" message="Vor &apos;}&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="227" column="34" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\FairySpawned.java">
+<error line="35" column="93" severity="warning" message="&apos;100&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="35" column="118" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="35" column="121" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="59" column="60" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="59" column="77" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="59" column="91" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\FieldEffect.java">
+<error line="47" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="47" column="50" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="65" column="90" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="65" column="102" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="66" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="66" column="121" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\Fight.java">
+<error line="6" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.model.RoundState." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="18" column="35" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="22" column="55" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="32" column="59" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\Kicked.java">
+<error line="36" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="36" column="23" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="50" column="110" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="50" column="126" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\MapFile.java">
+<error line="6" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.model.RoundState." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\PoisonEffect.java">
+<error line="34" column="18" severity="warning" message="&apos;31&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="40" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="42" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="46" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="61" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="61" column="48" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="65" column="29" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="79" column="104" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="79" column="119" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\Register.java">
+<error line="6" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="89" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="89" column="56" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="137" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="137" column="56" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="212" column="85" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="212" column="102" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\RegistrationAborted.java">
+<error line="6" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.model.RoundState." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\RoundBegin.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\RoundEnd.java">
+<error line="13" column="39" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\SpawnEvent.java">
+<error line="10" column="19" severity="warning" message="Variable &apos;creatureId&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="11" column="19" severity="warning" message="&apos;x_coord&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="11" column="19" severity="warning" message="Variable &apos;x_coord&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="11" column="28" severity="warning" message="&apos;y_coord&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
+<error line="11" column="28" severity="warning" message="Variable &apos;y_coord&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="13" column="44" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="29" column="16" severity="warning" message="&apos;getX_coord&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck"/>
+<error line="33" column="16" severity="warning" message="&apos;getY_coord&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\WarCry.java">
+<error line="54" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="54" column="92" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="68" severity="warning" message="Das &apos;for&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="111" column="132" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="111" column="146" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="124" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="124" column="38" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="128" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="128" column="33" severity="warning" message="&apos;140&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\Winner.java">
+<error line="14" column="35" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="18" column="55" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="22" column="59" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Bite.java">
+<error line="6" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="43" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="116" column="87" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="117" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="117" column="71" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="126" column="32" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="126" column="48" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="126" column="68" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Blink.java">
+<error line="7" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="19" column="77" severity="warning" message="Nach &apos;{&apos; folgt ein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.NoWhitespaceAfterCheck"/>
+<error line="25" column="61" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="40" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="52" severity="warning" message="Das &apos;for&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="78" column="94" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="78" column="108" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="78" column="115" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="96" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="96" column="29" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="100" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="100" column="30" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="108" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="113" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="116" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="118" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Burn.java">
+<error line="8" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="15" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.util.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="44" column="88" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="53" column="55" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="58" column="53" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="98" column="84" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="120" column="58" severity="warning" message="Nach &apos;typumwandlung&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="121" column="37" severity="warning" message="Nach &apos;typumwandlung&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="125" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="134" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="134" column="23" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="139" column="25" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="156" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="162" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="166" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Cast.java">
+<error line="5" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="31" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="43" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="60" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="71" column="34" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="95" column="95" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="96" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="96" column="70" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="125" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="146" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Claw.java">
+<error line="36" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="82" column="87" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="83" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="83" column="71" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Crush.java">
+<error line="17" column="40" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="36" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="59" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="81" column="89" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="82" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="82" column="71" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Cut.java">
+<error line="21" column="96" severity="warning" message="Vor &apos;;&apos; befindet sich ein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.NoWhitespaceBeforeCheck"/>
+<error line="65" column="86" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="66" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="66" column="71" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="76" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="106" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\MagicAttack.java">
+<error line="17" column="19" severity="warning" message="Variable &apos;actorId&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="18" column="19" severity="warning" message="Variable &apos;xCoord&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="19" column="19" severity="warning" message="Variable &apos;yCoord&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="20" column="19" severity="warning" message="Variable &apos;targetId&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="21" column="23" severity="warning" message="Variable &apos;targetDied&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="22" column="19" severity="warning" message="Variable &apos;damage&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="23" column="19" severity="warning" message="Variable &apos;range&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="24" column="19" severity="warning" message="Variable &apos;energyCost&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="25" column="30" severity="warning" message="Variable &apos;validCreatures&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="26" column="23" severity="warning" message="Variable &apos;commIds&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Move.java">
+<error line="8" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="73" severity="warning" message="Das &apos;for&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="113" column="87" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="133" column="109" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="145" column="66" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="164" column="39" severity="warning" message="&apos;110&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="167" column="39" severity="warning" message="&apos;230&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="170" column="39" severity="warning" message="&apos;200&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="177" column="39" severity="warning" message="&apos;100&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Shoot.java">
+<error line="8" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="55" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="55" column="47" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="90" column="88" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="141" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="141" column="28" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\SimpleAttack.java">
+<error line="8" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="24" column="19" severity="warning" message="Variable &apos;actorId&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="25" column="25" severity="warning" message="Variable &apos;direction&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="26" column="19" severity="warning" message="Variable &apos;targetId&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="27" column="19" severity="warning" message="Variable &apos;damage&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="28" column="19" severity="warning" message="Variable &apos;range&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="29" column="19" severity="warning" message="Variable &apos;energyCost&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="30" column="23" severity="warning" message="Variable &apos;commIDs&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="31" column="23" severity="warning" message="Variable &apos;targetDied&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="95" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="95" column="23" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Singe.java">
+<error line="36" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="59" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="81" column="88" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="82" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="82" column="71" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Slash.java">
+<error line="42" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="115" column="89" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="116" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="116" column="71" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Stab.java">
+<error line="116" column="87" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="117" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="117" column="71" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Stare.java">
+<error line="6" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="82" column="91" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="83" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="83" column="71" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Swap.java">
+<error line="5" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="54" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="113" column="92" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="114" column="58" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="114" column="70" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="142" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="142" column="29" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="162" column="47" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="167" column="47" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\messages\attack\Watch.java">
+<error line="7" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.comm.ClientConnection." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="31" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="31" column="56" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="36" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="47" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="47" column="72" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\Creature.java">
+<error line="15" column="19" severity="warning" message="Variable &apos;id&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="16" column="26" severity="warning" message="Variable &apos;position&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="17" column="19" severity="warning" message="Variable &apos;hp&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="18" column="28" severity="warning" message="Variable &apos;type&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="19" column="28" severity="warning" message="Variable &apos;poisons&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="20" column="25" severity="warning" message="Variable &apos;lastDirection&apos; muss private sein." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\CreatureType.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\Field.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\FieldEffects.java">
+<error line="104" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="104" column="94" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\Game.java">
+<error line="7" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.util.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="115" column="44" severity="warning" message="&apos;monster_id&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="222" column="11" severity="warning" message="Nach &apos;if&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="222" column="37" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="368" column="32" severity="warning" message="&apos;10&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="391" column="44" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="479" column="44" severity="warning" message="&apos;9&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="520" column="23" severity="warning" message="&apos;-2&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="522" column="52" severity="warning" message="&apos;-2&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="529" column="23" severity="warning" message="&apos;-2&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="553" column="30" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="557" column="29" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\Map.java">
+<error line="9" column="8" severity="warning" message="Nicht benutztes import - java.util.Set." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="37" column="12" severity="warning" message="Nach &apos;for&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="37" column="87" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="61" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="63" severity="warning" message="Das &apos;else&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="183" column="83" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="188" column="23" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\Npc.java">
+<error line="199" column="37" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\Pc.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\Player.java">
+<error line="19" column="39" severity="warning" message="&apos;TeamName&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="19" column="62" severity="warning" message="&apos;MonsterType&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="108" severity="warning" message="Das &apos;if&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\Poison.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\RoundState.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\model\Team.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\AmokBoar2Test.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\AmokBoarTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\BlinkOnIceTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\BoarAttackOnIceSameRound.java">
+<error line="24" column="25" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="30" column="27" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="31" column="29" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="90" column="63" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\BoarAttackOnIceTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\BoarAttackOnWaterTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\BoarRangeAttackTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\BoarSurroundedTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\BrokenInputTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\PublicBeispielTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\PublicTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\PublicWarCryTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\TestEventFactory.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\publictest\TrappedBoarTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\AnotherAttackOnCurseFieldTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\AttackKickedPlayerTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\AttackOnCurseFieldTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\AttackOnWaterTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\AttackOutsideOfMap.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BiteCutTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BiteIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BiteKillPoisonTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BlinkIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BlinkSwapTestSimple.java">
+<error line="7" column="8" severity="warning" message="Nicht benutztes import - org.junit.Assert." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoarAndFairyTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoarAttackOnIce.java">
+<error line="24" column="5" severity="warning" message="Methode ist 325 Zeilen lang, erlaubt sind höchstens 150." source="com.puppycrawl.tools.checkstyle.checks.sizes.MethodLengthCheck"/>
+<error line="27" column="90" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="28" column="98" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="29" column="95" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="30" column="89" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="88" column="29" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="103" column="57" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="116" column="29" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="136" column="55" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="142" column="57" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="158" column="29" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="168" column="29" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="186" column="30" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="190" column="70" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="193" column="74" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="199" column="55" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="205" column="57" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="250" column="37" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="262" column="51" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="266" column="55" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="272" column="57" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="291" column="29" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="312" column="50" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="316" column="55" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="322" column="57" severity="warning" message="&apos;7&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="346" column="55" severity="warning" message="&apos;7&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoarAttackOnIceTwo.java">
+<error line="11" column="54" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="13" column="32" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="19" column="83" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="23" column="81" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="32" column="12" severity="warning" message="Nach &apos;for&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="32" column="28" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="32" column="35" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="56" column="12" severity="warning" message="Nach &apos;for&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="56" column="28" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="56" column="35" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="70" column="26" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="70" column="26" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="76" column="32" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="76" column="32" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="77" column="35" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="77" column="35" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoarAttacksFairyTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoarKilledThenInvisibleTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoarOnLavaTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoarOnWaterTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoarRespawnInhibitedTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoarReviveTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BoringHundredRoundsTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\Burn6Test.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BurnDoubleKillTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BurnFourTargetsTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BurnIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BurnMultipleKillTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BurnOneDiedTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\BushFieldEffectTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CanAttackBurnTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CanBlinkTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CanBurnBlinkOnWater.java">
+<error line="13" column="33" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="49" column="22" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="49" column="22" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="55" column="24" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="55" column="24" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="56" column="32" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="56" column="32" severity="warning" message="Vor &apos;+&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CastCanAttackTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CastIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CastLimitsTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CastOnTreeNoEffectTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\ClawCrushTestSimple.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\ClawIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CrushIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CrushOnBoar.java">
+<error line="24" column="74" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="24" column="76" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="24" column="78" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="25" column="73" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="25" column="75" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="26" column="73" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="26" column="75" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="35" column="49" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="35" column="66" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CutIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\CutOnBoar.java">
+<error line="24" column="78" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="24" column="80" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="24" column="82" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="25" column="77" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="25" column="79" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="26" column="77" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="26" column="79" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="41" column="53" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="41" column="70" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="42" column="73" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\FairyKilledTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\FairyOnIceTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\FairyOnWaterTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\FairyRespawnTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\FightFileTests.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\FightSimpleGrassTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\FiveKilledByBurnTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\HSystemTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\HealAndKillFairyTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\IllegalAttackHelper.java">
+<error line="11" severity="warning" message="Die Klasse IllegalAttackHelper sollte als final deklariert sein, da alle ihre Konstruktoren private sind." source="com.puppycrawl.tools.checkstyle.checks.design.FinalClassCheck"/>
+<error line="16" column="55" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\InitOrderKilledTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\LavaFieldeffectTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\LoosingLifeOnWaterTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\MeleeCurseTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\MeleeTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\MoveOutOfAnchorFairyTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\MovementTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\NoHealTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\OurSystemTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\PoisonKillBoarTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\PoisonKillFairyTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\PoisonKillTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\RegisterPhaseAttackTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\RegistrationAbortedTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\RegistrationAbortedTestFour.java">
+<error line="34" column="23" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="40" column="40" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="41" column="44" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="42" column="42" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\RegistrationAbortedTestOne.java">
+<error line="34" column="37" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="46" column="34" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="47" column="44" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\RegistrationAbortedTestThree.java">
+<error line="42" column="37" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="49" column="23" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="55" column="40" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="56" column="44" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="57" column="42" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\RegistrationAbortedTestTwo.java">
+<error line="32" column="37" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="44" column="34" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="45" column="44" severity="warning" message="&apos;+&apos; sollte in einer neuen Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\RegistrationPhaseMoveCommandTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\RegistrationPhaseTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\RookRangeInHillFieldTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\ShootAcrossRockfield.java">
+<error line="21" column="88" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="24" column="87" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\ShootFromKickedElf.java">
+<error line="16" column="32" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="21" column="30" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="79" column="33" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="81" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="82" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="83" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="87" column="31" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="89" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="90" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\ShootIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\ShootInWrongActNowPhase.java">
+<error line="13" column="37" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="18" column="30" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="46" column="33" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="48" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="49" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="53" column="31" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="55" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="56" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\ShootOnHillNoEffectTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\ShootWithoutEnergy.java">
+<error line="13" column="32" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="18" column="30" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="75" column="33" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="77" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="78" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="82" column="31" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="84" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="85" column="16" severity="warning" message="Nach &apos;+&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\ShootWithoutHindranceTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SimpleAttackTestOne.java">
+<error line="67" column="50" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="89" column="48" severity="warning" message="&apos;3&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="90" column="50" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="112" column="48" severity="warning" message="&apos;4&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="113" column="50" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="135" column="48" severity="warning" message="&apos;5&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="136" column="50" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<error line="150" column="48" severity="warning" message="&apos;6&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SimpleFightTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SingeBurnTestSimple.java">
+<error line="7" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.publictest.TestEventFactory." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SingeIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SingeKillBoarTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SingeKillPlayerTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SlashIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\StabIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\StabKillTests.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\StareCastTestSimple.java">
+<error line="7" column="8" severity="warning" message="Nicht benutztes import - org.junit.Assert." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\StareIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\StareKillBoarTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\StareKillPlayerTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SwapAlreadyDeadTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SwapIllegalTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SwapKilledTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SwapNoEnergyTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SwapNotYourTurnTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\SwapOnWaterTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\TooManyMonstersInTeamTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\TreeFieldEffectTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\TurnOnIceTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\WrongDataTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\systemtest\YetiOnIceTest.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\utility\DirectionHelper.java">
+<error line="4" column="1" severity="warning" message="Überflüssiges import aus demselben Package - de.unisaarland.sopra.utility.GameVector." source="com.puppycrawl.tools.checkstyle.checks.imports.RedundantImportCheck"/>
+<error line="9" severity="warning" message="Die Klasse DirectionHelper sollte als final deklariert sein, da alle ihre Konstruktoren private sind." source="com.puppycrawl.tools.checkstyle.checks.design.FinalClassCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\utility\GameVector.java">
+<error line="128" column="18" severity="warning" message="&apos;997&apos; sollte durch eine Konstante definiert sein." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\utility\InvalidFightFileException.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\utility\InvalidMapFileException.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\utility\KiHelper.java">
+<error line="3" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - de.unisaarland.sopra.model.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="12" severity="warning" message="Die Klasse KiHelper sollte als final deklariert sein, da alle ihre Konstruktoren private sind." source="com.puppycrawl.tools.checkstyle.checks.design.FinalClassCheck"/>
+<error line="14" column="23" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="14" column="24" severity="warning" message="Nach &apos;{&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="14" column="24" severity="warning" message="Vor &apos;}&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\utility\LogString.java">
+<error line="8" column="8" severity="warning" message="Nicht benutztes import - de.unisaarland.sopra.model.Pc." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="15" severity="warning" message="Die Klasse LogString sollte als final deklariert sein, da alle ihre Konstruktoren private sind." source="com.puppycrawl.tools.checkstyle.checks.design.FinalClassCheck"/>
+<error line="17" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="18" column="19" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="20" column="18" severity="warning" message="Modifier &apos;static&apos; weicht von der empfohlenen Modifier-Reihenfolge aus der Java-Sprachdefinition ab." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="33" column="27" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="51" column="23" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="58" column="68" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="59" column="23" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="60" column="49" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="60" column="51" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="62" column="40" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="85" column="58" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="89" column="63" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="90" column="55" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="93" column="48" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="97" column="47" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\utility\Pathfinder.java">
+<error line="8" column="1" severity="warning" message="Überflüssiges import aus demselben Package - de.unisaarland.sopra.utility.DirectionHelper." source="com.puppycrawl.tools.checkstyle.checks.imports.RedundantImportCheck"/>
+<error line="9" column="1" severity="warning" message="Überflüssiges import aus demselben Package - de.unisaarland.sopra.utility.GameVector." source="com.puppycrawl.tools.checkstyle.checks.imports.RedundantImportCheck"/>
+<error line="11" severity="warning" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - java.util.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="16" column="1" severity="warning" message="Konstruktoren von Hilfsklassen sollten nicht public oder default deklariert sein." source="com.puppycrawl.tools.checkstyle.checks.design.HideUtilityClassConstructorCheck"/>
+<error line="22" column="132" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="40" column="77" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="58" column="21" severity="warning" message="&apos;field_dmg&apos; entspricht nicht dem Muster &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck"/>
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\utility\RegistrationAbortedException.java">
+</file>
+<file name="C:\Users\DJ MacHack\Dropbox\Uni\SS 2016\Sopra\git\map\core\src\main\java\de\unisaarland\sopra\utility\SimplePathfinder.java">
+<error line="58" column="97" severity="warning" message="Nach &apos;(&apos; folgt ein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.ParenPadCheck"/>
+<error line="61" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="63" column="133" severity="warning" message="Nach &apos;,&apos; folgt kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="66" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="68" column="145" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="71" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="76" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="81" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="83" column="146" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="86" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="89" column="131" severity="warning" message="Vor &apos;{&apos; befindet sich kein Leerzeichen." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="92" column="13" severity="warning" message="&apos;}&apos; in Spalte 13 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="96" column="9" severity="warning" message="&apos;}&apos; in Spalte 9 auf der gleichen Linie wie der nächste Teil einer Multi-Block-Anweisung (eine, die direkt mehrere Blöcke enthält: if/else-if/else, do/while oder try/catch/finally) sein sollte." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="97" severity="warning" message="Das &apos;else&apos;-Konstrukt muss &apos;{}&apos; benutzen." source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+</file>
+</checkstyle>

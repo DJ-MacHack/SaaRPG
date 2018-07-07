@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TreeFieldEffectTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">TreeFieldEffectTest.java</span></div><h1>TreeFieldEffectTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.messages.RoundBegin;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Karla on 19.09.2016.
+ */
+public class TreeFieldEffectTest extends OurSystemTest {
+    private static final String MAPFILE =
+            &quot; tt0t\n&quot;
+                    + &quot;tttxx\n&quot;
+                    + &quot;  xxx\n&quot;
+                    + &quot;xxxxx\n&quot;
+                    + &quot;xx  x\n&quot;
+                    + &quot;ttttx\n&quot;
+                    + &quot;~~~~x\n&quot;
+                    + &quot;~~~~x\n&quot;
+                    + &quot;1   x&quot;;
+
+    private static final String FIGHTFILE = &quot;Targaryen, Lannister \n&quot;
+                    + &quot;Targaryen, Daenerys, Elf\n&quot;
+                    + &quot;Lannister, Cersei, Naga&quot;;
+
+    public TreeFieldEffectTest() {
+<span class="nc" id="L29">        super(&quot;TreeTest&quot;);</span>
+<span class="nc" id="L30">    }</span>
+
+    @Override
+    protected void executeTest() {
+
+<span class="nc" id="L35">        ClientConnection&lt;Event&gt; dany = register(0, &quot;Daenerys&quot;, CreatureType.ELF, &quot;Targaryen&quot;, 3, 0);</span>
+<span class="nc" id="L36">        ClientConnection&lt;Event&gt; cersei = register(1, &quot;Cersei&quot;, CreatureType.NAGA, &quot;Lannister&quot;, -4, 8);</span>
+
+<span class="nc" id="L38">        assertRegisterEvent(cersei.nextEvent(), 0, &quot;Daenerys&quot;, CreatureType.ELF, &quot;Targaryen&quot;, 3, 0);</span>
+<span class="nc" id="L39">        assertRegisterEvent(dany.nextEvent(), 1, &quot;Cersei&quot;, CreatureType.NAGA, &quot;Lannister&quot;, -4, 8);</span>
+
+<span class="nc" id="L41">        assertRoundBegin(assertAndMerge(dany, cersei), 1);</span>
+
+        //Everybody is registered, Dany: HP:100, Cersei: HP:100
+
+        //Dany's turn
+<span class="nc" id="L46">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L47">        dany.sendWarCry(&quot;I am Daenerys Stormborn, of House Targaryen. &quot; +</span>
+                &quot;Rightful heir to the Iron Throne, Queen of the Seven Kingdoms of Westeros!&quot;);
+<span class="nc" id="L49">        assertWarCry(assertAndMerge(dany, cersei), 0, &quot;I am Daenerys Stormborn, of House Targaryen. &quot; +</span>
+                &quot;Rightful heir to the Iron Throne, Queen of the Seven Kingdoms of Westeros!&quot;);
+        //Dany moves to a Tree Field E:900, HP:100
+<span class="nc" id="L52">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L53">        dany.sendMove(Direction.EAST);</span>
+<span class="nc" id="L54">        assertMoved(assertAndMerge(dany, cersei), 0, Direction.EAST);</span>
+        //Dany attacks E:60, HP:100
+<span class="nc" id="L56">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L57">        dany.sendShoot(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L58">        assertShot(assertAndMerge(dany, cersei), 0, Direction.SOUTH_WEST);         //Cersei HP:89</span>
+        //Dany passes
+<span class="nc" id="L60">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L61">        dany.sendDoneActing();</span>
+<span class="nc" id="L62">        assertDoneActing(assertAndMerge(dany, cersei), 0);</span>
+
+        //Cersei's turn
+        //Cersei E:1000, HP:89
+<span class="nc" id="L66">        assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L67">        cersei.sendWarCry(&quot;The Lannisters send their regards!&quot;);</span>
+<span class="nc" id="L68">        assertWarCry(assertAndMerge(dany, cersei), 1, &quot;The Lannisters send their regards!&quot;);</span>
+        //Cersei moves 5 Fields
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        for (int i = 0; i &lt; 5; i++) {</span>
+<span class="nc" id="L71">            assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L72">            cersei.sendMove(Direction.NORTH_EAST);//2xWater, Tree, Grass, 2xBush</span>
+<span class="nc" id="L73">            assertMoved(assertAndMerge(dany, cersei), 1, Direction.NORTH_EAST);</span>
+        }
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L76">            assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L77">            cersei.sendMove(Direction.NORTH_WEST); //Bush</span>
+<span class="nc" id="L78">            assertMoved(assertAndMerge(dany, cersei), 1, Direction.NORTH_WEST);</span>
+        }
+        //Cersei E: 10, HP: 89 Passes
+<span class="nc" id="L81">        assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L82">        cersei.sendDoneActing();</span>
+<span class="nc" id="L83">        assertDoneActing(assertAndMerge(dany, cersei), 1);</span>
+        //Round 1 ends
+<span class="nc" id="L85">        assertRoundEnd(assertAndMerge(dany, cersei), 1, 0);</span>
+
+        //Round 2 Starts--------------------------------------------
+
+<span class="nc" id="L89">        assertRoundBegin(assertAndMerge(cersei, dany), 2);</span>
+
+        //Dany's Turn E:900, HP:100
+<span class="nc" id="L92">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L93">        dany.sendMove(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L94">        assertMoved(assertAndMerge(dany, cersei), 0, Direction.SOUTH_EAST);</span>
+        //Dany attacks E:60, HP:100
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L97">            assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L98">            dany.sendShoot(Direction.WEST);</span>
+<span class="nc" id="L99">            assertShot(assertAndMerge(dany, cersei), 0, Direction.WEST); //Cersei: HP:75</span>
+        }
+        //Dany passes
+<span class="nc" id="L102">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L103">        dany.sendDoneActing();</span>
+<span class="nc" id="L104">        assertDoneActing(assertAndMerge(dany, cersei), 0);</span>
+
+        //Cersei's turn
+        //Cersei E:780, HP:75
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L109">            assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L110">            cersei.sendMove(Direction.EAST);</span>
+<span class="nc" id="L111">            assertMoved(assertAndMerge(dany, cersei), 1, Direction.EAST);</span>
+        }
+        //Cersei attacks E:430, HP:75
+<span class="nc" id="L114">        assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L115">        cersei.sendBite(Direction.EAST);</span>
+<span class="nc" id="L116">        assertBitten(assertAndMerge(dany, cersei), 1, Direction.EAST);      //Dany: HP:94**</span>
+
+        //Cersei attacks E:30 HP:75
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L120">            assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L121">            cersei.sendCut(Direction.EAST);</span>
+<span class="nc" id="L122">            assertCut(assertAndMerge(dany, cersei), 1, Direction.EAST);     //Dany HP:84**</span>
+        }
+        //Cersei passes
+<span class="nc" id="L125">        assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L126">        cersei.sendDoneActing();</span>
+<span class="nc" id="L127">        assertDoneActing(assertAndMerge(dany, cersei), 1);</span>
+        //Round ends
+<span class="nc" id="L129">        assertRoundEnd(assertAndMerge(cersei, dany), 2, 0);</span>
+
+        //Round 3 starts-----------------------------------------------
+<span class="nc" id="L132">        assertRoundBegin(assertAndMerge(dany, cersei), 3);</span>
+
+        //Dany's turn E:1000, HP:84**
+        //Dany attacks E:250, HP: 84**
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        for (int i = 0; i &lt; 3; i++) {</span>
+<span class="nc" id="L137">            assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L138">            dany.sendStab(Direction.WEST);</span>
+<span class="nc" id="L139">            assertStabbed(assertAndMerge(dany, cersei), 0, Direction.WEST);//Cersei HP:54</span>
+        }
+        //Dany moves E:50, HP:84**
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L143">            assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L144">            dany.sendMove(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L145">            assertMoved(assertAndMerge(dany, cersei), 0, Direction.SOUTH_WEST);</span>
+        }
+        //Dany passes
+<span class="nc" id="L148">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L149">        dany.sendDoneActing();</span>
+<span class="nc" id="L150">        assertDoneActing(assertAndMerge(dany, cersei), 0);</span>
+
+        //Cersei's turn
+        //Cersei moves E:890,HP:54
+<span class="nc" id="L154">        assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L155">        cersei.sendMove(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L156">        assertMoved(assertAndMerge(dany, cersei), 1, Direction.SOUTH_EAST);</span>
+        //Cersei Attacks E:90, HP:54
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        for (int i = 0; i &lt; 4; i++) {</span>
+<span class="nc" id="L159">            assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L160">            cersei.sendCut(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L161">            assertCut(assertAndMerge(dany, cersei), 1, Direction.SOUTH_WEST);//Dany HP: 64**</span>
+        }
+        //Cersei Passes
+<span class="nc" id="L164">        assertActNow(assertAndMerge(dany,cersei),1);</span>
+<span class="nc" id="L165">        cersei.sendDoneActing();</span>
+<span class="nc" id="L166">        assertDoneActing(assertAndMerge(dany,cersei),1);</span>
+        //PoisonEffect
+<span class="nc" id="L168">        assertPoisonEffect(assertAndMerge(dany,cersei),0,4);        //Dany HP:60*</span>
+
+        //Round 3 ends
+<span class="nc" id="L171">        assertRoundEnd(assertAndMerge(dany,cersei),3,0);</span>
+
+        //Round 4 begins -------------------------------------------
+<span class="nc" id="L174">        assertRoundBegin(assertAndMerge(dany,cersei),4);</span>
+
+        //Cersei's turn
+<span class="nc" id="L177">        assertActNow(assertAndMerge(dany, cersei), 1);</span>
+<span class="nc" id="L178">        cersei.sendWarCry(&quot;Hear me roar!&quot;);</span>
+<span class="nc" id="L179">        assertWarCry(assertAndMerge(dany, cersei), 1, &quot;Hear me roar!&quot;);</span>
+        //Cersei attacks E:0 HP:54
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        for(int i = 0; i &lt; 5; i++){</span>
+<span class="nc" id="L182">            assertActNow(assertAndMerge(dany,cersei),1);</span>
+<span class="nc" id="L183">            cersei.sendCut(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L184">            assertCut(assertAndMerge(dany,cersei),1, Direction.SOUTH_WEST); //Dany HP:35*</span>
+        }
+        //Cersei passes
+<span class="nc" id="L187">        assertActNow(assertAndMerge(dany,cersei),1);</span>
+<span class="nc" id="L188">        cersei.sendDoneActing();</span>
+<span class="nc" id="L189">        assertDoneActing(assertAndMerge(dany,cersei),1);</span>
+
+        //Dany's turn
+<span class="nc" id="L192">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L193">        dany.sendWarCry(&quot;I am Daenerys Stormborn and I will take what is mine with fire and blood.&quot;);</span>
+<span class="nc" id="L194">        assertWarCry(assertAndMerge(dany, cersei), 0, &quot;I am Daenerys Stormborn and I will take what is mine with fire and blood.&quot;);</span>
+        //Dany attacks E:580, HP: 35*
+<span class="nc" id="L196">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L197">        dany.sendShoot(Direction.NORTH_EAST);</span>
+<span class="nc" id="L198">        assertShot(assertAndMerge(dany,cersei),0,Direction.NORTH_EAST);     //Cersei HP:43</span>
+        //Dany attacks E:80, HP: 35*
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        for(int i = 0; i &lt; 2;i++) {</span>
+<span class="nc" id="L201">            assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L202">            dany.sendStab(Direction.NORTH_EAST);</span>
+<span class="nc" id="L203">            assertStabbed(assertAndMerge(dany,cersei),0, Direction.NORTH_EAST); //Cersei HP:29</span>
+        }
+        //Dany passes
+<span class="nc" id="L206">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L207">        dany.sendDoneActing();</span>
+<span class="nc" id="L208">        assertDoneActing(assertAndMerge(dany, cersei), 0);</span>
+        //PoisonEffect
+<span class="nc" id="L210">        assertPoisonEffect(assertAndMerge(dany,cersei),0,2);        //Dany HP: 33</span>
+        //Round ends
+<span class="nc" id="L212">        assertRoundEnd(assertAndMerge(dany,cersei),4,0);</span>
+
+        //Round 5 starts----------------------------------------------------
+<span class="nc" id="L215">        assertRoundBegin(assertAndMerge(dany,cersei),5);</span>
+
+        //Dany'S turn
+        //Dany attacks E:250, HP:33
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        for(int i = 0; i &lt; 3;i++) {</span>
+<span class="nc" id="L220">            assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L221">            dany.sendStab(Direction.NORTH_EAST);</span>
+<span class="nc" id="L222">            assertStabbed(assertAndMerge(dany,cersei),0, Direction.NORTH_EAST); //Cersei HP:8</span>
+        }
+        //Dany passes
+<span class="nc" id="L225">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L226">        dany.sendDoneActing();</span>
+<span class="nc" id="L227">        assertDoneActing(assertAndMerge(dany, cersei), 0);</span>
+
+        //Cersei's turn
+        //Cersei attacks E:0, HP: 8
+<span class="nc bnc" id="L231" title="All 2 branches missed.">        for(int i = 0; i &lt; 5; i++){</span>
+<span class="nc" id="L232">            assertActNow(assertAndMerge(dany,cersei),1);</span>
+<span class="nc" id="L233">            cersei.sendCut(Direction.SOUTH_WEST);</span>
+<span class="nc" id="L234">            assertCut(assertAndMerge(dany,cersei),1, Direction.SOUTH_WEST); //Dany HP:8</span>
+        }
+        //Cersei passes
+<span class="nc" id="L237">        assertActNow(assertAndMerge(dany,cersei),1);</span>
+<span class="nc" id="L238">        cersei.sendDoneActing();</span>
+<span class="nc" id="L239">        assertDoneActing(assertAndMerge(dany,cersei),1);</span>
+        //Round ends
+<span class="nc" id="L241">        assertRoundEnd(assertAndMerge(dany,cersei),5,0);</span>
+
+        //Round 6 starts --------------------------------------------------------
+<span class="nc" id="L244">        assertRoundBegin(assertAndMerge(dany,cersei),6);</span>
+        //Dany's turn
+        //Dany attacks E:580, HP:8
+<span class="nc" id="L247">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L248">        dany.sendShoot(Direction.NORTH_EAST);</span>
+<span class="nc" id="L249">        assertShot(assertAndMerge(dany,cersei),0,Direction.NORTH_EAST); //Cersei dies</span>
+<span class="nc" id="L250">        assertDied(assertAndMerge(dany,cersei),1);</span>
+
+<span class="nc" id="L252">        assertActNow(assertAndMerge(dany, cersei), 0);</span>
+<span class="nc" id="L253">        dany.sendDoneActing();</span>
+<span class="nc" id="L254">        assertDoneActing(assertAndMerge(dany,cersei),0);</span>
+
+<span class="nc" id="L256">        assertRoundEnd(assertAndMerge(dany,cersei),6,0);</span>
+
+<span class="nc" id="L258">        assertWinner(assertAndMerge(dany,cersei),&quot;Targaryen&quot;);</span>
+<span class="nc" id="L259">        passed();</span>
+<span class="nc" id="L260">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L264">        return MAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L269">        return FIGHTFILE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

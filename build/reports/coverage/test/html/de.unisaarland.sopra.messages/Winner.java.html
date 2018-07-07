@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Winner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.messages</a> &gt; <span class="el_source">Winner.java</span></div><h1>Winner.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.messages;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.model.Game;
+
+/**
+ * Created by Team 14 on 12.09.2016.
+ */
+public class Winner implements Event {
+
+    private final String teamName;
+
+<span class="nc" id="L14">    public Winner(String teamName){</span>
+<span class="nc" id="L15">        this.teamName = teamName;</span>
+<span class="nc" id="L16">    }</span>
+
+    public void executeEvent(Game game, Client client){
+<span class="nc" id="L19">        client.setRunning(false);</span>
+<span class="nc" id="L20">    }</span>
+
+    public boolean validateEvent(Game game, Client client){
+<span class="nc" id="L23">     return true;</span>
+    }
+
+    @Override
+    public void sendCommand(ClientConnection cc) {
+<span class="nc" id="L28">        throw new UnsupportedOperationException(&quot;You are not allowed to send a WinnerEvent!&quot;);</span>
+    }
+
+    @Override
+    public String getText(Client cli) {
+<span class="nc" id="L33">        return String.format(&quot;%s wins!&quot;, this.teamName);</span>
+    }
+
+    public String getTeamName() {
+<span class="nc" id="L37">        return this.teamName;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

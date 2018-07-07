@@ -1,0 +1,1 @@
+java -jar core-1.0-SNAPSHOT.jar -server -port 10001 -timeout -1 -map maps/mapsmall.txt -fight fights/fighto.txt >> log.txt

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Gui.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.gui</a> &gt; <span class="el_source">Gui.java</span></div><h1>Gui.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.gui;
+
+import de.unisaarland.sopra.Client;
+import de.unisaarland.sopra.messages.ActNow;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.messages.RoundBegin;
+import de.unisaarland.sopra.messages.WarCry;
+import de.unisaarland.sopra.model.Pc;
+
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+import javax.swing.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * Created by Team 14 on 13.09.2016.
+ */
+public class Gui extends Client {
+
+    private GuiFrame frame;
+    private boolean wraithCat, wraithDoctor, fairyMavis, ifritNatsu, rookBird, koboldChristmas, yetiAg, boarPig;
+    private List&lt;Event&gt; eventsList;
+    private Pc currentPlayer;
+    private static final boolean PLAYMIDI = true;
+
+    /**
+     * create a new client
+     *
+     * @param ip      IP or host
+     * @param port    port number
+     * @param timeout timeout in ms
+     */
+    public Gui(String ip, int port, int timeout) {
+<span class="nc" id="L37">        super(ip, port, timeout);</span>
+
+<span class="nc" id="L39">        super.clientConnection.sendWatch();</span>
+
+<span class="nc" id="L41">        eventsList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L42">        Random r = new Random();</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        wraithCat = (r.nextDouble() &lt;= 0.05);</span>
+<span class="nc" id="L44">        wraithDoctor = false;</span>
+<span class="nc" id="L45">        fairyMavis = false;</span>
+<span class="nc" id="L46">        ifritNatsu = false;</span>
+<span class="nc" id="L47">        rookBird = false;</span>
+<span class="nc" id="L48">        koboldChristmas = false;</span>
+<span class="nc" id="L49">        yetiAg = false;</span>
+<span class="nc" id="L50">        boarPig = false;</span>
+
+<span class="nc" id="L52">        frame = new GuiFrame(this);</span>
+<span class="nc" id="L53">    }</span>
+
+    @Override
+    public void actNow() {
+<span class="nc" id="L57">        return;</span>
+    }
+
+    public void run() {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        while (isRunning()) {</span>
+<span class="nc" id="L62">            Event event = this.clientConnection.nextEvent();</span>
+
+<span class="nc" id="L64">            eventsList.add(event);</span>
+<span class="nc" id="L65">            event.executeEvent(game, this);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            if (event instanceof WarCry) {</span>
+<span class="nc" id="L67">                WarCry cry = (WarCry) event;</span>
+<span class="nc" id="L68">                frame.addWarcy(cry.getMonsterId(), 20, cry.getCry());</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">                wraithCat = (wraithCat || catchCryingCat(cry));</span>
+<span class="nc bnc" id="L70" title="All 4 branches missed.">                wraithDoctor = (wraithDoctor || catchWraithDoctor(cry));</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">                koboldChristmas = (koboldChristmas || catchKoboldChristmas(cry));</span>
+<span class="nc bnc" id="L72" title="All 4 branches missed.">                ifritNatsu = (ifritNatsu || catchIfritNatsu(cry));</span>
+<span class="nc bnc" id="L73" title="All 4 branches missed.">                fairyMavis = (fairyMavis || catchFairyMavis(cry));</span>
+<span class="nc bnc" id="L74" title="All 4 branches missed.">                rookBird = (rookBird || catchRookBird(cry));</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">                yetiAg = (yetiAg || catchYetiAg(cry));</span>
+<span class="nc bnc" id="L76" title="All 4 branches missed.">                boarPig = (boarPig || catchBoarPig(cry));</span>
+            }
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (event instanceof ActNow){</span>
+<span class="nc" id="L79">                this.currentPlayer = this.game.getMonsterById(((ActNow) event).getMonsterId());</span>
+            }
+<span class="nc" id="L81">            frame.repaint();</span>
+
+<span class="nc" id="L83">        }</span>
+<span class="nc" id="L84">        clientConnection.close();</span>
+<span class="nc" id="L85">    }</span>
+
+    @Override
+    public String getName() {
+<span class="nc" id="L89">        return null;</span>
+    }
+
+    @Override
+    public String getTeamName() {
+<span class="nc" id="L94">        return null;</span>
+    }
+
+    private boolean catchCryingCat(WarCry event) {
+<span class="nc" id="L98">        String cry = event.getCry().toLowerCase();</span>
+<span class="nc" id="L99">        String name = &quot;wraith_cat&quot;;</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        boolean result = cry.split(&quot;hello kitty&quot;).length &gt; 1;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (PLAYMIDI &amp;&amp; result) {</span>
+            try {
+<span class="nc" id="L103">                Music.run(name);</span>
+<span class="nc" id="L104">            } catch (InvalidMidiDataException | IOException | MidiUnavailableException | InterruptedException e) {</span>
+<span class="nc" id="L105">                e.printStackTrace();</span>
+<span class="nc" id="L106">            }</span>
+        }
+<span class="nc" id="L108">        return result;</span>
+    }
+
+    private boolean catchWraithDoctor(WarCry event) {
+<span class="nc" id="L112">        String cry = event.getCry().toLowerCase();</span>
+<span class="nc" id="L113">        int res = cry.split(&quot;allonsy&quot;).length;</span>
+<span class="nc" id="L114">        int res1 = cry.split(&quot;allons-y&quot;).length;</span>
+<span class="nc bnc" id="L115" title="All 4 branches missed.">        boolean result = res &gt; 1 || res1 &gt; 1;</span>
+<span class="nc" id="L116">        String name = &quot;wraith_doctor&quot;;</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        if (PLAYMIDI &amp;&amp; result) {</span>
+            try {
+<span class="nc" id="L119">                Music.run(name);</span>
+<span class="nc" id="L120">            } catch (InvalidMidiDataException | IOException | MidiUnavailableException | InterruptedException e) {</span>
+<span class="nc" id="L121">                e.printStackTrace();</span>
+<span class="nc" id="L122">            }</span>
+        }
+<span class="nc" id="L124">        return result;</span>
+    }
+
+    private boolean catchRookBird(WarCry event) {
+<span class="nc" id="L128">        String cry = event.getCry().toLowerCase();</span>
+<span class="nc" id="L129">        int res = cry.split(&quot;flying is a dream&quot;).length;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        boolean result = res &gt; 1;</span>
+<span class="nc" id="L131">        String name = &quot;rook_bird&quot;;</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (PLAYMIDI &amp;&amp; result) {</span>
+            try {
+<span class="nc" id="L134">                Music.run(name);</span>
+<span class="nc" id="L135">            } catch (InvalidMidiDataException | IOException | MidiUnavailableException | InterruptedException e) {</span>
+<span class="nc" id="L136">                e.printStackTrace();</span>
+<span class="nc" id="L137">            }</span>
+        }
+<span class="nc" id="L139">        return result;</span>
+    }
+
+    private boolean catchKoboldChristmas(WarCry event) {
+<span class="nc" id="L143">        String cry = event.getCry().toLowerCase();</span>
+<span class="nc" id="L144">        int merry = (cry.split(&quot;merry christmas&quot;).length);</span>
+<span class="nc" id="L145">        int hohoho = (cry.split(&quot;hohoho&quot;).length);</span>
+<span class="nc bnc" id="L146" title="All 4 branches missed.">        boolean result = (merry &gt; 1 || hohoho &gt; 1);</span>
+<span class="nc" id="L147">        String name = &quot;kobold_christmas&quot;;</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (PLAYMIDI &amp;&amp; result) {</span>
+            try {
+<span class="nc" id="L150">                Music.run(name);</span>
+<span class="nc" id="L151">            } catch (InvalidMidiDataException | IOException | MidiUnavailableException | InterruptedException e) {</span>
+<span class="nc" id="L152">                e.printStackTrace();</span>
+<span class="nc" id="L153">            }</span>
+        }
+<span class="nc" id="L155">        return result;</span>
+    }
+
+    private boolean catchIfritNatsu(WarCry event) {
+<span class="nc" id="L159">        String cry = event.getCry().toLowerCase();</span>
+<span class="nc" id="L160">        int res = cry.split(&quot;we cannot live if we do not keep running forward&quot;).length;</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        boolean result = res &gt; 1;</span>
+<span class="nc" id="L162">        String name = &quot;ifrit_natsu&quot;;</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        if (PLAYMIDI &amp;&amp; result) {</span>
+            try {
+<span class="nc" id="L165">                Music.run(name);</span>
+<span class="nc" id="L166">            } catch (InvalidMidiDataException | IOException | MidiUnavailableException | InterruptedException e) {</span>
+<span class="nc" id="L167">                e.printStackTrace();</span>
+<span class="nc" id="L168">            }</span>
+        }
+<span class="nc" id="L170">        return result;</span>
+    }
+
+    private boolean catchFairyMavis(WarCry event) {
+<span class="nc" id="L174">        String cry = event.getCry().toLowerCase();</span>
+<span class="nc" id="L175">        int cries = cry.split(&quot;unwavering faith and resilient bonds will bring even miracles to your side&quot;).length;</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">        boolean result = cries &gt; 1;</span>
+<span class="nc" id="L177">        String name = &quot;fairy_tail&quot;;</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if (PLAYMIDI &amp;&amp; result) {</span>
+            try {
+<span class="nc" id="L180">                Music.run(name);</span>
+<span class="nc" id="L181">            } catch (InvalidMidiDataException | IOException | MidiUnavailableException | InterruptedException e) {</span>
+<span class="nc" id="L182">                e.printStackTrace();</span>
+<span class="nc" id="L183">            }</span>
+        }
+<span class="nc" id="L185">        return result;</span>
+    }
+
+    private boolean catchYetiAg(WarCry event) {
+<span class="nc" id="L189">        String cry = event.getCry().toLowerCase();</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">        return cry.split(&quot;schwaebisch&quot;).length &gt; 1;</span>
+    }
+
+    private boolean catchBoarPig(WarCry event) {
+<span class="nc" id="L194">        String cry = event.getCry().toLowerCase();</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        return cry.split(&quot;schweinisch&quot;).length &gt; 1;</span>
+    }
+
+
+    public boolean getWraithCat() {
+<span class="nc" id="L200">        return wraithCat;</span>
+    }
+
+    public boolean isWraithDoctor() {
+<span class="nc" id="L204">        return wraithDoctor;</span>
+    }
+
+    public boolean isFairyMavis() {
+<span class="nc" id="L208">        return fairyMavis;</span>
+    }
+
+    public boolean isRookBird() {
+<span class="nc" id="L212">        return rookBird;</span>
+    }
+
+    public boolean isIfritNatsu() {
+<span class="nc" id="L216">        return ifritNatsu;</span>
+    }
+
+    public boolean isKoboldChristmas() {
+<span class="nc" id="L220">        return koboldChristmas;</span>
+    }
+
+    public boolean isYetiAg() {
+<span class="nc" id="L224">        return yetiAg;</span>
+    }
+
+    public boolean isBoarPig() {
+<span class="nc" id="L228">        return boarPig;</span>
+    }
+
+    public List&lt;Event&gt; getEventsList() {
+<span class="nc" id="L232">        return eventsList;</span>
+    }
+
+    public Pc getCurrentPlayer() {
+<span class="nc" id="L236">        return this.currentPlayer;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

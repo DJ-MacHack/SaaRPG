@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WrongDataTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">WrongDataTest.java</span></div><h1>WrongDataTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.comm.TimeoutException;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+import org.junit.Assert;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+/**
+ * Created by Lukas Kirschner on 9/20/16.
+ * This test checks if the tested server implementation crashes when invalid data is sent.
+ */
+<span class="nc bnc" id="L16" title="All 2 branches missed.">public class WrongDataTest extends OurSystemTest {</span>
+    private String INVALIDFIGHTFILE;
+    private String INVALIDMAPFILE;
+    private final static String PLAYERA = &quot;AndreasKieling&quot;;
+    private final static String PLAYERB = &quot;MarcelDavis&quot;;
+    private final static String TEAMA = &quot;YTK&quot;;
+    private final static String TEAMB = &quot;VollerEmpfang&quot;;
+<span class="nc" id="L23">    private CreatureType CREATUREA = CreatureType.YETI;</span>
+<span class="nc" id="L24">    private CreatureType CREATUREB = CreatureType.NAGA;</span>
+<span class="nc" id="L25">    private final static String VALIDFIGHTFILE = OurSystemTest.buildValidFightFile(TEAMA, TEAMB, PLAYERA, PLAYERB, &quot;Yeti&quot;, &quot;Naga&quot;);</span>
+    private final static String VALIDMAPFILE = &quot;01\n  &quot;;
+<span class="nc" id="L27">    private final static char[] ILLEGALMAPCHARS = {'(', 'P', '\t', 'u'};</span>
+
+    private WrongDataTest(String invalidFightFile, String invalidMapFile, String testName) {
+<span class="nc" id="L30">        super(&quot;WrongDataTest.&quot; + testName);</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        this.INVALIDFIGHTFILE = (invalidFightFile == null) ? VALIDFIGHTFILE : invalidFightFile;</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        this.INVALIDMAPFILE = (invalidMapFile == null) ? VALIDMAPFILE : invalidMapFile;</span>
+<span class="nc" id="L33">    }</span>
+    private WrongDataTest(String invalidFightFile, String invalidMapFile, String testName, CreatureType a, CreatureType b){
+<span class="nc" id="L35">        super(&quot;WrongDataTest.&quot; + testName);</span>
+<span class="nc bnc" id="L36" title="All 4 branches missed.">        assert(invalidFightFile != null);</span>
+<span class="nc" id="L37">        this.INVALIDFIGHTFILE = invalidFightFile;</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        this.INVALIDMAPFILE = (invalidMapFile == null) ? VALIDMAPFILE : invalidMapFile;</span>
+<span class="nc" id="L39">        this.CREATUREA = a;</span>
+<span class="nc" id="L40">        this.CREATUREB = b;</span>
+<span class="nc" id="L41">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L45">        expectServerFail();</span>
+<span class="nc" id="L46">        try (ClientConnection&lt;Event&gt; pa = register(0, PLAYERA, CREATUREA, TEAMA, 0, 0);</span>
+<span class="nc" id="L47">             ClientConnection&lt;Event&gt; pb = register(1, PLAYERB, CREATUREB, TEAMB, 1, 0);) {</span>
+<span class="nc" id="L48">            assertRegisterEvent(pb.nextEvent(), 0, PLAYERA, CREATUREA, TEAMA, 0, 0);</span>
+<span class="nc" id="L49">            assertRegisterEvent(pa.nextEvent(), 1, PLAYERB, CREATUREB, TEAMB, 1, 0);</span>
+<span class="nc" id="L50">            Assert.fail(&quot;Server did not time out.&quot;);</span>
+<span class="nc bnc" id="L51" title="All 16 branches missed.">        } catch (TimeoutException | IllegalArgumentException ex) {</span>
+<span class="nc" id="L52">            Assert.assertNotNull(ex);</span>
+<span class="nc" id="L53">        }</span>
+
+<span class="nc" id="L55">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L59">        return this.INVALIDMAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L64">        return this.INVALIDFIGHTFILE;</span>
+    }
+
+    public static Collection&lt;OurSystemTest&gt; getTests() {
+<span class="nc" id="L68">        ArrayList&lt;OurSystemTest&gt; sysTests = new ArrayList&lt;OurSystemTest&gt;();</span>
+<span class="nc" id="L69">        sysTests.add(new WrongDataTest(null, &quot;  \n  &quot;, &quot;MapNoSpawnPoints&quot;));</span>
+<span class="nc" id="L70">        sysTests.add(new WrongDataTest(null, &quot;0 \n  &quot;, &quot;MapTooFewSpawnPoints&quot;));</span>
+<span class="nc" id="L71">        sysTests.add(new WrongDataTest(null, &quot;01 \n  &quot;, &quot;MapOneLineTooShort&quot;));</span>
+<span class="nc" id="L72">        sysTests.add(new WrongDataTest(null, &quot;01 \n  \n   &quot;, &quot;MapMiddleLineTooShort&quot;));</span>
+<span class="nc" id="L73">        sysTests.add(new WrongDataTest(null, &quot;01\n##\n##\n###&quot;, &quot;MapOneLineTooLong&quot;));</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for (int i = 0; i &lt; ILLEGALMAPCHARS.length; i++) {</span>
+<span class="nc" id="L75">            sysTests.add(new WrongDataTest(null, &quot;01\n &quot; + ILLEGALMAPCHARS[i], &quot;MapIllegalCharacter&quot; + (i + 1)));</span>
+        }
+<span class="nc" id="L77">        sysTests.add(new WrongDataTest(</span>
+                &quot;TeamA, TeamB, TeamC, TeamD, TeamE, TeamF, TeamG, TeamH, TeamI, TeamJ\n&quot; +
+                        &quot;TeamA, Player0, Naga\n&quot; +
+                        &quot;TeamB, Player1, Naga\n&quot; +
+                        &quot;TeamC, Player2, Naga\n&quot; +
+                        &quot;TeamD, Player3, Naga\n&quot; +
+                        &quot;TeamE, Player4, Naga\n&quot; +
+                        &quot;TeamF, Player5, Naga\n&quot; +
+                        &quot;TeamG, Player6, Naga\n&quot; +
+                        &quot;TeamH, Player7, Naga\n&quot; +
+                        &quot;TeamI, Player8, Naga\n&quot; +
+                        &quot;TeamJ, Player9, Naga\n&quot;,
+                &quot;01234\n56789\n +#%x\nt~^_*\n$&amp;XTA\nABCDE&quot;,
+                &quot;MapTestAllTilesAndInvalid&quot;));
+
+<span class="nc" id="L92">        sysTests.add(new WrongDataTest(OurSystemTest.buildValidFightFile(TEAMA, &quot;&quot;, PLAYERA, PLAYERB, &quot;Yeti&quot;, &quot;Naga&quot;), null, &quot;FightTooFewTeams&quot;));</span>
+<span class="nc" id="L93">        sysTests.add(new WrongDataTest(TEAMA + &quot;, &quot; + TEAMB + &quot;\n&quot; + TEAMA + &quot;, &quot; + PLAYERA + &quot;Yeti&quot;, null, &quot;FightTooFewPlayers&quot;));</span>
+<span class="nc" id="L94">        sysTests.add(new WrongDataTest(&quot;\n&quot; + OurSystemTest.buildValidFightFile(TEAMA, &quot;&quot;, PLAYERA, PLAYERB, &quot;Yeti&quot;, &quot;Naga&quot;), null, &quot;FightEmptyFirstLine&quot;));</span>
+<span class="nc" id="L95">        sysTests.add(new WrongDataTest(</span>
+                &quot;TeamA, TeamB, TeamC, TeamD, TeamE, TeamF, TeamG, TeamH, TeamI, TeamJ, TeamK\n&quot; +
+                        &quot;TeamA, Player0, Naga\n&quot; +
+                        &quot;TeamB, Player1, Naga\n&quot; +
+                        &quot;TeamC, Player2, Naga\n&quot; +
+                        &quot;TeamD, Player3, Naga\n&quot; +
+                        &quot;TeamE, Player4, Naga\n&quot; +
+                        &quot;TeamF, Player5, Naga\n&quot; +
+                        &quot;TeamG, Player6, Naga\n&quot; +
+                        &quot;TeamH, Player7, Naga\n&quot; +
+                        &quot;TeamI, Player8, Naga\n&quot; +
+                        &quot;TeamJ, Player9, Naga\n&quot; +
+                        &quot;TeamK, Player10, Naga\n&quot;,
+                null,
+                &quot;FightTooManyTeams&quot;));
+<span class="nc" id="L110">        sysTests.add(new WrongDataTest(OurSystemTest.buildValidFightFile(TEAMA, TEAMB, PLAYERA, PLAYERA, &quot;Yeti&quot;, &quot;Naga&quot;), null, &quot;FightDuplicatePlayerName&quot;));</span>
+<span class="nc" id="L111">        sysTests.add(new WrongDataTest(OurSystemTest.buildValidFightFile(TEAMA, TEAMB, PLAYERA, PLAYERB, &quot;Yeti&quot;, &quot;Fairy&quot;), null, &quot;FightPlayAsFairy&quot;, CreatureType.YETI, CreatureType.FAIRY));</span>
+<span class="nc" id="L112">        sysTests.add(new WrongDataTest(OurSystemTest.buildValidFightFile(TEAMA, TEAMB, PLAYERA, PLAYERB, &quot;Yeti&quot;, &quot;Boar&quot;), null, &quot;FightPlayAsBoar&quot;, CreatureType.YETI, CreatureType.BOAR));</span>
+<span class="nc" id="L113">        return sysTests;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

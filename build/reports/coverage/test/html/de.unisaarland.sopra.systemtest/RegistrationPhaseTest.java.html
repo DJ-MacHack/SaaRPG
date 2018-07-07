@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationPhaseTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">RegistrationPhaseTest.java</span></div><h1>RegistrationPhaseTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Team14 on 16/09/16.
+ * Responsible for creation and implementation: Lukas Schaefer
+ */
+public class RegistrationPhaseTest extends OurSystemTest {
+
+    private final static String map = &quot;0 1 2 \n&quot; +
+            &quot;~~^^**\n&quot; +
+            &quot;2 1 0 &quot;;
+
+    private final static String fight = &quot;Aqua, Rocket, Magma\n&quot; +
+            &quot;Aqua, Kyogre, Yeti\n&quot; +
+            &quot;Aqua, Garados, Naga\n&quot; +
+            &quot;Rocket, Mauzi, Kobold\n&quot; +
+            &quot;Rocket, Vipitis, Naga\n&quot; +
+            &quot;Magma, Slugma, Ifrit\n&quot; +
+            &quot;Magma, Mewto, Wraith&quot;;
+
+    public RegistrationPhaseTest() {
+<span class="nc" id="L29">        super(&quot;RegistrationPhase&quot;);</span>
+<span class="nc" id="L30">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L34">        List&lt;ClientConnection&lt;Event&gt;&gt; ccs = new ArrayList&lt;&gt;();</span>
+
+        // Team Aqua registration
+<span class="nc" id="L37">        ClientConnection&lt;Event&gt; kyogre = register(0, &quot;Kyogre&quot;, CreatureType.YETI, &quot;Aqua&quot;, 0, 0);</span>
+<span class="nc" id="L38">        ccs.add(kyogre);</span>
+
+<span class="nc" id="L40">        ClientConnection&lt;Event&gt; garados = register(1, &quot;Garados&quot;, CreatureType.NAGA, &quot;Aqua&quot;, 3, 2);</span>
+<span class="nc" id="L41">        assertRegisterEvent(kyogre.nextEvent(), 1, &quot;Garados&quot;, CreatureType.NAGA, &quot;Aqua&quot;, 3, 2);</span>
+        //assertRegisterEvent(assertAndMerge(ccs), 1, &quot;Garados&quot;, CreatureType.NAGA, &quot;Aqua&quot;, 3, 2);
+<span class="nc" id="L43">        assertRegisterEvent(garados.nextEvent(), 0, &quot;Kyogre&quot;, CreatureType.YETI, &quot;Aqua&quot;, 0, 0);</span>
+<span class="nc" id="L44">        ccs.add(garados);</span>
+
+        // Team Rocket registration
+<span class="nc" id="L47">        ClientConnection&lt;Event&gt; mauzi = register(2, &quot;Mauzi&quot;, CreatureType.KOBOLD, &quot;Rocket&quot;, 2, 0);</span>
+<span class="nc" id="L48">        assertRegisterEvent(assertAndMerge(ccs), 2, &quot;Mauzi&quot;, CreatureType.KOBOLD, &quot;Rocket&quot;, 2, 0);</span>
+<span class="nc" id="L49">        assertRegisterEvent(mauzi.nextEvent(), 0, &quot;Kyogre&quot;, CreatureType.YETI, &quot;Aqua&quot;, 0, 0);</span>
+<span class="nc" id="L50">        assertRegisterEvent(mauzi.nextEvent(), 1, &quot;Garados&quot;, CreatureType.NAGA, &quot;Aqua&quot;, 3, 2);</span>
+<span class="nc" id="L51">        ccs.add(mauzi);</span>
+
+<span class="nc" id="L53">        ClientConnection&lt;Event&gt; vipitis = register(3, &quot;Vipitis&quot;, CreatureType.NAGA, &quot;Rocket&quot;, 1, 2);</span>
+<span class="nc" id="L54">        assertRegisterEvent(assertAndMerge(ccs), 3, &quot;Vipitis&quot;, CreatureType.NAGA, &quot;Rocket&quot;, 1, 2);</span>
+<span class="nc" id="L55">        assertRegisterEvent(vipitis.nextEvent(), 0, &quot;Kyogre&quot;, CreatureType.YETI, &quot;Aqua&quot;, 0, 0);</span>
+<span class="nc" id="L56">        assertRegisterEvent(vipitis.nextEvent(), 1, &quot;Garados&quot;, CreatureType.NAGA, &quot;Aqua&quot;, 3, 2);</span>
+<span class="nc" id="L57">        assertRegisterEvent(vipitis.nextEvent(), 2, &quot;Mauzi&quot;, CreatureType.KOBOLD, &quot;Rocket&quot;, 2, 0);</span>
+<span class="nc" id="L58">        ccs.add(vipitis);</span>
+
+        // Team Magma registration
+<span class="nc" id="L61">        ClientConnection&lt;Event&gt; slugma = register(4, &quot;Slugma&quot;, CreatureType.IFRIT, &quot;Magma&quot;, 4, 0);</span>
+<span class="nc" id="L62">        assertRegisterEvent(assertAndMerge(ccs), 4, &quot;Slugma&quot;, CreatureType.IFRIT, &quot;Magma&quot;, 4, 0);</span>
+<span class="nc" id="L63">        assertRegisterEvent(slugma.nextEvent(), 0, &quot;Kyogre&quot;, CreatureType.YETI, &quot;Aqua&quot;, 0, 0);</span>
+<span class="nc" id="L64">        assertRegisterEvent(slugma.nextEvent(), 1, &quot;Garados&quot;, CreatureType.NAGA, &quot;Aqua&quot;, 3, 2);</span>
+<span class="nc" id="L65">        assertRegisterEvent(slugma.nextEvent(), 2, &quot;Mauzi&quot;, CreatureType.KOBOLD, &quot;Rocket&quot;, 2, 0);</span>
+<span class="nc" id="L66">        assertRegisterEvent(slugma.nextEvent(), 3, &quot;Vipitis&quot;, CreatureType.NAGA, &quot;Rocket&quot;, 1, 2);</span>
+<span class="nc" id="L67">        ccs.add(slugma);</span>
+
+<span class="nc" id="L69">        ClientConnection&lt;Event&gt; mewto = register(5, &quot;Mewto&quot;, CreatureType.WRAITH, &quot;Magma&quot;, -1, 2);</span>
+<span class="nc" id="L70">        assertRegisterEvent(assertAndMerge(ccs), 5, &quot;Mewto&quot;, CreatureType.WRAITH, &quot;Magma&quot;, -1, 2);</span>
+<span class="nc" id="L71">        assertRegisterEvent(mewto.nextEvent(), 0, &quot;Kyogre&quot;, CreatureType.YETI, &quot;Aqua&quot;, 0, 0);</span>
+<span class="nc" id="L72">        assertRegisterEvent(mewto.nextEvent(), 1, &quot;Garados&quot;, CreatureType.NAGA, &quot;Aqua&quot;, 3, 2);</span>
+<span class="nc" id="L73">        assertRegisterEvent(mewto.nextEvent(), 2, &quot;Mauzi&quot;, CreatureType.KOBOLD, &quot;Rocket&quot;, 2, 0);</span>
+<span class="nc" id="L74">        assertRegisterEvent(mewto.nextEvent(), 3, &quot;Vipitis&quot;, CreatureType.NAGA, &quot;Rocket&quot;, 1, 2);</span>
+<span class="nc" id="L75">        assertRegisterEvent(mewto.nextEvent(), 4, &quot;Slugma&quot;, CreatureType.IFRIT, &quot;Magma&quot;, 4, 0);</span>
+<span class="nc" id="L76">        ccs.add(mewto);</span>
+
+        // Registration completed -&gt; Roundbegin
+        //assertRoundBegin(assertAndMerge(ccs), 1);
+<span class="nc" id="L80">        assertRoundBegin(kyogre.nextEvent(), 1);</span>
+<span class="nc" id="L81">        assertRoundBegin(garados.nextEvent(), 1);</span>
+<span class="nc" id="L82">        assertRoundBegin(mauzi.nextEvent(), 1);</span>
+<span class="nc" id="L83">        assertRoundBegin(vipitis.nextEvent(), 1);</span>
+<span class="nc" id="L84">        assertRoundBegin(slugma.nextEvent(), 1);</span>
+<span class="nc" id="L85">        assertRoundBegin(mewto.nextEvent(), 1);</span>
+
+<span class="nc" id="L87">        assertActNow(assertAndMerge(ccs), 0);</span>
+<span class="nc" id="L88">        assertKicked(assertAndMerge(ccs), 0);</span>
+
+<span class="nc" id="L90">        assertActNow(assertAndMerge(ccs), 1);</span>
+<span class="nc" id="L91">        assertKicked(assertAndMerge(ccs), 1);</span>
+
+
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        for (int id = 2; id &lt; 6; id++) {</span>
+<span class="nc" id="L95">            assertActNow(assertAndMerge(ccs), id);</span>
+<span class="nc" id="L96">            assertKicked(assertAndMerge(ccs), id);</span>
+        }
+
+<span class="nc" id="L99">        assertRoundEnd(assertAndMerge(ccs), 1, 0);</span>
+<span class="nc" id="L100">        assertWinner(assertAndMerge(ccs), &quot;&quot;);</span>
+
+<span class="nc" id="L102">        passed();</span>
+<span class="nc" id="L103">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L107">        return map;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L112">        return fight;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

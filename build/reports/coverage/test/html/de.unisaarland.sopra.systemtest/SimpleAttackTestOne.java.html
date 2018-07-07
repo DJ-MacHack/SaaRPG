@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpleAttackTestOne.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">SimpleAttackTestOne.java</span></div><h1>SimpleAttackTestOne.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.Direction;
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+/**
+ * Created by Team 14 on 19.09.2016.
+ */
+public class SimpleAttackTestOne extends OurSystemTest {
+
+    private static final String MAPFILE = &quot;0^^\n&quot;
+            + &quot;  ^\n&quot;
+            + &quot;1 ^&quot;;
+
+    private static final String FIGHTFILE = &quot;Stark, Bolton\n&quot;
+            + &quot;Stark, John, Elf\n&quot;
+            + &quot;Bolton, Ramsay, Kobold&quot;;
+
+    public SimpleAttackTestOne() {
+<span class="nc" id="L22">        super(&quot;SimpleAttackTestOne&quot;);</span>
+<span class="nc" id="L23">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L27">        ClientConnection&lt;Event&gt; c1 = register(0, &quot;John&quot;, CreatureType.ELF, &quot;Stark&quot;, 0, 0);</span>
+<span class="nc" id="L28">        ClientConnection&lt;Event&gt; c2 = register(1, &quot;Ramsay&quot;, CreatureType.KOBOLD, &quot;Bolton&quot;, -1, 2);</span>
+
+<span class="nc" id="L30">        assertRegisterEvent(c1.nextEvent(), 1, &quot;Ramsay&quot;, CreatureType.KOBOLD, &quot;Bolton&quot;, -1, 2);</span>
+<span class="nc" id="L31">        assertRegisterEvent(c2.nextEvent(), 0, &quot;John&quot;, CreatureType.ELF, &quot;Stark&quot;, 0, 0);</span>
+
+<span class="nc" id="L33">        assertRoundBegin(assertAndMerge(c1, c2), 1);    // Ramsay: 100 hp | John: 100 hp</span>
+
+<span class="nc" id="L35">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L36">        c1.sendDoneActing();</span>
+<span class="nc" id="L37">        assertDoneActing(assertAndMerge(c1, c2), 0);</span>
+
+<span class="nc" id="L39">        assertActNow(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L40">        c2.sendMove(Direction.EAST);</span>
+<span class="nc" id="L41">        assertMoved(assertAndMerge(c1, c2), 1, Direction.EAST);</span>
+<span class="nc" id="L42">        assertActNow(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L43">        c2.sendDoneActing();</span>
+<span class="nc" id="L44">        assertDoneActing(assertAndMerge(c1, c2), 1);</span>
+
+<span class="nc" id="L46">        assertRoundEnd(assertAndMerge(c1, c2), 1, 1);</span>
+<span class="nc" id="L47">        assertRoundBegin(assertAndMerge(c1, c2), 2);    // Ramsay: 100 hp | John: 100 hp</span>
+
+<span class="nc" id="L49">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L50">        c1.sendShoot(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L51">        assertShot(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L52">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L53">        c1.sendDoneActing();</span>
+<span class="nc" id="L54">        assertDoneActing(assertAndMerge(c1, c2), 0);</span>
+
+<span class="nc" id="L56">        assertActNow(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L57">        c2.sendMove(Direction.NORTH_WEST);</span>
+<span class="nc" id="L58">        assertMoved(assertAndMerge(c1, c2), 1, Direction.NORTH_WEST);</span>
+<span class="nc" id="L59">        assertActNow(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L60">        c2.sendStab(Direction.NORTH_WEST);</span>
+<span class="nc" id="L61">        assertStabbed(assertAndMerge(c1, c2), 1, Direction.NORTH_WEST);</span>
+<span class="nc" id="L62">        assertActNow(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L63">        c2.sendDoneActing();</span>
+<span class="nc" id="L64">        assertDoneActing(assertAndMerge(c1, c2), 1);</span>
+
+<span class="nc" id="L66">        assertRoundEnd(assertAndMerge(c1, c2), 2, 0);</span>
+<span class="nc" id="L67">        assertRoundBegin(assertAndMerge(c1, c2), 3);    // Ramsay: 89 hp | John: 93 hp</span>
+
+<span class="nc" id="L69">        assertActNow(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L70">        c2.sendDoneActing();</span>
+<span class="nc" id="L71">        assertDoneActing(assertAndMerge(c1, c2), 1);</span>
+
+<span class="nc" id="L73">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L74">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L75">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L76">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L77">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L78">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L79">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L80">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L81">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L82">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L83">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L84">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L85">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L86">        c1.sendDoneActing();</span>
+<span class="nc" id="L87">        assertDoneActing(assertAndMerge(c1, c2), 0);</span>
+
+<span class="nc" id="L89">        assertRoundEnd(assertAndMerge(c1, c2), 3, 0);</span>
+<span class="nc" id="L90">        assertRoundBegin(assertAndMerge(c1, c2), 4);    // Ramsay: 61 hp | John: 93 hp</span>
+
+<span class="nc" id="L92">        assertActNow(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L93">        c2.sendDoneActing();</span>
+<span class="nc" id="L94">        assertDoneActing(assertAndMerge(c1, c2), 1);</span>
+
+<span class="nc" id="L96">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L97">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L98">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L99">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L100">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L101">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L102">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L103">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L104">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L105">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L106">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L107">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L108">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L109">        c1.sendDoneActing();</span>
+<span class="nc" id="L110">        assertDoneActing(assertAndMerge(c1, c2), 0);</span>
+
+<span class="nc" id="L112">        assertRoundEnd(assertAndMerge(c1, c2), 4, 0);</span>
+<span class="nc" id="L113">        assertRoundBegin(assertAndMerge(c1, c2), 5);    // Ramsay: 33 hp | John: 93 hp</span>
+
+<span class="nc" id="L115">        assertActNow(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L116">        c2.sendDoneActing();</span>
+<span class="nc" id="L117">        assertDoneActing(assertAndMerge(c1, c2), 1);</span>
+
+<span class="nc" id="L119">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L120">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L121">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L122">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L123">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L124">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L125">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L126">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L127">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L128">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L129">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L130">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L131">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L132">        c1.sendDoneActing();</span>
+<span class="nc" id="L133">        assertDoneActing(assertAndMerge(c1, c2), 0);</span>
+
+<span class="nc" id="L135">        assertRoundEnd(assertAndMerge(c1, c2), 5, 0);</span>
+<span class="nc" id="L136">        assertRoundBegin(assertAndMerge(c1, c2), 6);    // Ramsay: 5 hp | John: 93 hp</span>
+
+<span class="nc" id="L138">        assertActNow(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L139">        c2.sendDoneActing();</span>
+<span class="nc" id="L140">        assertDoneActing(assertAndMerge(c1, c2), 1);</span>
+
+<span class="nc" id="L142">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L143">        c1.sendStab(Direction.SOUTH_EAST);</span>
+<span class="nc" id="L144">        assertStabbed(assertAndMerge(c1, c2), 0, Direction.SOUTH_EAST);</span>
+<span class="nc" id="L145">        assertDied(assertAndMerge(c1, c2), 1);</span>
+<span class="nc" id="L146">        assertActNow(assertAndMerge(c1, c2), 0);</span>
+<span class="nc" id="L147">        c1.sendDoneActing();</span>
+<span class="nc" id="L148">        assertDoneActing(assertAndMerge(c1, c2), 0);</span>
+
+<span class="nc" id="L150">        assertRoundEnd(assertAndMerge(c1, c2), 6, 0);</span>
+<span class="nc" id="L151">        assertWinner(assertAndMerge(c1, c2), &quot;Stark&quot;);</span>
+<span class="nc" id="L152">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L156">        return MAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L161">        return FIGHTFILE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

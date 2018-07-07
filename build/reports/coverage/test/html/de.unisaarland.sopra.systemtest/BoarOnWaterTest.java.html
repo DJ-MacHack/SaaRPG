@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoarOnWaterTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.systemtest</a> &gt; <span class="el_source">BoarOnWaterTest.java</span></div><h1>BoarOnWaterTest.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.systemtest;
+
+import de.unisaarland.sopra.comm.ClientConnection;
+import de.unisaarland.sopra.messages.Event;
+import de.unisaarland.sopra.model.CreatureType;
+
+import static de.unisaarland.sopra.Direction.EAST;
+import static de.unisaarland.sopra.Direction.NORTH_EAST;
+import static de.unisaarland.sopra.Direction.NORTH_WEST;
+
+/**
+ * Created by Lukas Kirschner on 9/22/16.
+ */
+public class BoarOnWaterTest extends OurSystemTest {
+    private final static String PLAYERA = &quot;AndreasKieling&quot;;
+    private final static String PLAYERB = &quot;MarcelDavis&quot;;
+    private final static String TEAMA = &quot;YTK&quot;;
+    private final static String TEAMB = &quot;VollerEmpfang&quot;;
+<span class="nc" id="L19">    private final static CreatureType CREATUREA = CreatureType.WRAITH;</span>
+<span class="nc" id="L20">    private final static CreatureType CREATUREB = CreatureType.YETI;</span>
+<span class="nc" id="L21">    private final static String VALIDFIGHTFILE = TEAMA + &quot;, &quot; + TEAMB + &quot;\n&quot; +</span>
+<span class="nc" id="L22">                    TEAMA + &quot;, &quot; + PLAYERA + &quot;, &quot; + CREATUREA.toString() + &quot;\n&quot; +</span>
+<span class="nc" id="L23">                    TEAMB + &quot;, &quot; + PLAYERB + &quot;, &quot; + CREATUREB.toString();</span>
+    public final static String VALIDMAPFILE = &quot;*********\n&quot; +
+            &quot;01.     ~&quot;;
+
+
+    public BoarOnWaterTest() {
+<span class="nc" id="L29">        super(&quot;BoarOnWaterTest&quot;);</span>
+<span class="nc" id="L30">    }</span>
+
+    @Override
+    protected void executeTest() {
+<span class="nc" id="L34">        ClientConnection&lt;Event&gt; pa = register(0, PLAYERA, CREATUREA, TEAMA, 0, 1);</span>
+<span class="nc" id="L35">        ClientConnection&lt;Event&gt; pb = register(1, PLAYERB, CREATUREB, TEAMB, 1, 1);</span>
+<span class="nc" id="L36">        assertRegisterEvent(pb.nextEvent(), 0, PLAYERA, CREATUREA, TEAMA, 0, 1);</span>
+<span class="nc" id="L37">        assertRegisterEvent(pa.nextEvent(), 1, PLAYERB, CREATUREB, TEAMB, 1, 1);</span>
+<span class="nc" id="L38">        assertRoundBegin(assertAndMerge(pb,pa),1);</span>
+
+<span class="nc" id="L40">        assertBoarSpawned(assertAndMerge(pb,pa),2,2,1);</span>
+<span class="nc" id="L41">        assertMoved(assertAndMerge(pb,pa),2,EAST);</span>
+<span class="nc" id="L42">        assertMoved(assertAndMerge(pb,pa),2,EAST);</span>
+<span class="nc" id="L43">        assertMoved(assertAndMerge(pb,pa),2,EAST);</span>
+<span class="nc" id="L44">        assertMoved(assertAndMerge(pb,pa),2,EAST);</span>
+<span class="nc" id="L45">        assertMoved(assertAndMerge(pb,pa),2,EAST);</span>
+<span class="nc" id="L46">        assertMoved(assertAndMerge(pb,pa),2,NORTH_EAST);</span>
+
+<span class="nc" id="L48">        assertActNow(assertAndMerge(pb,pa),0);</span>
+<span class="nc" id="L49">        pa.sendDoneActing();</span>
+<span class="nc" id="L50">        assertDoneActing(assertAndMerge(pb,pa),0);</span>
+
+<span class="nc" id="L52">        assertActNow(assertAndMerge(pb,pa),1);</span>
+<span class="nc" id="L53">        pb.sendDoneActing();</span>
+<span class="nc" id="L54">        assertDoneActing(assertAndMerge(pb,pa),1);</span>
+
+<span class="nc" id="L56">        assertFieldEffect(assertAndMerge(pb,pa),8,0,25);</span>
+<span class="nc" id="L57">        assertDied(assertAndMerge(pb,pa),2);</span>
+
+<span class="nc" id="L59">        assertRoundEnd(assertAndMerge(pb,pa),1,1);</span>
+
+<span class="nc" id="L61">        assertRoundBegin(assertAndMerge(pb,pa),2);</span>
+
+<span class="nc" id="L63">        assertActNow(assertAndMerge(pb,pa),1);</span>
+<span class="nc" id="L64">        pb.sendDoneActing();</span>
+<span class="nc" id="L65">        assertDoneActing(assertAndMerge(pb,pa),1);</span>
+
+<span class="nc" id="L67">        assertActNow(assertAndMerge(pb,pa),0);</span>
+<span class="nc" id="L68">        pa.sendBlink(-1,-1);</span>
+<span class="nc" id="L69">        assertKicked(assertAndMerge(pb,pa),0);</span>
+
+<span class="nc" id="L71">        assertRoundEnd(assertAndMerge(pb,pa),2,0);</span>
+<span class="nc" id="L72">        assertWinner(assertAndMerge(pb,pa),TEAMB);</span>
+
+<span class="nc" id="L74">    }</span>
+
+    @Override
+    protected String getMapFile() {
+<span class="nc" id="L78">        return VALIDMAPFILE;</span>
+    }
+
+    @Override
+    protected String getFightFile() {
+<span class="nc" id="L83">        return VALIDFIGHTFILE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

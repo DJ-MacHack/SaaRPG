@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GuiFrame.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra.gui</a> &gt; <span class="el_source">GuiFrame.java</span></div><h1>GuiFrame.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra.gui;
+
+import de.unisaarland.sopra.model.*;
+import de.unisaarland.sopra.utility.GameVector;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map;
+
+/**
+ * Created by Team 14 on 13.09.2016.
+ */
+public class GuiFrame extends JFrame {
+
+    public final static int SIZE = 32;
+    private final static int INFOBOX = 110;
+
+    //PIXEL-PEEPER'S CONSTANTS
+    private final static int INFOBOX_CONTENT_X = 182;
+    private final static int INFOBOX_BARGRAPH_HEIGHT = 22;
+    private final static int INFOBOX_BARGRAPH_Y_HP = 43;
+    private final static int INFOBOX_BARGRAPH_Y_EP = 68;
+    private final static int INFOBOX_BARGRAPH_Y_TEXT_HP = 59;
+    private final static int INFOBOX_BARGRAPH_Y_TEXT_EP = 84;
+    private final static int INFOBOX_BARGRAPH_WIDTH = 150;
+    private final static int INFOBOX_BARGRAPH_X_TEXT = 175;
+    private final static int INFOBOX_TYPETEXT_Y = 38;
+    private final static int PROFILE_DIMENSIONS = 100;
+    private final static int PROFILE_HEIGHT = 80; //Grows up
+
+<span class="nc" id="L36">    private final static GameVector VIEWPOSITION_OFFSET = new GameVector(0, -6);</span>
+<span class="nc" id="L37">    private final static GameVector STARTPOSITION_OFFSET = new GameVector(-1, -1);</span>
+
+    private int width;
+    private int vertOff;
+    private GameVector viewPosition;
+    private GameVector selectedField;
+    private Gui gui;
+    private InputListener inputListener;
+    private BufferedImage tile;
+    private BufferedImage tileOutline;
+    private BufferedImage speechBubble;
+    private BufferedImage box;
+    private HashMap&lt;Field, Image&gt; fieldImageMap;
+    private HashMap&lt;String, BufferedImage&gt; creatureImageMap;
+    private HashMap&lt;String, BufferedImage&gt; creatureProfileMap;
+
+    private long lastTime;
+    private HashMap&lt;Integer, String&gt; warcryMonsterMap;
+    private HashMap&lt;Integer, Long&gt; warcryTimeMap;
+
+    public GuiFrame(Gui gui) {
+<span class="nc" id="L58">        super(&quot;SaaRPG | GUI&quot;);</span>
+<span class="nc" id="L59">        this.gui = gui;</span>
+<span class="nc" id="L60">        viewPosition = (new GameVector(0, 0)).add(STARTPOSITION_OFFSET);</span>
+<span class="nc" id="L61">        selectedField = new GameVector(0, 0);</span>
+<span class="nc" id="L62">        this.fieldImageMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L63">        this.creatureImageMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L64">        this.creatureProfileMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L65">        this.setBackground(GuiHelper.BACKGROUND_COLOR);</span>
+<span class="nc" id="L66">        this.warcryMonsterMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L67">        this.warcryTimeMap = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L69">        inputListener = new InputListener(this);</span>
+<span class="nc" id="L70">        lastTime = System.currentTimeMillis();</span>
+
+<span class="nc" id="L72">        JPanel gamePanel = new GamePanel();</span>
+<span class="nc" id="L73">        this.setContentPane(gamePanel);</span>
+<span class="nc" id="L74">        gamePanel.setPreferredSize(new Dimension(800, 600));</span>
+<span class="nc" id="L75">        this.addKeyListener(inputListener);</span>
+<span class="nc" id="L76">        this.addMouseListener(inputListener);</span>
+<span class="nc" id="L77">        this.setFocusable(true);</span>
+<span class="nc" id="L78">        this.setFocusTraversalKeysEnabled(false);</span>
+<span class="nc" id="L79">        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L80">        this.pack();</span>
+<span class="nc" id="L81">        this.setMinimumSize(this.getSize());</span>
+<span class="nc" id="L82">        this.setLocationRelativeTo(null);</span>
+<span class="nc" id="L83">        this.setVisible(true);</span>
+
+<span class="nc" id="L85">        Load();</span>
+<span class="nc" id="L86">    }</span>
+
+    public void addWarcy(int monsterId, long time, String warCry){
+<span class="nc" id="L89">        warcryMonsterMap.put(monsterId, warCry);</span>
+<span class="nc" id="L90">        warcryTimeMap.put(monsterId, time * 1000);</span>
+<span class="nc" id="L91">    }</span>
+
+    private void Load() {
+<span class="nc" id="L94">        int height = SIZE * 2;</span>
+<span class="nc" id="L95">        width = (int) (Math.sqrt(3) / 2 * height);</span>
+<span class="nc" id="L96">        vertOff = height * 3 / 4;</span>
+
+        try {
+<span class="nc" id="L99">            tile = ImageIO.read(Image.class.getResourceAsStream(&quot;/tile.png&quot;));</span>
+<span class="nc" id="L100">            tileOutline = ImageIO.read(Image.class.getResourceAsStream(&quot;/tile_outline.png&quot;));</span>
+<span class="nc" id="L101">            speechBubble = ImageIO.read(Image.class.getResourceAsStream(&quot;/speechbubble.png&quot;));</span>
+<span class="nc" id="L102">            box = ImageIO.read(Image.class.getResourceAsStream(&quot;/box.png&quot;));</span>
+
+<span class="nc" id="L104">            ArrayList&lt;String&gt; names = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            for (CreatureType creatureType : CreatureType.values()) {</span>
+<span class="nc" id="L107">                String name = creatureType.name().toLowerCase();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                if (creatureType == CreatureType.WRAITH) {</span>
+<span class="nc" id="L109">                    name = &quot;wraith_default&quot;;</span>
+                }
+<span class="nc" id="L111">                names.add(name);</span>
+            }
+
+<span class="nc" id="L114">            names.add(&quot;wraith_cat&quot;);</span>
+<span class="nc" id="L115">            names.add(&quot;wraith_doctor&quot;);</span>
+<span class="nc" id="L116">            names.add(&quot;ifrit_natsu&quot;);</span>
+<span class="nc" id="L117">            names.add(&quot;fairy_tail&quot;);</span>
+<span class="nc" id="L118">            names.add(&quot;kobold_christmas&quot;);</span>
+<span class="nc" id="L119">            names.add(&quot;rook_bird&quot;);</span>
+<span class="nc" id="L120">            names.add(&quot;yeti_ag&quot;);</span>
+<span class="nc" id="L121">            names.add(&quot;boar_pig&quot;);</span>
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            for (String name : names) {</span>
+<span class="nc" id="L124">                BufferedImage image = ImageIO.read(Image.class.getResourceAsStream(&quot;/creatures/&quot; + name + &quot;.png&quot;));</span>
+<span class="nc" id="L125">                BufferedImage profile = ImageIO.read(Image.class.getResourceAsStream(&quot;/profile/&quot; + name + &quot;.jpg&quot;));</span>
+<span class="nc" id="L126">                creatureImageMap.put(name, image);</span>
+<span class="nc" id="L127">                creatureProfileMap.put(name, profile);</span>
+<span class="nc" id="L128">            }</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            for (Field f : Field.values()) {</span>
+<span class="nc" id="L130">                BufferedImage image = ImageIO.read(Image.class.getResourceAsStream(&quot;/tiles/&quot; + f.toString().toLowerCase() + &quot;.png&quot;));</span>
+<span class="nc" id="L131">                Color fieldColor = GuiHelper.getColorForField(f);</span>
+<span class="nc" id="L132">                image = GuiHelper.getColoredImage(image, fieldColor);</span>
+<span class="nc" id="L133">                fieldImageMap.put(f, image);</span>
+            }
+<span class="nc" id="L135">        } catch (IOException e) {</span>
+<span class="nc" id="L136">            e.printStackTrace();</span>
+<span class="nc" id="L137">            gui.setRunning(false);</span>
+<span class="nc" id="L138">            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));</span>
+<span class="nc" id="L139">        }</span>
+<span class="nc" id="L140">    }</span>
+
+<span class="nc" id="L142">    private class GamePanel extends JPanel {</span>
+
+        public void paintComponent(Graphics g) {
+<span class="nc" id="L145">            synchronized (gui.getGame()) {</span>
+<span class="nc" id="L146">                int xMaxTiles = getWidth() / SIZE;</span>
+<span class="nc" id="L147">                int yMaxTiles = getHeight() / SIZE;</span>
+
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                for (int y = 0; y &lt; yMaxTiles; y++) {</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">                    for (int x = 0; x &lt; xMaxTiles; x++) {</span>
+<span class="nc" id="L151">                        int xa = x + viewPosition.getX();</span>
+<span class="nc" id="L152">                        int ya = y + viewPosition.getY();</span>
+
+<span class="nc" id="L154">                        GameVector vector = new GameVector(xa - (ya / 2), ya);</span>
+
+<span class="nc" id="L156">                        int xx = x * width;</span>
+<span class="nc" id="L157">                        int yy = y * vertOff;</span>
+
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                        if (ya % 2 != 0) {</span>
+<span class="nc" id="L160">                            xx += width / 2;</span>
+                        }
+
+<span class="nc" id="L163">                        Field field = gui.getGame().getFieldAt(vector);</span>
+
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                        if (field != null) {</span>
+                            Image fieldImage;
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                            if (fieldImageMap.containsKey(field)) {</span>
+<span class="nc" id="L168">                                fieldImage = fieldImageMap.get(field);</span>
+                            } else { //This case is impossible to happen
+<span class="nc" id="L170">                                Color fieldColor = GuiHelper.getColorForField(field);</span>
+<span class="nc" id="L171">                                fieldImage = GuiHelper.getColoredImage(tile, fieldColor);</span>
+<span class="nc" id="L172">                                fieldImageMap.put(field, fieldImage);</span>
+                            }
+
+<span class="nc" id="L175">                            g.drawImage(fieldImage, xx - (tile.getWidth() / 2), yy - (tile.getHeight() / 2), null);</span>
+
+<span class="nc bnc" id="L177" title="All 2 branches missed.">                            if (vector.equals(selectedField)) {</span>
+<span class="nc" id="L178">                                g.drawImage(tileOutline, xx - (tileOutline.getWidth() / 2), yy - (tileOutline.getHeight() / 2), null);</span>
+                            }
+                        }
+
+<span class="nc" id="L182">                        Creature creature = gui.getGame().getCreatureByPosition(vector);</span>
+
+<span class="nc bnc" id="L184" title="All 2 branches missed.">                        if (creature != null) {</span>
+<span class="nc" id="L185">                            String name = creature.getCreatureType().name().toLowerCase();</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">                            if (creature.getCreatureType() == CreatureType.WRAITH) {</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                                if (gui.getWraithCat()) {</span>
+<span class="nc" id="L188">                                    name = &quot;wraith_cat&quot;;</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">                                } else if (gui.isWraithDoctor()) {</span>
+<span class="nc" id="L190">                                    name = &quot;wraith_doctor&quot;;</span>
+                                } else {
+<span class="nc" id="L192">                                    name = &quot;wraith_default&quot;;</span>
+                                }
+                            }
+<span class="nc bnc" id="L195" title="All 2 branches missed.">                            if (creature.getCreatureType() == CreatureType.IFRIT) {</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                                if (gui.isIfritNatsu()) {</span>
+<span class="nc" id="L197">                                    name = &quot;ifrit_natsu&quot;;</span>
+                                } else {
+<span class="nc" id="L199">                                    name = &quot;ifrit&quot;;</span>
+                                }
+                            }
+<span class="nc bnc" id="L202" title="All 2 branches missed.">                            if (creature.getCreatureType() == CreatureType.FAIRY) {</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">                                if (gui.isFairyMavis()) {</span>
+<span class="nc" id="L204">                                    name = &quot;fairy_tail&quot;;</span>
+                                } else {
+<span class="nc" id="L206">                                    name = &quot;fairy&quot;;</span>
+                                }
+                            }
+<span class="nc bnc" id="L209" title="All 2 branches missed.">                            if (creature.getCreatureType() == CreatureType.KOBOLD) {</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">                                if (gui.isKoboldChristmas()) {</span>
+<span class="nc" id="L211">                                    name = &quot;kobold_christmas&quot;;</span>
+                                } else {
+<span class="nc" id="L213">                                    name = &quot;kobold&quot;;</span>
+                                }
+                            }
+<span class="nc bnc" id="L216" title="All 2 branches missed.">                            if (creature.getCreatureType() == CreatureType.ROOK) {</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">                                if (gui.isRookBird()) {</span>
+<span class="nc" id="L218">                                    name = &quot;rook_bird&quot;;</span>
+                                } else {
+<span class="nc" id="L220">                                    name = &quot;rook&quot;;</span>
+                                }
+                            }
+<span class="nc bnc" id="L223" title="All 2 branches missed.">                            if (creature.getCreatureType() == CreatureType.YETI) {</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">                                if (gui.isYetiAg()) {</span>
+<span class="nc" id="L225">                                    name = &quot;yeti_ag&quot;;</span>
+                                } else {
+<span class="nc" id="L227">                                    name = &quot;yeti&quot;;</span>
+                                }
+                            }
+<span class="nc bnc" id="L230" title="All 2 branches missed.">                            if (creature.getCreatureType() == CreatureType.BOAR) {</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">                                if (gui.isBoarPig()) {</span>
+<span class="nc" id="L232">                                    name = &quot;boar_pig&quot;;</span>
+                                } else {
+<span class="nc" id="L234">                                    name = &quot;boar&quot;;</span>
+                                }
+                            }
+
+<span class="nc" id="L238">                            BufferedImage creatureImg = creatureImageMap.get(name);</span>
+<span class="nc" id="L239">                            g.drawImage(creatureImg, xx - (creatureImg.getWidth() / 2), yy - creatureImg.getHeight() + 16, null);</span>
+
+<span class="nc" id="L241">                            int id = creature.getId();</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">                            if(warcryMonsterMap.containsKey(id)){</span>
+<span class="nc" id="L243">                                int sX = xx - (creatureImg.getWidth() / 2);</span>
+<span class="nc" id="L244">                                int sY = yy - creatureImg.getHeight() - 4;</span>
+<span class="nc" id="L245">                                String cry = warcryMonsterMap.get(id);</span>
+<span class="nc" id="L246">                                boolean mirror = false;</span>
+<span class="nc" id="L247">                                int length = g.getFontMetrics().stringWidth(cry);</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">                                if(sX + length &gt;= getWidth()){</span>
+<span class="nc" id="L249">                                    mirror = true;</span>
+                                }
+
+<span class="nc" id="L252">                                System.out.println(&quot;draw speechbubble&quot;);</span>
+<span class="nc" id="L253">                                GuiHelper.drawSpeechBubble(g, sX, sY, cry, mirror, speechBubble);</span>
+                            }
+                        }
+                    }
+                }
+
+                //g.setColor(Color.BLACK);
+                //g.fillRect(0, getHeight() - INFOBOX, 150, INFOBOX);
+                //g.setColor(Color.WHITE);
+                //g.fillRect(0, getHeight() - INFOBOX + 2, 148, INFOBOX - 2);
+
+<span class="nc" id="L264">                GuiHelper.drawBox(g, 0, getHeight() - INFOBOX, 150, INFOBOX, box);</span>
+
+<span class="nc" id="L266">                g.setColor(GuiHelper.FONT_COLOR);</span>
+<span class="nc" id="L267">                g.drawString(&quot;X: &quot; + selectedField.getX(), 16, getHeight() - INFOBOX + 24);</span>
+<span class="nc" id="L268">                g.drawString(&quot;Y: &quot; + selectedField.getY(), 16, getHeight() - INFOBOX + 40);</span>
+
+<span class="nc" id="L270">                Field f = gui.getGame().getFieldAt(selectedField);</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">                if (f != null) {</span>
+<span class="nc" id="L272">                    g.drawString(&quot;Field: &quot; + f.name(), 16, getHeight() - INFOBOX + 60);</span>
+                }
+
+<span class="nc" id="L275">                Creature creature = gui.getGame().getCreatureByPosition(selectedField);</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">                if (creature != null) {</span>
+                    //g.setColor(Color.BLACK);
+                    //g.fillRect(getWidth() - 200, getHeight() - INFOBOX, 200, INFOBOX);
+                    //g.setColor(Color.WHITE);
+                    //g.fillRect(getWidth() - 198, getHeight() - INFOBOX + 2, 198, INFOBOX - 2);
+<span class="nc" id="L281">                    GuiHelper.drawBox(g, getWidth() - 200, getHeight() - INFOBOX, 200, INFOBOX, box);</span>
+
+<span class="nc" id="L283">                    g.setColor(Color.BLACK);</span>
+<span class="nc" id="L284">                    g.fillRect(getWidth() - (PROFILE_DIMENSIONS + 4), getHeight() - INFOBOX - (PROFILE_HEIGHT + 2), (PROFILE_DIMENSIONS + 4), (PROFILE_DIMENSIONS + 4));</span>
+
+<span class="nc" id="L286">                    String name = creature.getCreatureType().name().toLowerCase();</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.WRAITH) {</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">                        if (gui.getWraithCat()) {</span>
+<span class="nc" id="L289">                            name = &quot;wraith_cat&quot;;</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">                        } else if (gui.isWraithDoctor()) {</span>
+<span class="nc" id="L291">                            name = &quot;wraith_doctor&quot;;</span>
+                        } else {
+<span class="nc" id="L293">                            name = &quot;wraith_default&quot;;</span>
+                        }
+
+                    }
+<span class="nc bnc" id="L297" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.IFRIT) {</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">                        if (gui.isIfritNatsu()) {</span>
+<span class="nc" id="L299">                            name = &quot;ifrit_natsu&quot;;</span>
+                        } else {
+<span class="nc" id="L301">                            name = &quot;ifrit&quot;;</span>
+                        }
+                    }
+<span class="nc bnc" id="L304" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.FAIRY) {</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">                        if (gui.isFairyMavis()) {</span>
+<span class="nc" id="L306">                            name = &quot;fairy_tail&quot;;</span>
+                        } else {
+<span class="nc" id="L308">                            name = &quot;fairy&quot;;</span>
+                        }
+                    }
+<span class="nc bnc" id="L311" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.KOBOLD) {</span>
+<span class="nc bnc" id="L312" title="All 2 branches missed.">                        if (gui.isKoboldChristmas()) {</span>
+<span class="nc" id="L313">                            name = &quot;kobold_christmas&quot;;</span>
+                        } else {
+<span class="nc" id="L315">                            name = &quot;kobold&quot;;</span>
+                        }
+                    }
+<span class="nc bnc" id="L318" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.ROOK) {</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">                        if (gui.isRookBird()) {</span>
+<span class="nc" id="L320">                            name = &quot;rook_bird&quot;;</span>
+                        } else {
+<span class="nc" id="L322">                            name = &quot;rook&quot;;</span>
+                        }
+                    }
+<span class="nc bnc" id="L325" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.YETI) {</span>
+<span class="nc bnc" id="L326" title="All 2 branches missed.">                        if (gui.isYetiAg()) {</span>
+<span class="nc" id="L327">                            name = &quot;yeti_ag&quot;;</span>
+                        } else {
+<span class="nc" id="L329">                            name = &quot;yeti&quot;;</span>
+                        }
+                    }
+<span class="nc bnc" id="L332" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.BOAR) {</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">                        if (gui.isBoarPig()) {</span>
+<span class="nc" id="L334">                            name = &quot;boar_pig&quot;;</span>
+                        } else {
+<span class="nc" id="L336">                            name = &quot;boar&quot;;</span>
+                        }
+                    }
+<span class="nc" id="L339">                    g.drawImage(creatureProfileMap.get(name), getWidth() - (PROFILE_DIMENSIONS + 2), getHeight() - INFOBOX - PROFILE_HEIGHT, PROFILE_DIMENSIONS, PROFILE_DIMENSIONS, null);</span>
+
+<span class="nc" id="L341">                    g.setColor(GuiHelper.FONT_COLOR);</span>
+<span class="nc bnc" id="L342" title="All 2 branches missed.">                    if (creature instanceof Pc) {</span>
+<span class="nc" id="L343">                        Player p = gui.getGame().getPlayerByMonsterId(creature.getId());</span>
+<span class="nc" id="L344">                        String playerName = &quot;Unknown&quot;;</span>
+<span class="nc bnc" id="L345" title="All 2 branches missed.">                        if (p != null) {</span>
+<span class="nc" id="L346">                            playerName = p.getName();</span>
+                        }
+<span class="nc" id="L348">                        g.drawString(playerName, getWidth() - INFOBOX_CONTENT_X, getHeight() - INFOBOX + INFOBOX_TYPETEXT_Y - 16);</span>
+                    }
+
+<span class="nc" id="L351">                    g.setColor(GuiHelper.FONT_COLOR);</span>
+<span class="nc" id="L352">                    String creatureName = creature.getCreatureType().name().charAt(0) + creature.getCreatureType().name().substring(1).toLowerCase();</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.WRAITH) {</span>
+<span class="nc bnc" id="L354" title="All 2 branches missed.">                        if (gui.getWraithCat()) {</span>
+<span class="nc" id="L355">                            creatureName = &quot;Wraith Cat&quot;;</span>
+<span class="nc bnc" id="L356" title="All 2 branches missed.">                        } else if (gui.isWraithDoctor()) {</span>
+<span class="nc" id="L357">                            creatureName = &quot;The Doctor&quot;;</span>
+                        } else {
+<span class="nc" id="L359">                            creatureName = &quot;Wraith&quot;;</span>
+                        }
+                    }
+<span class="nc bnc" id="L362" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.FAIRY) {</span>
+<span class="nc bnc" id="L363" title="All 2 branches missed.">                        if (gui.isFairyMavis())</span>
+<span class="nc" id="L364">                            creatureName = &quot;Mavis Vermillion&quot;;</span>
+                    }
+<span class="nc bnc" id="L366" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.IFRIT) {</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">                        if (gui.isIfritNatsu())</span>
+<span class="nc" id="L368">                            creatureName = &quot;Natsu Dragneel&quot;;</span>
+                    }
+<span class="nc bnc" id="L370" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.KOBOLD) {</span>
+<span class="nc bnc" id="L371" title="All 2 branches missed.">                        if (gui.isKoboldChristmas())</span>
+<span class="nc" id="L372">                            creatureName = &quot;Buddy&quot;;</span>
+                    }
+<span class="nc bnc" id="L374" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.ROOK) {</span>
+<span class="nc bnc" id="L375" title="All 2 branches missed.">                        if (gui.isRookBird())</span>
+<span class="nc" id="L376">                            creatureName = &quot;Rook&quot;;</span>
+                    }
+<span class="nc bnc" id="L378" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.YETI) {</span>
+<span class="nc bnc" id="L379" title="All 2 branches missed.">                        if (gui.isYetiAg())</span>
+<span class="nc" id="L380">                            creatureName = &quot;Yeti wie auch immer&quot;;</span>
+                    }
+<span class="nc bnc" id="L382" title="All 2 branches missed.">                    if (creature.getCreatureType() == CreatureType.BOAR) {</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">                        if (gui.isBoarPig())</span>
+<span class="nc" id="L384">                            creatureName = &quot;Pig&quot;;</span>
+                    }
+<span class="nc" id="L386">                    g.drawString(creatureName, getWidth() - INFOBOX_CONTENT_X, getHeight() - INFOBOX + INFOBOX_TYPETEXT_Y);</span>
+
+<span class="nc" id="L388">                    g.setColor(Color.BLACK);</span>
+<span class="nc" id="L389">                    g.fillRect(getWidth() - INFOBOX_CONTENT_X, getHeight() - INFOBOX + INFOBOX_BARGRAPH_Y_HP, INFOBOX_BARGRAPH_WIDTH, INFOBOX_BARGRAPH_HEIGHT);</span>
+<span class="nc" id="L390">                    g.setColor(Color.RED);</span>
+<span class="nc" id="L391">                    double hpW = (creature.getHp() / (double) creature.getMaxHp()) * (INFOBOX_BARGRAPH_WIDTH - 2);</span>
+<span class="nc" id="L392">                    g.fillRect(getWidth() - (INFOBOX_CONTENT_X - 1), getHeight() - INFOBOX + INFOBOX_BARGRAPH_Y_HP + 1, (int) hpW, INFOBOX_BARGRAPH_HEIGHT - 2);</span>
+<span class="nc" id="L393">                    g.setColor(Color.WHITE);</span>
+<span class="nc" id="L394">                    g.drawString(&quot;HP: &quot; + creature.getHp() + &quot;/&quot; + creature.getMaxHp(), getWidth() - INFOBOX_BARGRAPH_X_TEXT, getHeight() - INFOBOX + INFOBOX_BARGRAPH_Y_TEXT_HP);</span>
+
+<span class="nc bnc" id="L396" title="All 2 branches missed.">                    if (creature instanceof Pc) {</span>
+<span class="nc" id="L397">                        g.setColor(Color.BLACK);</span>
+<span class="nc" id="L398">                        g.fillRect(getWidth() - INFOBOX_CONTENT_X, getHeight() - INFOBOX + INFOBOX_BARGRAPH_Y_EP, INFOBOX_BARGRAPH_WIDTH, INFOBOX_BARGRAPH_HEIGHT);</span>
+<span class="nc" id="L399">                        g.setColor(Color.GREEN);</span>
+<span class="nc" id="L400">                        Pc pc = (Pc) creature;</span>
+<span class="nc" id="L401">                        double enW = (pc.getEnergy() / 1000.0) * (INFOBOX_BARGRAPH_WIDTH - 2);</span>
+<span class="nc" id="L402">                        g.fillRect(getWidth() - (INFOBOX_CONTENT_X - 1), getHeight() - INFOBOX + INFOBOX_BARGRAPH_Y_EP + 1, (int) enW, INFOBOX_BARGRAPH_HEIGHT - 2);</span>
+<span class="nc" id="L403">                        g.setColor(Color.WHITE);</span>
+<span class="nc" id="L404">                        g.drawString(&quot;EP: &quot; + pc.getEnergy() + &quot;/1000&quot;, getWidth() - INFOBOX_BARGRAPH_X_TEXT, getHeight() - INFOBOX + INFOBOX_BARGRAPH_Y_TEXT_EP);</span>
+                    }
+                }
+
+                // GuiHelper.drawSpeechBubble(g, 170, 80, &quot;Wuhuuuuu, ich bin ein Geist!&quot;, false, speechBubble);
+<span class="nc" id="L409">                long time = System.currentTimeMillis();</span>
+<span class="nc" id="L410">                decreaseWarCryTime(time - lastTime);</span>
+<span class="nc" id="L411">                lastTime = time;</span>
+<span class="nc" id="L412">            }</span>
+<span class="nc" id="L413">        }</span>
+    }
+
+    private void decreaseWarCryTime(long timePast){
+<span class="nc" id="L417">        Set&lt;Map.Entry&lt;Integer, Long&gt;&gt; clone = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L418">        clone.addAll(warcryTimeMap.entrySet());</span>
+
+<span class="nc bnc" id="L420" title="All 2 branches missed.">        for(Map.Entry&lt;Integer, Long&gt; e : clone){</span>
+<span class="nc" id="L421">            long t = e.getValue() - timePast;</span>
+
+<span class="nc" id="L423">            System.out.println(warcryMonsterMap.get(e.getKey()));</span>
+<span class="nc" id="L424">            System.out.println(e.getValue());</span>
+
+<span class="nc bnc" id="L426" title="All 2 branches missed.">            if(t &lt;= 0){</span>
+<span class="nc" id="L427">                warcryTimeMap.remove(e.getKey());</span>
+<span class="nc" id="L428">                warcryMonsterMap.remove(e.getKey());</span>
+            }else{
+<span class="nc" id="L430">                warcryTimeMap.put(e.getKey(), t);</span>
+            }
+<span class="nc" id="L432">        }</span>
+<span class="nc" id="L433">    }</span>
+
+    public GameVector getViewPosition() {
+<span class="nc" id="L436">        return this.viewPosition;</span>
+    }
+
+    public void setViewPosition(GameVector pos) {
+<span class="nc" id="L440">        this.viewPosition = pos;</span>
+<span class="nc" id="L441">    }</span>
+
+    public void setSelectedField(GameVector pos) {
+<span class="nc" id="L444">        this.selectedField = pos;</span>
+<span class="nc" id="L445">    }</span>
+
+    public void setSelectedFieldToCurrentPlayer() {
+<span class="nc" id="L448">        Pc curr = this.gui.getCurrentPlayer();</span>
+<span class="nc bnc" id="L449" title="All 2 branches missed.">        if (curr != null) {</span>
+<span class="nc" id="L450">            this.selectedField = curr.getPosition();</span>
+        }
+<span class="nc" id="L452">    }</span>
+
+    public void setViewPositionToCurrentPlayer() {
+<span class="nc" id="L455">        Pc curr = this.gui.getCurrentPlayer();</span>
+<span class="nc bnc" id="L456" title="All 2 branches missed.">        if (curr != null) {</span>
+<span class="nc" id="L457">            this.viewPosition = curr.getPosition().add(VIEWPOSITION_OFFSET);</span>
+        }
+<span class="nc" id="L459">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

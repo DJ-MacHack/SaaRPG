@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Master.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">core</a> &gt; <a href="index.source.html" class="el_package">de.unisaarland.sopra</a> &gt; <span class="el_source">Master.java</span></div><h1>Master.java</h1><pre class="source lang-java linenums">package de.unisaarland.sopra;
+
+import de.unisaarland.sopra.model.Game;
+import de.unisaarland.sopra.model.Npc;
+import de.unisaarland.sopra.model.Pc;
+import de.unisaarland.sopra.utility.RegistrationAbortedException;
+
+/**
+ * Master class for {@link Server} and {@link Client}
+ * Created on 12.09.16.
+ * @author Henrik Paul Koehn, Lukas Kirschner
+ */
+public abstract class Master {
+
+    //Fields
+    protected boolean running;  // true if current game is running
+    protected Game game;        // game model to play on
+
+<span class="fc" id="L19">    public Master() {</span>
+<span class="fc" id="L20">        this.running = true;</span>
+<span class="fc" id="L21">        this.game = new Game();</span>
+<span class="fc" id="L22">    }</span>
+
+    /**
+     * @return Returns current {@link Game} model
+     */
+    public Game getGame() {
+<span class="nc" id="L28">        return game;</span>
+    }
+
+    /**
+     * runs {@link Server}/{@link Client}
+     */
+    public abstract void run() throws RegistrationAbortedException;
+
+    /**
+     * Resets energy and lastDirection for every creature in given game instance
+     * @param game game instance to reset
+     */
+    public void resetCreatureStats(Game game){
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        for (Pc monster : game.getMonsters()) {</span>
+<span class="nc" id="L42">            monster.setEnergy(1000);</span>
+<span class="nc" id="L43">            monster.setLastDirection(null);</span>
+<span class="nc" id="L44">            monster.setCriedInRound(false);</span>
+<span class="nc" id="L45">        }</span>
+
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        for (Npc npc : game.getNpcs()) {</span>
+<span class="nc" id="L48">            npc.setLastDirection(null);</span>
+<span class="nc" id="L49">        }</span>
+<span class="nc" id="L50">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>
